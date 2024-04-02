@@ -18,3 +18,58 @@
     --bs-nav-link-color: var(--mud-palette-primary) !important;
     --bs-nav-link-hover-color: var(--mud-palette-primary-darken) !important;
 }
+
+.account-card-border {
+    --rgb: 200, 200, 200;
+    /*background-image: linear-gradient(0deg, rgba(var(--rgb), 0) 50%, rgba(var(--rgb), 0.125) 100%);
+    background-color: rgb(250, 250, 250);*/
+    background-color: hsl(120, 50%, 96%);
+    border-top: 1px solid rgba(var(--rgb), 0.125);
+    border-bottom: 1px solid rgba(var(--rgb), 0.125);
+}
+
+/*.account-card-border {*/
+/*    --red: 255;*/
+/*    --green: 255;*/
+/*    --blue: 255;*/
+/*    background-image: !* Top jagged *! linear-gradient(*/
+/*            135deg,*/
+/*            rgba(var(--red), var(--green), var(--blue), 1) 50%, rgba(var(--red), var(--green), var(--blue), 0) 50%*/
+/*    ),*/
+/*    linear-gradient(*/
+/*            -135deg,*/
+/*            rgba(var(--red), var(--green), var(--blue), 1) 50%, rgba(var(--red), var(--green), var(--blue), 0) 50%*/
+/*    ),*/
+/*       !*  Bottom jagged *! linear-gradient(*/
+/*            45deg,*/
+/*            rgba(210, 210, 210, 1) 50%, rgba(210,210,210, 0) 50%*/
+/*    ),*/
+/*    linear-gradient(*/
+/*            -45deg,*/
+/*            rgba(210,210,210, 1) 50%, rgba(210,210,210, 0) 50%*/
+/*    );*/
+/*    background-position: !* Top jagged *! top center, top center,*/
+/*        !* Bottom jagged *! bottom center, bottom center;*/
+/*    background-size: !* Top + bottom jagged *! 0.75rem 0.75rem, 0.75rem 0.75rem,*/
+/*    0.75rem 0.75rem, 0.75rem 0.75rem;*/
+/*    background-repeat: repeat-x;*/
+/*    background-color: rgb(236, 236, 236);*/
+/*}*/
+/*.account-actions-border {*/
+/*    --red: 236;*/
+/*    --green: 236;*/
+/*    --blue: 236;*/
+/*    background-image: !* Top jagged *! linear-gradient(*/
+/*            135deg,*/
+/*            rgba(var(--red), var(--green), var(--blue), 1) 50%, rgba(var(--red), var(--green), var(--blue), 0) 50%*/
+/*    ),*/
+/*    linear-gradient(*/
+/*            -135deg,*/
+/*            rgba(var(--red), var(--green), var(--blue), 1) 50%, rgba(var(--red), var(--green), var(--blue), 0) 50%*/
+/*    );*/
+/*    background-position: !* Top jagged *! top center, top center;*/
+/*    background-size: !* Top + bottom jagged *! 0.75rem 0.75rem, 0.75rem 0.75rem,*/
+/*    0.75rem 0.75rem, 0.75rem 0.75rem;*/
+/*    background-repeat: repeat-x;*/
+/*    background-color: rgb(210, 210, 210);*/
+/*}*/

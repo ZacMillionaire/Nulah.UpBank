@@ -1,6 +1,7 @@
 ﻿@page "/Account/{AccountId}/Transactions"
 @using System.Text.Json
 @using Nulah.Up.Blazor.Components.Pages.Accounts.Dialogs
+@using Nulah.Up.Blazor.Models
 @using Nulah.UpApi.Lib.Models.Transactions
 @rendermode InteractiveServer
 @implements IDisposable
@@ -12,26 +13,27 @@
 }
 else
 {
-    <MudCard>
-        <MudCardHeader>
-            <CardHeaderContent>
-                <MudText Typo="Typo.h6">@LoadedAccount.Attributes.DisplayName</MudText>
-            </CardHeaderContent>
-            <CardHeaderActions>
-                <MudIconButton Icon="@Icons.Material.Filled.QuestionMark" Color="Color.Default" OnClick="@(_ => DisplayRawData(LoadedAccount))"/>
-            </CardHeaderActions>
-        </MudCardHeader>
-        <MudCardContent>
-            <MudText>@LoadedAccount.Attributes.Balance.Value</MudText>
-            <MudText Typo="Typo.body2">@LoadedAccount.Attributes.Balance.CurrencyCode</MudText>
-            <MudText Typo="Typo.body2">@LoadedAccount.Attributes.AccountType</MudText>
-        </MudCardContent>
-        <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">
-                Refresh Cache
-            </MudButton>
-        </MudCardActions>
-    </MudCard>
+    <AccountCard Account="LoadedAccount"/>
+    @* <MudCard> *@
+    @*     <MudCardHeader> *@
+    @*         <CardHeaderContent> *@
+    @*             <MudText Typo="Typo.h6">@LoadedAccount.Attributes.DisplayName</MudText> *@
+    @*         </CardHeaderContent> *@
+    @*         <CardHeaderActions> *@
+    @*             <MudIconButton Icon="@Icons.Material.Filled.QuestionMark" Color="Color.Default" OnClick="@(_ => DisplayRawData(LoadedAccount))"/> *@
+    @*         </CardHeaderActions> *@
+    @*     </MudCardHeader> *@
+    @*     <MudCardContent> *@
+    @*         <MudText>@LoadedAccount.Attributes.Balance.Value</MudText> *@
+    @*         <MudText Typo="Typo.body2">@LoadedAccount.Attributes.Balance.CurrencyCode</MudText> *@
+    @*         <MudText Typo="Typo.body2">@LoadedAccount.Attributes.AccountType</MudText> *@
+    @*     </MudCardContent> *@
+    @*     <MudCardActions> *@
+    @*         <MudButton Variant="Variant.Text" Color="Color.Primary"> *@
+    @*             Refresh Cache *@
+    @*         </MudButton> *@
+    @*     </MudCardActions> *@
+    @* </MudCard> *@
 }
 
 @if (TransactionsLoading)
@@ -150,7 +152,7 @@ else
 
     private bool AccountLoading = true;
     private bool TransactionsLoading = true;
-    private Account LoadedAccount { get; set; }
+    private UpAccount LoadedAccount { get; set; }
     private IReadOnlyList<Transaction> Transactions { get; set; } = new List<Transaction>();
 
     private DateRange _transactionDateRange;

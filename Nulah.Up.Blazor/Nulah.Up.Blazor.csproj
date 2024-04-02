@@ -17,4 +17,9 @@
       <ProjectReference Include="..\Nulah.UpApi.Lib\Nulah.UpApi.Lib.csproj" />
     </ItemGroup>
 
+
+    <ItemGroup>
+      <Folder Include="Internal\Generated\DocumentStorage\" />
+    </ItemGroup>
+
 </Project>

@@ -1,9 +1,9 @@
 using Marten;
 using Nulah.Up.Blazor.Components;
 using MudBlazor.Services;
+using Nulah.Up.Blazor.Models;
 using Nulah.Up.Blazor.Services;
 using Nulah.UpApi.Lib;
-using Nulah.UpApi.Lib.Models.Accounts;
 using Nulah.UpApi.Lib.Models.Transactions;
 using Weasel.Core;
 
@@ -14,7 +14,7 @@ public class Program
 	public static void Main(string[] args)
 	{
 		var builder = WebApplication.CreateBuilder(args);
-		
+
 		builder.Configuration.AddEnvironmentVariables(prefix: "NulahUpBank_");
 
 		// Add services to the container.
@@ -47,8 +47,16 @@ public class Program
 					options.AutoCreateSchemaObjects = AutoCreate.All;
 				}
 
+				options.Schema.For<UpAccount>().Metadata(x =>
+				{
+					x.LastModified.MapTo(y => y.ModifiedAt);
+				});
+
+
 				options.Schema.For<Transaction>().Index(x => x.Relationships.Account.Data.Id, x => x.Name = "account_id");
 			})
+			.ApplyAllDatabaseChangesOnStartup()
+			.OptimizeArtifactWorkflow()
 			.UseLightweightSessions();
 		// enable once we're adding a dbcontext
 		//.UseNpgsqlDataSource();

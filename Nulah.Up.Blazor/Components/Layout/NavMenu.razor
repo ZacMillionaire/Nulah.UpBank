@@ -1,24 +1,27 @@
 ﻿@using Nulah.Up.Blazor.Services
 @using Nulah.UpApi.Lib.Models.Accounts
 @using Nulah.Up.Blazor.Components.Dialogs
+@using Nulah.Up.Blazor.Models
 @implements IDisposable
 
 <MudNavMenu>
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-    <MudNavGroup Title="Accounts" ExpandedChanged="AccountGroupExpandChange" Icon="@Icons.Material.Filled.ManageAccounts">
-        <MudNavLink Href="accounts" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AccountTree">View all</MudNavLink>
+    <MudNavGroup Title="Accounts" Icon="@Icons.Material.Filled.AccountCircle">
+        <MudNavLink Href="accounts" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ManageAccounts">Management</MudNavLink>
         <MudDivider/>
-        @if (_isLoading)
-        {
-            <MudNavLink Disabled="true">Loading...</MudNavLink>
-        }
-        else
-        {
-            foreach (var account in LoadedAccounts)
+        <MudNavGroup Title="View All" ExpandedChanged="AccountGroupExpandChange" Icon="@Icons.Material.Filled.AccountTree">
+            @if (_isLoading)
             {
-                <MudNavLink Href="@($"account/{@account.Id}/transactions")" Match="NavLinkMatch.Prefix">@account.Attributes.DisplayName</MudNavLink>
+                <MudNavLink Disabled="true">Loading...</MudNavLink>
             }
-        }
+            else
+            {
+                foreach (var account in LoadedAccounts)
+                {
+                    <MudNavLink Href="@($"account/{@account.Id}/transactions")" Match="NavLinkMatch.Prefix">@account.DisplayName</MudNavLink>
+                }
+            }
+        </MudNavGroup>
     </MudNavGroup>
 </MudNavMenu>
 
@@ -27,7 +30,7 @@
     [Inject]
     private UpApiService UpBankApi { get; set; } = null!;
 
-    private IReadOnlyList<Account> LoadedAccounts { get; set; } = new List<Account>();
+    private IReadOnlyList<UpAccount> LoadedAccounts { get; set; } = new List<UpAccount>();
     private bool _isLoading = true;
 
     protected override Task OnAfterRenderAsync(bool firstRender)
@@ -41,7 +44,7 @@
         return base.OnAfterRenderAsync(firstRender);
     }
 
-    private void UpBankApiOnAccountsUpdated(object? sender, IReadOnlyList<Account> e)
+    private void UpBankApiOnAccountsUpdated(object? sender, IReadOnlyList<UpAccount> e)
     {
         _isLoading = false;
         LoadedAccounts = e;
@@ -56,8 +59,6 @@
 
     private async void AccountGroupExpandChange(bool expandedState)
     {
-        // Ensure that the group can expand to display loading state first
-        StateHasChanged();
         if (expandedState && LoadedAccounts.Count == 0)
         {
             // trigger a load that wil then fire off any events that will then update the list

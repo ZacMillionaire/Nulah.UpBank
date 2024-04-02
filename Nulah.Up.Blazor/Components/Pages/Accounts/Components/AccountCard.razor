@@ -1,0 +1,36 @@
+﻿@using Nulah.Up.Blazor.Models
+<MudItem xs="12" md="3">
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">@Account.DisplayName</MudText>
+                <MudText Typo="Typo.body2">@Account.AccountType</MudText>
+            </CardHeaderContent>
+            <CardHeaderActions>
+                @if (DisplayRawData != null)
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.QuestionMark" Color="Color.Default" OnClick="@(_ => DisplayRawData(Account))"/>
+                }
+            </CardHeaderActions>
+        </MudCardHeader>
+        <MudCardContent Class="account-card-border">
+            <MudText Typo="Typo.h4">@Account.Balance.CurrencyCode@((Account.Balance.ValueInBaseUnits / 100.0).ToString("C"))</MudText>
+        </MudCardContent>
+        <MudCardActions Class="account-actions-border">
+            @ViewTransactionButton
+        </MudCardActions>
+    </MudCard>
+</MudItem>
+
+@code {
+
+    [Parameter]
+    public UpAccount Account { get; set; } = null!;
+
+    [Parameter]
+    public Action<UpAccount>? DisplayRawData { get; set; }
+
+    [Parameter]
+    public RenderFragment? ViewTransactionButton { get; set; }
+
+}

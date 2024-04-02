@@ -32,7 +32,7 @@ public class UpBankApi
 	/// </para>
 	/// </summary>
 	/// <returns></returns>
-	public async Task<ApiResponse<AccountsResponse>> GetAccounts()
+	public async Task<ApiResponse<AccountsResponse>> GetAccounts(string? nextPage = null)
 	{
 		// TODO: see comments in this method to potentially change this call to a throw on fail method instead of return bool
 		if (!await IsAuthorised())
@@ -40,7 +40,9 @@ public class UpBankApi
 			throw new Exception("Api token is invalid");
 		}
 
-		var accounts = await HttpGet<AccountsResponse>($"{_configuration.ApiBaseAddress}/accounts");
+		var accounts = await HttpGet<AccountsResponse>(string.IsNullOrWhiteSpace(nextPage)
+			? $"{_configuration.ApiBaseAddress}/accounts"
+			: nextPage);
 
 		return accounts;
 	}
@@ -83,7 +85,7 @@ public class UpBankApi
 		var accountTransactions = await HttpGet<TransactionResponse>($"{_configuration.ApiBaseAddress}/accounts/{accountId}/transactions", queryDict);
 		return accountTransactions;
 	}
-	
+
 	// TODO: make the TransactionResponse generic so this method can be generic for accounts
 	public async Task<ApiResponse<TransactionResponse>> GetNextTransactionPage(TransactionResponse transactionResponse)
 	{

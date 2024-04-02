@@ -1,39 +1,23 @@
 ﻿@page "/Accounts"
-@implements IDisposable
 
 <h3>Accounts</h3>
-@if (IsLoading)
+@if (_isLoading)
 {
     <h1>Loading...</h1>
 }
 else
 {
-    <MudButton Color="Color.Primary" OnClick="RefreshAccounts">Refresh</MudButton>
+    <MudButton Color="Color.Primary" OnClick="RecacheAccounts">Refresh</MudButton>
     <MudGrid>
         @foreach (var account in LoadedAccounts)
         {
-            <MudItem xs="12" md="3">
-                <MudCard>
-                    <MudCardHeader>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.h6">@account.Attributes.DisplayName</MudText>
-                        </CardHeaderContent>
-                        <CardHeaderActions>
-                            <MudIconButton Icon="@Icons.Material.Filled.QuestionMark" Color="Color.Default" OnClick="@(_ => DisplayRawData(account))"/>
-                        </CardHeaderActions>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText>@account.Attributes.Balance.Value</MudText>
-                        <MudText Typo="Typo.body2">@account.Attributes.Balance.CurrencyCode</MudText>
-                        <MudText Typo="Typo.body2">@account.Attributes.AccountType</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Variant="Variant.Text" Color="Color.Primary">
-                            <a href="/Account/@account.Id/Transactions">View Transactions</a>
-                        </MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
+            <AccountCard Account="account" DisplayRawData="DisplayAccountRaw">
+                <ViewTransactionButton>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary">
+                        <a href="/Account/@account.Id/Transactions">View Transactions</a>
+                    </MudButton>
+                </ViewTransactionButton>
+            </AccountCard>
         }
     </MudGrid>
 }

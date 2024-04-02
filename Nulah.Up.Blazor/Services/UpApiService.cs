@@ -2,6 +2,7 @@
 using Marten;
 using Marten.Linq.LastModified;
 using Marten.Pagination;
+using Nulah.Up.Blazor.Models;
 using Nulah.UpApi.Lib;
 using Nulah.UpApi.Lib.Models.Accounts;
 using Nulah.UpApi.Lib.Models.Transactions;
@@ -14,7 +15,7 @@ public class UpApiService
 	private readonly IDocumentStore _documentStore;
 
 	public event EventHandler? AccountsUpdating;
-	public event EventHandler<IReadOnlyList<Account>>? AccountsUpdated;
+	public event EventHandler<IReadOnlyList<UpAccount>>? AccountsUpdated;
 
 	public UpApiService(UpBankApi upBankApi, IDocumentStore documentStore)
 	{
@@ -23,71 +24,112 @@ public class UpApiService
 	}
 
 	/// <summary>
-	/// The first ever call to this method will cache accounts to the underlying database
+	///	Retrieves all accounts from the Up Api.
+	///
+	/// If this is the first time called, no accounts are in the database, or <paramref name="bypassCache"/> is true,
+	/// the accounts will be first retrieved from the Up Api then cached nad returned.
+	/// Otherwise the results will be returned from the cache. 
 	/// </summary>
+	/// <param name="bypassCache"></param>
 	/// <returns></returns>
-	public async Task<IReadOnlyList<Account>> GetAccounts()
+	public async Task<IReadOnlyList<UpAccount>> GetAccounts(bool bypassCache = false)
 	{
-		try
+		AccountsUpdating?.Invoke(this, EventArgs.Empty);
+
+		await using var session = _documentStore.LightweightSession();
+
+		if (!bypassCache)
 		{
-			AccountsUpdating?.Invoke(this, EventArgs.Empty);
-			await using var session = _documentStore.LightweightSession();
 			var existingAccounts = await LoadAccountsFromCacheAsync(session);
 
+			// We duplicate code slightly here to retrieve accounts from the Api if _no_ accounts
+			// exist in the database.
+			// This means that if the user has no accounts ever (unlikely as an Up customer should always have a spending account)
+			// this method will potentially hit the Api every single call.
+			// I don't really care about that though, if the user has no accounts then the Up Api will be doing no
+			// work to return nothing so ¯\_(ツ)_/¯
 			if (existingAccounts.Count != 0)
 			{
 				AccountsUpdated?.Invoke(this, existingAccounts);
 				return existingAccounts;
 			}
-
-			var accounts = await _upBankApi.GetAccounts();
-
-			if (accounts is { Success: true, Response: not null })
-			{
-				await _documentStore.BulkInsertAsync(accounts.Response.Data, BulkInsertMode.OverwriteExisting);
-				await session.SaveChangesAsync();
-
-				AccountsUpdated?.Invoke(this, accounts.Response.Data);
-				return accounts.Response.Data;
-			}
-
-			AccountsUpdated?.Invoke(this, new List<Account>());
-			return new List<Account>();
 		}
-		catch
-		{
-			throw;
-		}
+
+		var accounts = await GetAccountsFromApi();
+
+		session.Store((IEnumerable<UpAccount>)accounts);
+		await session.SaveChangesAsync();
+
+		AccountsUpdated?.Invoke(this, accounts);
+		return accounts;
 	}
 
-	public async Task<Account> GetAccount(string accountId)
+	private async Task<List<UpAccount>> GetAccountsFromApi(string? nextPage = null)
+	{
+		var accounts = new List<UpAccount>();
+		var apiResponse = await _upBankApi.GetAccounts(nextPage);
+
+		if (apiResponse is { Success: true, Response: not null })
+		{
+			accounts.AddRange(
+				apiResponse.Response.Data
+					.Select(x => new UpAccount()
+					{
+						Balance = x.Attributes.Balance,
+						Id = x.Id,
+						Type = x.Type,
+						AccountType = x.Attributes.AccountType,
+						CreatedAt = x.Attributes.CreatedAt,
+						DisplayName = x.Attributes.DisplayName,
+						OwnershipType = x.Attributes.OwnershipType
+					})
+			);
+
+			if (!string.IsNullOrWhiteSpace(apiResponse.Response.Links.Next))
+			{
+				await GetAccountsFromApi(apiResponse.Response.Links.Next);
+			}
+		}
+
+		return accounts;
+	}
+
+	public async Task<UpAccount> GetAccount(string accountId)
 	{
 		try
 		{
 			await using var session = _documentStore.LightweightSession();
-			var existingAccount = await session.Query<Account>().FirstOrDefaultAsync(x =>
-				x.Id == accountId
-				// only return an account if it's "fresh" which is a modified date less than a day old (currently)
-				// TODO: configure this
-				&& x.ModifiedBefore(DateTime.UtcNow.AddDays(-1))
-			);
+			var account = await session.Query<UpAccount>()
+				.FirstOrDefaultAsync(x =>
+					x.Id == accountId
+					// only return an account if it's "fresh" which is a modified date less than a day old (currently)
+					// TODO: configure this
+					&& x.ModifiedBefore(DateTime.UtcNow.AddDays(1))
+				);
 
-			if (existingAccount != null)
+			if (account == null)
 			{
-				return existingAccount;
+				var accounts = await _upBankApi.GetAccount(accountId);
+
+				if (accounts is { Success: true, Response: not null })
+				{
+					account = new UpAccount()
+					{
+						Balance = accounts.Response.Data.Attributes.Balance,
+						Id = accounts.Response.Data.Id,
+						Type = accounts.Response.Data.Type,
+						AccountType = accounts.Response.Data.Attributes.AccountType,
+						CreatedAt = accounts.Response.Data.Attributes.CreatedAt,
+						DisplayName = accounts.Response.Data.Attributes.DisplayName,
+						OwnershipType = accounts.Response.Data.Attributes.OwnershipType
+					};
+
+					session.Store(account);
+					await session.SaveChangesAsync();
+				}
 			}
 
-			var accounts = await _upBankApi.GetAccount(accountId);
-
-			if (accounts is { Success: true, Response: not null })
-			{
-				session.Insert(accounts.Response.Data);
-				await session.SaveChangesAsync();
-
-				return accounts.Response.Data;
-			}
-
-			return new Account();
+			return account;
 		}
 		catch
 		{
@@ -188,9 +230,11 @@ public class UpApiService
 		return baseFunc;
 	}
 
-	private Task<IReadOnlyList<Account>> LoadAccountsFromCacheAsync(IDocumentSession documentSession)
+	private Task<IReadOnlyList<UpAccount>> LoadAccountsFromCacheAsync(IDocumentSession documentSession)
 	{
-		return documentSession.Query<Account>().ToListAsync();
+		return documentSession.Query<UpAccount>()
+			.OrderByDescending(x => x.AccountType)
+			.ToListAsync();
 	}
 
 	private Task<IPagedList<Transaction>> LoadTransactionsFromCacheAsync(IDocumentSession documentSession, int pageSize = 20, int pageNumber = 1, Expression<Func<Transaction, bool>>? expression = null)
