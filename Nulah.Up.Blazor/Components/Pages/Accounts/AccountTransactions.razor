@@ -1,0 +1,308 @@
+﻿@page "/Account/{AccountId}/Transactions"
+@using System.Text.Json
+@using Nulah.Up.Blazor.Components.Pages.Accounts.Dialogs
+@using Nulah.UpApi.Lib.Models.Transactions
+@rendermode InteractiveServer
+@implements IDisposable
+
+<h3>AccountTransactions</h3>
+@if (AccountLoading)
+{
+    <h1>Loading...</h1>
+}
+else
+{
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">@LoadedAccount.Attributes.DisplayName</MudText>
+            </CardHeaderContent>
+            <CardHeaderActions>
+                <MudIconButton Icon="@Icons.Material.Filled.QuestionMark" Color="Color.Default" OnClick="@(_ => DisplayRawData(LoadedAccount))"/>
+            </CardHeaderActions>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudText>@LoadedAccount.Attributes.Balance.Value</MudText>
+            <MudText Typo="Typo.body2">@LoadedAccount.Attributes.Balance.CurrencyCode</MudText>
+            <MudText Typo="Typo.body2">@LoadedAccount.Attributes.AccountType</MudText>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Text" Color="Color.Primary">
+                Refresh Cache
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
+}
+
+@if (TransactionsLoading)
+{
+    <h1>Transactions loading</h1>
+}
+else
+{
+    <MudDateRangePicker @bind-DateRange="@TransactionDateRange" Margin="Margin.Dense"
+                        Editable="false"
+                        Clearable="true"
+                        AutoClose="false"
+                        PlaceholderStart="Start Date" PlaceholderEnd="End Date"/>
+
+    <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="CacheAccountTransactions">
+        Refresh Cache
+    </MudButton>
+    <MudDataGrid @ref="TransactionDataGrid" ServerData="LoadData"
+                 T="Transaction"
+                 Filterable="false"
+                 SortMode="@SortMode.None"
+                 Dense="true"
+                 Groupable="false"
+                 FixedHeader="true"
+                 RowsPerPage="@(PageSize ?? 20)"
+                 CurrentPage="@(Page ?? 0)">
+        <ColGroup>
+            <col style="min-width: 20px; width: 1%"/>
+            <col style="width: 10%"/>
+            <col style="width: 87%;"/>
+            <col style="min-width: 100px; width: 2%"/>
+            <col style="min-width: 100px; width: 2%"/>
+        </ColGroup>
+        <Columns>
+            <HierarchyColumn T="Transaction"/>
+            <PropertyColumn Property="x => x.Attributes.CreatedAt"/>
+            <PropertyColumn Property="x => x.Attributes.Description"/>
+            @*
+            <PropertyColumn Property="x => x.Attributes.Message"/>
+            <PropertyColumn Property="x => x.Attributes.RawText" Title="Raw Text"/>
+             <PropertyColumn Property="x => decimal.Parse(x.Attributes.Amount.Value)" Title="Value" Format="C" CellStyleFunc="x => CurrencyStyle(x.Attributes.Amount.ValueInBaseUnits)"/> 
+*@
+            <TemplateColumn Title="In" CellStyle="color: rgb(0,163,68);">
+                <CellTemplate>
+                    @if (context.Item!.Attributes.Amount.ValueInBaseUnits >= 0)
+                    {
+                        @decimal.Parse(context.Item.Attributes.Amount.Value).ToString("C")
+                    }
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn Title="Out" CellStyle="color: rgb(242,28,13);">
+                <CellTemplate>
+                    @if (context.Item!.Attributes.Amount.ValueInBaseUnits < 0)
+                    {
+                        @decimal.Parse(context.Item.Attributes.Amount.Value).ToString("C")
+                    }
+                </CellTemplate>
+            </TemplateColumn>
+            @* <TemplateColumn Title="Foreign Amount"> *@
+            @*     <CellTemplate> *@
+            @*         @context.Item.Attributes.ForeignAmount?.CurrencyCode @context.Item.Attributes.ForeignAmount?.ValueInBaseUnits *@
+            @*     </CellTemplate> *@
+            @* </TemplateColumn> *@
+        </Columns>
+        <ChildRowContent>
+            <MudCard>
+                <MudSimpleTable Bordered="true" Dense="true" Elevation="0" Class="ma-0">
+                    <tbody>
+                    <tr>
+                        <td>Payee</td>
+                        <td>@context.Item.Attributes.Description</td>
+                    </tr>
+                    <tr>
+                        <td>Message</td>
+                        <td>@context.Item.Attributes.Message</td>
+                    </tr>
+                    <tr>
+                        <td>Raw Text</td>
+                        <td>@context.Item.Attributes.RawText</td>
+                    </tr>
+                    <tr>
+                        <td>Created</td>
+                        <td>@(context.Item.Attributes.CreatedAt.ToString("f"))</td>
+                    </tr>
+                    <tr>
+                        <td>Settled</td>
+                        <td>@(context.Item.Attributes.SettledAt?.ToString("f"))</td>
+                    </tr>
+                    </tbody>
+                </MudSimpleTable>
+            </MudCard>
+            @* <MudText><strong>Payee:</strong> @context.Item.Attributes.Description</MudText> *@
+        </ChildRowContent>
+        <PagerContent>
+            <MudDataGridPager T="Transaction" PageSizeOptions="new int[] { 10, 20, 50, 100 }"/>
+        </PagerContent>
+    </MudDataGrid>
+}
+
+@code {
+
+    [Inject]
+    private UpApiService _upBankApi { get; set; }
+
+    [Inject]
+    private IDialogService DialogService { get; set; }
+
+    [Parameter]
+    public string AccountId { get; set; } = null!;
+
+    [SupplyParameterFromQuery]
+    public int? PageSize { get; set; }
+
+    [SupplyParameterFromQuery]
+    public int? Page { get; set; }
+
+    private bool AccountLoading = true;
+    private bool TransactionsLoading = true;
+    private Account LoadedAccount { get; set; }
+    private IReadOnlyList<Transaction> Transactions { get; set; } = new List<Transaction>();
+
+    private DateRange _transactionDateRange;
+
+    private DateRange TransactionDateRange
+    {
+        get => _transactionDateRange;
+        set
+        {
+            _transactionDateRange = value;
+            TransactionDataGrid.ReloadServerData();
+        }
+    }
+
+    private void DisplayRawData(Account account) => DisplayAccountRaw(account);
+
+
+    private MudDataGrid<Transaction> TransactionDataGrid { get; set; }
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        await LoadAccount();
+        TransactionsLoading = false;
+        StateHasChanged();
+        await TransactionDataGrid.ReloadServerData();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            /*
+            await LoadAccountTransactions(AccountId);
+            TransactionsLoading = false;
+            StateHasChanged();
+            */
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task LoadAccount()
+    {
+        AccountLoading = true;
+        try
+        {
+            LoadedAccount = await _upBankApi.GetAccount(AccountId);
+        }
+        catch (Exception ex)
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+
+            var parameters = new DialogParameters<ErrorDialog>();
+            parameters.Add(x => x.ContentText, ex.Message);
+
+            await DialogService.ShowAsync<ErrorDialog>("Error when loading account", parameters, options);
+        }
+        finally
+        {
+            AccountLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task CacheAccountTransactions()
+    {
+        // TODO: this is just testing code - caching transactions will have its own page
+        TransactionsLoading = true;
+        try
+        {
+            Transactions = await _upBankApi.CacheTransactionsForAccount(AccountId,
+                _transactionDateRange?.Start,
+                _transactionDateRange?.End,
+                PageSize ?? 20);
+        }
+        catch (Exception ex)
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+
+            var parameters = new DialogParameters<ErrorDialog>();
+            parameters.Add(x => x.ContentText, ex.Message);
+
+            await DialogService.ShowAsync<ErrorDialog>("Error when loading account transactions", parameters, options);
+        }
+        finally
+        {
+            TransactionsLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task<GridData<Transaction>> LoadData(GridState<Transaction> state)
+    {
+        if (_transactionDateRange is { End: not null })
+        {
+            _transactionDateRange.End = new DateTime(
+                _transactionDateRange.End.Value.Year,
+                _transactionDateRange.End.Value.Month,
+                _transactionDateRange.End.Value.Day,
+                23, 59, 59, DateTimeKind.Local
+            );
+        }
+
+        var transactions = await _upBankApi.GetTransactionsForAccountFromCache(AccountId,
+            _transactionDateRange?.Start,
+            _transactionDateRange?.End,
+            state.PageSize,
+            state.Page + 1);
+        return new GridData<Transaction>()
+        {
+            Items = transactions,
+            TotalItems = (int)transactions.TotalItemCount
+        };
+    }
+
+    private void DisplayAccountRaw(Account account)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        var parameters = new DialogParameters<ErrorDialog>();
+        parameters.Add(x => x.ContentText, JsonSerializer.Serialize(account, new JsonSerializerOptions()
+        {
+            WriteIndented = true
+        }));
+
+        DialogService.Show<DebugDialog>("Account raw data", parameters, options);
+    }
+
+    private Func<long, string> CurrencyStyle => x =>
+    {
+        string style = "";
+
+        if (x > 0)
+        {
+            style += "color:rgb(0,163,68)";
+        }
+        else if (x < 0)
+
+        {
+            style += "color:rgb(242,28,13)";
+        }
+        else
+        {
+            style += "color:rgb(0,0,0)";
+        }
+
+        return style;
+    };
+
+    public void Dispose()
+    {
+    }
+
+}
