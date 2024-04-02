@@ -1,11 +1,14 @@
 ﻿@using Nulah.Up.Blazor.Services
 @using Nulah.UpApi.Lib.Models.Accounts
 @using Nulah.Up.Blazor.Components.Dialogs
+@implements IDisposable
+
 <MudNavMenu>
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-    <MudNavGroup Title="Accounts" Expanded="false" Icon="@Icons.Material.Filled.ManageAccounts">
+    <MudNavGroup Title="Accounts" ExpandedChanged="AccountGroupExpandChange" Icon="@Icons.Material.Filled.ManageAccounts">
         <MudNavLink Href="accounts" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AccountTree">View all</MudNavLink>
-        @if (IsLoading)
+        <MudDivider/>
+        @if (_isLoading)
         {
             <MudNavLink Disabled="true">Loading...</MudNavLink>
         }
@@ -22,46 +25,50 @@
 @code{
 
     [Inject]
-    private UpApiService _upBankApi { get; set; }
-
-    [Inject]
-    private IDialogService DialogService { get; set; }
+    private UpApiService UpBankApi { get; set; } = null!;
 
     private IReadOnlyList<Account> LoadedAccounts { get; set; } = new List<Account>();
-    private bool IsLoading = true;
+    private bool _isLoading = true;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            await LoadAccounts();
+            UpBankApi.AccountsUpdating += UpBankApiOnAccountsUpdating;
+            UpBankApi.AccountsUpdated += UpBankApiOnAccountsUpdated;
         }
 
-        await base.OnAfterRenderAsync(firstRender);
+        return base.OnAfterRenderAsync(firstRender);
     }
 
-    private async Task LoadAccounts()
+    private void UpBankApiOnAccountsUpdated(object? sender, IReadOnlyList<Account> e)
     {
-        // TODO: I should move accounts to an inmemory cache situation as it's likely the UpApiService will be shared across all pages
-        IsLoading = true;
-        try
-        {
-            LoadedAccounts = await _upBankApi.GetAccounts();
-        }
-        catch (Exception ex)
-        {
-            var options = new DialogOptions { CloseOnEscapeKey = true };
+        _isLoading = false;
+        LoadedAccounts = e;
+        StateHasChanged();
+    }
 
-            var parameters = new DialogParameters<ErrorDialog>();
-            parameters.Add(x => x.ContentText, ex.Message);
+    private void UpBankApiOnAccountsUpdating(object? sender, EventArgs e)
+    {
+        _isLoading = true;
+        StateHasChanged();
+    }
 
-            await DialogService.ShowAsync<ErrorDialog>("Error when loading accounts", parameters, options);
-        }
-        finally
+    private async void AccountGroupExpandChange(bool expandedState)
+    {
+        // Ensure that the group can expand to display loading state first
+        StateHasChanged();
+        if (expandedState && LoadedAccounts.Count == 0)
         {
-            IsLoading = false;
-            StateHasChanged();
+            // trigger a load that wil then fire off any events that will then update the list
+            await UpBankApi.GetAccounts();
         }
+    }
+
+    public void Dispose()
+    {
+        UpBankApi.AccountsUpdating -= UpBankApiOnAccountsUpdating;
+        UpBankApi.AccountsUpdated -= UpBankApiOnAccountsUpdated;
     }
 
 }

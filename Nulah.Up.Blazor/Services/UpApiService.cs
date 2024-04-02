@@ -13,6 +13,9 @@ public class UpApiService
 	private readonly UpBankApi _upBankApi;
 	private readonly IDocumentStore _documentStore;
 
+	public event EventHandler? AccountsUpdating;
+	public event EventHandler<IReadOnlyList<Account>>? AccountsUpdated;
+
 	public UpApiService(UpBankApi upBankApi, IDocumentStore documentStore)
 	{
 		_upBankApi = upBankApi;
@@ -27,11 +30,13 @@ public class UpApiService
 	{
 		try
 		{
+			AccountsUpdating?.Invoke(this, EventArgs.Empty);
 			await using var session = _documentStore.LightweightSession();
 			var existingAccounts = await LoadAccountsFromCacheAsync(session);
 
 			if (existingAccounts.Count != 0)
 			{
+				AccountsUpdated?.Invoke(this, existingAccounts);
 				return existingAccounts;
 			}
 
@@ -42,9 +47,11 @@ public class UpApiService
 				await _documentStore.BulkInsertAsync(accounts.Response.Data, BulkInsertMode.OverwriteExisting);
 				await session.SaveChangesAsync();
 
+				AccountsUpdated?.Invoke(this, accounts.Response.Data);
 				return accounts.Response.Data;
 			}
 
+			AccountsUpdated?.Invoke(this, new List<Account>());
 			return new List<Account>();
 		}
 		catch
