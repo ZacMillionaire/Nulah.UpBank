@@ -75,6 +75,7 @@ public class Program
 		}
 
 		app.UseHttpsRedirection();
+		app.UseStatusCodePagesWithRedirects("/{0}");
 
 		app.UseStaticFiles();
 		app.UseAntiforgery();
