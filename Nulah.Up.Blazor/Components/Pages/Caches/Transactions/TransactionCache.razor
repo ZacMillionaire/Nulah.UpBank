@@ -1,0 +1,104 @@
+﻿@page "/Cache/Transactions"
+@using Nulah.Up.Blazor.Components.Pages.Transactions.Components
+@using Marten.Pagination
+<h3>TransactionCache</h3>
+
+<MudGrid>
+    <MudItem xs="12" md="4">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Cached Transactions</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText>@CacheStats?.Count</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" md="4">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Most recent transaction</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText>@CacheStats?.MostRecentTransactionDate?.LocalDateTime</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" md="4">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">First Transaction Date</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText>@CacheStats?.FirstTransactionDate?.LocalDateTime</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<h1>TODO: add filters for until/since for button</h1>
+<MudButton OnClick="CacheAllTransactions">Cache all transactions</MudButton>
+
+<TransactionTable TransactionDateRange="@(new DateRange())" @ref="TransactionTableComponent" Page="Page" PageSize="PageSize" RetrieveTransactions="GetTransactions"/>
+
+@code {
+
+    [Inject]
+    private IDialogService DialogService { get; set; }
+
+    [Inject]
+    private UpApiService _upBankApi { get; set; }
+
+    [SupplyParameterFromQuery]
+    public int? PageSize { get; set; }
+
+    [SupplyParameterFromQuery]
+    public int? Page { get; set; }
+
+    private TransactionCacheStats? CacheStats;
+
+    private async void CacheAllTransactions(MouseEventArgs obj)
+    {
+        var options = new DialogOptions
+        {
+            CloseOnEscapeKey = false,
+            DisableBackdropClick = true
+        };
+
+        var parameters = new DialogParameters<CacheDialog>();
+
+        await DialogService.ShowAsync<CacheDialog>("Cache transactions", parameters, options);
+    }
+
+    private TransactionTable? TransactionTableComponent { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        try
+        {
+            CacheStats = await _upBankApi.GetTransactionCacheStats();
+            StateHasChanged();
+            if (TransactionTableComponent != null)
+            {
+                await TransactionTableComponent.TransactionDataGrid.ReloadServerData();
+            }
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+    private async Task<IPagedList<UpTransaction>> GetTransactions(DateTimeOffset? since, DateTimeOffset? until, int pageSize, int page)
+    {
+        return await _upBankApi.GetTransactions(null, since, until, pageSize, page);
+    }
+
+}

@@ -1,5 +1,4 @@
-﻿using Marten.Metadata;
-using Nulah.UpApi.Lib.Models.Accounts;
+﻿using Nulah.UpApi.Lib.Models.Enums;
 using Nulah.UpApi.Lib.Models.Shared;
 
 namespace Nulah.Up.Blazor.Models;

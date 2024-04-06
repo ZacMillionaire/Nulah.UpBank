@@ -1,0 +1,85 @@
+﻿@using Nulah.Up.Blazor.Services
+@implements IDisposable
+<MudDialog>
+    <DialogContent>
+        @if (CacheInProgress)
+        {
+            <MudProgressLinear Color="Color.Primary" Size="Size.Large" Indeterminate="true" Class="my-7"/>
+        }
+        <MudContainer Style="max-height: 300px; overflow-y: scroll">
+            @foreach (var cacheEventMessage in CacheMessages)
+            {
+                <MudText>@cacheEventMessage</MudText>
+            }
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        @if (!CacheComplete)
+        {
+            <MudButton Color="Color.Primary" OnClick="StartCache" Disabled="CacheInProgress">Start Cache</MudButton>
+        }
+        else
+        {
+            <MudButton Color="Color.Success" OnClick="CloseDialog">Close</MudButton>
+        }
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    [Inject]
+    private UpApiService _upBankApi { get; set; }
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    //TODO: add parameters for other filters such as since/until
+    private List<string> CacheMessages = new();
+    private bool CacheInProgress;
+    private bool CacheComplete;
+
+    protected override void OnInitialized()
+    {
+        _upBankApi.TransactionCacheStarted += UpBankApiOnTransactionCacheStarted;
+        _upBankApi.TransactionCacheFinished += UpBankApiOnTransactionCacheFinished;
+        _upBankApi.TransactionCacheMessage += UpBankApiOnTransactionCacheMessage;
+        base.OnInitialized();
+    }
+
+    private void UpBankApiOnTransactionCacheStarted(object? sender, EventArgs e)
+    {
+        CacheInProgress = true;
+        StateHasChanged();
+    }
+
+    private void UpBankApiOnTransactionCacheFinished(object? sender, EventArgs e)
+    {
+        CacheInProgress = false;
+        StateHasChanged();
+    }
+
+    private void UpBankApiOnTransactionCacheMessage(object? sender, string e)
+    {
+        CacheMessages.Add(e);
+        StateHasChanged();
+    }
+
+    private async void StartCache()
+    {
+        var transactions = await _upBankApi.CacheTransactions(pageSize: 100);
+        //MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    public void Dispose()
+    {
+        _upBankApi.TransactionCacheStarted -= UpBankApiOnTransactionCacheStarted;
+        _upBankApi.TransactionCacheFinished -= UpBankApiOnTransactionCacheFinished;
+        _upBankApi.TransactionCacheMessage -= UpBankApiOnTransactionCacheMessage;
+    }
+
+    private void CloseDialog(MouseEventArgs obj)
+    {
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+}

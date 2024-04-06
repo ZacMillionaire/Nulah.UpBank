@@ -1,7 +1,6 @@
-﻿namespace Nulah.UpApi.Lib.Models.Shared
+﻿namespace Nulah.UpApi.Lib.Models.Shared;
+
+public class SelfLink
 {
-    public class SelfLink
-    {
-        public string Self { get; set; }
-    }
+    public string Self { get; set; }
 }

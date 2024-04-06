@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Text.Json.Serialization;
 using Nulah.UpApi.Lib.Models.Accounts;
+using Nulah.UpApi.Lib.Models.Enums;
 using Nulah.UpApi.Lib.Models.Shared;
 
 namespace Nulah.UpApi.Lib.Models.Transactions;
@@ -34,13 +34,13 @@ public class TransactionRelationships
 	/// If this transaction is a transfer between accounts, this relationship will contain the account the transaction went to/came from.
 	/// The amount field can be used to determine the direction of the transfer.
 	/// </summary>
-	public TransactionTransferAccount TransferAccount { get; set; }
+	public AccountResponse? TransferAccount { get; set; }
 
-	public AccountResponse Account { get; set; }
+	public AccountResponse? Account { get; set; }
 
-	public TransactionCategory Category { get; set; }
-	public TransactionParentCategory ParentCategory { get; set; }
-	public TransactionTags Tags { get; set; }
+	public TransactionCategory? Category { get; set; }
+	public TransactionParentCategory? ParentCategory { get; set; }
+	public TransactionTags? Tags { get; set; }
 }
 
 public class TransactionTransferAccount
@@ -137,8 +137,7 @@ public class TransactionAttributes
 	/// <summary>
 	/// The current processing status of this transaction, according to whether or not this transaction has settled or is still held.
 	/// </summary>
-	[JsonConverter(typeof(ResponseEnumConverter<TransactionStatusEnum>))]
-	public TransactionStatusEnum Status { get; set; }
+	public TransactionStatus Status { get; set; }
 
 	/// <summary>
 	/// The original, unprocessed text of the transaction. This is often not a perfect indicator of the actual merchant,
@@ -162,8 +161,8 @@ public class TransactionAttributes
 	public bool IsCategorizable { get; set; }
 
 	/// <summary>
-	/// If this transaction is currently in the <see cref="TransactionStatusEnum.HELD"/> status, or was ever in the <see cref="TransactionStatusEnum.HELD"/> status,
-	/// the <see cref="HoldInfo.Amount"/> and <see cref="HoldInfo.ForeignAmount"/> of the transaction while <see cref="TransactionStatusEnum.HELD"/>.
+	/// If this transaction is currently in the <see cref="TransactionStatus.HELD"/> status, or was ever in the <see cref="TransactionStatus.HELD"/> status,
+	/// the <see cref="HoldInfo.Amount"/> and <see cref="HoldInfo.ForeignAmount"/> of the transaction while <see cref="TransactionStatus.HELD"/>.
 	/// </summary>
 	// what even is this sentence...It's straight from the offical v1 documentation though
 	public HoldInfo? HoldInfo { get; set; }
@@ -180,15 +179,15 @@ public class TransactionAttributes
 
 	/// <summary>
 	/// The amount of this transaction in Australian dollars. 
-	/// For transactions that were once <see cref="TransactionStatusEnum.HELD"/> but are now <see cref="TransactionStatusEnum.SETTLED"/>,
-	/// refer to the <see cref="HoldInfo"/> field for the original <see cref="HoldInfo.Amount"/> the transaction was <see cref="TransactionStatusEnum.HELD"/> at.
+	/// For transactions that were once <see cref="TransactionStatus.HELD"/> but are now <see cref="TransactionStatus.SETTLED"/>,
+	/// refer to the <see cref="HoldInfo"/> field for the original <see cref="HoldInfo.Amount"/> the transaction was <see cref="TransactionStatus.HELD"/> at.
 	/// </summary>
 	public MoneyObject Amount { get; set; }
 
 	/// <summary>
 	/// The foreign currency amount of this transaction. This field will be null for domestic transactions. 
 	/// The amount was converted to the AUD amount reflected in the <see cref="Amount"/> of this transaction. 
-	/// Refer to the <see cref="HoldInfo"/> field for the original <see cref="HoldInfo.ForeignAmount"/> the transaction was <see cref="TransactionStatusEnum.HELD"/> at.
+	/// Refer to the <see cref="HoldInfo"/> field for the original <see cref="HoldInfo.ForeignAmount"/> the transaction was <see cref="TransactionStatus.HELD"/> at.
 	/// </summary>
 	public MoneyObject? ForeignAmount { get; set; }
 
@@ -199,7 +198,7 @@ public class TransactionAttributes
 
 	/// <summary>
 	/// The date-time at which this transaction settled. This field will be null for transactions
-	/// that are currently in the <see cref="TransactionStatusEnum.HELD"/> status.
+	/// that are currently in the <see cref="TransactionStatus.HELD"/> status.
 	/// </summary>
 	public DateTime? SettledAt { get; set; }
 
@@ -207,81 +206,4 @@ public class TransactionAttributes
 	/// The date-time at which this transaction was first encountered.
 	/// </summary>
 	public DateTime CreatedAt { get; set; }
-}
-
-public class HoldInfo
-{
-	/// <summary>
-	/// The amount of this transaction while in the <see cref="TransactionStatusEnum.HELD"/> status, in Australian dollars.
-	/// </summary>
-	public MoneyObject Amount { get; set; }
-
-	/// <summary>
-	/// The foreign currency amount of this transaction while in the <see cref="TransactionStatusEnum.HELD"/> status.
-	/// This field will be null for domestic transactions. The amount was converted to the <see cref="TransactionStatusEnum.HELD"/> amount 
-	/// reflected in the <see cref="Amount"/> field.
-	/// </summary>
-	public MoneyObject? ForeignAmount { get; set; }
-}
-
-public class RoundUp
-{
-	/// <summary>
-	/// The total amount of this Round Up, including any boosts, represented as a negative value.
-	/// </summary>
-	public MoneyObject Amount { get; set; }
-
-	/// <summary>
-	/// The portion of the Round Up <see cref="Amount"/> owing to boosted Round Ups, 
-	/// represented as a negative value. If no boost was added to the Round Up this field will be null.
-	/// </summary>
-	public MoneyObject? BoostPortion { get; set; }
-}
-
-public class Cashback
-{
-	/// <summary>
-	/// A brief description of why this cashback was paid.
-	/// </summary>
-	public string Description { get; set; }
-
-	/// <summary>
-	/// The total amount of cashback paid, represented as a positive value.
-	/// </summary>
-	public MoneyObject Amount { get; set; }
-}
-
-public class CardPurchaseMethod
-{
-	/// <summary>
-	/// The type of card purchase.
-	/// </summary>
-	[JsonConverter(typeof(ResponseEnumConverter<CardPurchaseMethodEnum>))]
-	public CardPurchaseMethodEnum Method { get; set; }
-
-	/// <summary>
-	/// The last four digits of the card used for the purchase, if applicable.
-	/// </summary>
-	public string? CardNumberSuffix { get; set; }
-}
-
-public enum TransactionStatusEnum
-{
-	/// <summary>
-	/// Pending (maybe?)
-	/// </summary>
-	HELD,
-	SETTLED
-}
-
-public enum CardPurchaseMethodEnum
-{
-	BAR_CODE,
-	OCR,
-	CARD_PIN,
-	CARD_DETAILS,
-	CARD_ON_FILE,
-	ECOMMERCE,
-	MAGNETIC_STRIPE,
-	CONTACTLESS
 }

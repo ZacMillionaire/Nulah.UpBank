@@ -3,6 +3,8 @@ using System.Text;
 using System.Text.Json;
 using Nulah.UpApi.Lib.Models;
 using Nulah.UpApi.Lib.Models.Accounts;
+using Nulah.UpApi.Lib.Models.Converters;
+using Nulah.UpApi.Lib.Models.Enums;
 using Nulah.UpApi.Lib.Models.Transactions;
 
 namespace Nulah.UpApi.Lib;
@@ -23,6 +25,13 @@ public class UpBankApi
 	{
 		_httpClient = httpClient;
 		_configuration = configuration;
+
+		// TODO: eventually move these back to attributes on their respective locations - this is just a temp fix to enable Marten to deserialise
+		_jsonSerialiserOptions.Converters.Add(new ResponseEnumConverter<AccountOwnershipType>());
+		_jsonSerialiserOptions.Converters.Add(new ResponseEnumConverter<AccountType>());
+		_jsonSerialiserOptions.Converters.Add(new ResponseEnumConverter<CardPurchaseMethodType>());
+		_jsonSerialiserOptions.Converters.Add(new ResponseEnumConverter<TransactionStatus>());
+		_jsonSerialiserOptions.Converters.Add(new HttpStatusCodeConverter());
 	}
 
 	/// <summary>
@@ -65,8 +74,50 @@ public class UpBankApi
 		return accountById;
 	}
 
+	public async Task<ApiResponse<TransactionResponse>> GetTransactions(DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = 20, string? nextPage = null)
+	{
+		// TODO: see comments in this method to potentially change this call to a throw on fail method instead of return bool
+		// TODO: add override for account id - only thing that should change is the uri has the account api added into it, all other functionality should be identical
+		if (!await IsAuthorised())
+		{
+			throw new Exception("Api token is invalid");
+		}
+
+		var queryDict = new Dictionary<string, object>();
+
+		// Only populate the query dict if we have nothing for next page, otherwise all query parameters will be contained
+		// within the supplied nextpage url
+		if (string.IsNullOrWhiteSpace(nextPage))
+		{
+			queryDict.Add("page[size]", pageSize);
+
+			if (since != null)
+			{
+				queryDict.Add("filter[since]", since);
+			}
+
+			if (until != null)
+			{
+				queryDict.Add("filter[until]", until);
+			}
+			// TODO: add remaining filters for category and tag
+		}
+
+		var accounts = await HttpGet<TransactionResponse>(string.IsNullOrWhiteSpace(nextPage)
+			? $"{_configuration.ApiBaseAddress}/transactions"
+			: nextPage, queryDict);
+
+		return accounts;
+	}
+
 	public async Task<ApiResponse<TransactionResponse>> GetTransactionsByAccountId(string accountId, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = 20)
 	{
+		// TODO: see comments in this method to potentially change this call to a throw on fail method instead of return bool
+		if (!await IsAuthorised())
+		{
+			throw new Exception("Api token is invalid");
+		}
+
 		var queryDict = new Dictionary<string, object>()
 		{
 			{ "page[size]", pageSize }
@@ -173,7 +224,7 @@ public class UpBankApi
 
 	private string AppendQueryParamsToUri(string uri, Dictionary<string, object>? queryParams)
 	{
-		if (queryParams == null)
+		if (queryParams == null || queryParams.Count == 0)
 		{
 			return uri;
 		}

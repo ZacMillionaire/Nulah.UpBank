@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+﻿using Nulah.UpApi.Lib.Models.Enums;
 using Nulah.UpApi.Lib.Models.Shared;
 
 namespace Nulah.UpApi.Lib.Models.Accounts;
@@ -11,7 +11,9 @@ public class AccountsResponse
 
 public class AccountResponse
 {
-	public Account Data { get; set; }
+	public Account? Data { get; set; }
+
+	public RelatedLink? Links { get; set; }
 	// public TransactionLink Transactions { get; set; }
 	// public SelfLink Links { get; set; }
 }
@@ -42,26 +44,12 @@ public class AccountAttributes
 {
 	public string DisplayName { get; set; }
 
-	[JsonConverter(typeof(ResponseEnumConverter<AccountType>))]
 	public AccountType AccountType { get; set; }
 
-	[JsonConverter(typeof(ResponseEnumConverter<AccountOwnershipType>))]
 	public AccountOwnershipType OwnershipType { get; set; }
 
 	public MoneyObject Balance { get; set; }
 	public DateTime CreatedAt { get; set; }
-}
-
-public enum AccountType
-{
-	SAVER,
-	TRANSACTIONAL
-}
-
-public enum AccountOwnershipType
-{
-	INDIVIDUAL,
-	JOINT
 }
 
 //

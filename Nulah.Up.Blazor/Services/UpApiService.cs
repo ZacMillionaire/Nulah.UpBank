@@ -16,12 +16,17 @@ public class UpApiService
 
 	public event EventHandler? AccountsUpdating;
 	public event EventHandler<IReadOnlyList<UpAccount>>? AccountsUpdated;
+	public event EventHandler? TransactionCacheStarted;
+	public event EventHandler? TransactionCacheFinished;
+	public event EventHandler<string>? TransactionCacheMessage;
 
 	public UpApiService(UpBankApi upBankApi, IDocumentStore documentStore)
 	{
 		_upBankApi = upBankApi;
 		_documentStore = documentStore;
 	}
+
+	#region Accounts
 
 	/// <summary>
 	///	Retrieves all accounts from the Up Api.
@@ -137,6 +142,44 @@ public class UpApiService
 		}
 	}
 
+	#endregion
+
+	#region Transactions
+
+	public async Task<IPagedList<UpTransaction>> GetTransactions(string? accountId = null, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = 20, int pageNumber = 1)
+	{
+		await using var session = _documentStore.LightweightSession();
+		var existingAccounts = await LoadTransactionsFromCacheAsync(session, pageSize, pageNumber, BuildTransactionQuery(accountId, since, until));
+
+		return existingAccounts;
+	}
+
+	public async Task<TransactionCacheStats> GetTransactionCacheStats()
+	{
+		await using var session = _documentStore.LightweightSession();
+
+		/*
+		// Commented out as Min/Max currently cause deserialisation exceptions
+		var statQueryBatch = session.CreateBatchQuery();
+		var transactionsCached = statQueryBatch.Query<UpTransaction>().Count();
+		var latestTransaction = statQueryBatch.Query<UpTransaction>().Max(x => x.CreatedAt);
+		var firstTransaction = statQueryBatch.Query<UpTransaction>().Min(x => x.CreatedAt);
+		await statQueryBatch.Execute();
+		*/
+
+		// shims to get a max result via Marten and sidestep any deserialisation exceptions.
+		// Whenever I find a solution to those I'll be able to add these back into a query batch
+		var transactionsCached = session.Query<UpTransaction>().Count();
+		var firstTransaction = session.Query<DateTime>("select MIN(d.data ->> 'CreatedAt')::timestamptz as data from public.mt_doc_uptransaction as d").FirstOrDefault();
+		var latestTransaction = session.Query<DateTime>("select MAX(d.data ->> 'CreatedAt')::timestamptz as data from public.mt_doc_uptransaction as d").FirstOrDefault();
+
+		return new TransactionCacheStats()
+		{
+			Count = transactionsCached,
+			MostRecentTransactionDate = latestTransaction,
+			FirstTransactionDate = firstTransaction
+		};
+	}
 
 	/// <summary>
 	/// 
@@ -147,23 +190,101 @@ public class UpApiService
 	/// <param name="pageSize"></param>
 	/// <param name="pageNumber">Minimum value is 1</param>
 	/// <returns></returns>
-	public async Task<IPagedList<Transaction>> GetTransactionsForAccountFromCache(string accountId, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = 20, int pageNumber = 1)
+	public async Task<IPagedList<UpTransaction>> CacheTransactions(string? accountId = null, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = 20)
 	{
 		try
 		{
-			await using var session = _documentStore.LightweightSession();
-			var existingAccounts = await LoadTransactionsFromCacheAsync(session, pageSize, pageNumber, BuildTransactionQuery(accountId, since, until));
+			TransactionCacheStarted?.Invoke(this, EventArgs.Empty);
+			var sinceString = since != null ? since?.ToString("f") : "right now";
+			var untilString = until != null ? until?.ToString("f") : "the very beginning";
 
-			return existingAccounts;
+			TransactionCacheMessage?.Invoke(this, $"Loading transactions since {sinceString} until {untilString} with page size of {pageSize}");
+			// load transactions from the api
+			var transactions = await GetTransactionsFromApi(null, since, until, pageSize);
+			TransactionCacheMessage?.Invoke(this, "All transactions loaded.");
+
+			TransactionCacheMessage?.Invoke(this, $"Caching loaded transactions...");
+
+			await using var session = _documentStore.LightweightSession();
+			session.Store((IEnumerable<UpTransaction>)transactions);
+			await session.SaveChangesAsync();
+
+			TransactionCacheMessage?.Invoke(this, $"Cache complete! Cached {transactions.Count} transactions");
+
+			var firstPageOfTransactions = await LoadTransactionsFromCacheAsync(session, pageSize);
+
+			return firstPageOfTransactions;
 		}
 		catch
 		{
 			throw;
 		}
+		finally
+		{
+			TransactionCacheFinished?.Invoke(this, EventArgs.Empty);
+		}
+	}
+
+	/// <summary>
+	/// Retrieves transactions from the API with the given filters.
+	/// <para>
+	/// If <paramref name="nextPage"/> is not null, all other parameters will be ignored.
+	/// </para>
+	/// </summary>
+	/// <param name="nextPage"></param>
+	/// <param name="since"></param>
+	/// <param name="until"></param>
+	/// <param name="pageSize"></param>
+	/// <returns></returns>
+	private async Task<List<UpTransaction>> GetTransactionsFromApi(string? nextPage = null, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = 20)
+	{
+		var transactions = new List<UpTransaction>();
+		var apiResponse = await _upBankApi.GetTransactions(since, until, pageSize, nextPage);
+
+		if (apiResponse is { Success: true, Response: not null })
+		{
+			TransactionCacheMessage?.Invoke(this, $"Loaded {apiResponse.Response.Data.Count} transactions from the api");
+			transactions.AddRange(
+				apiResponse.Response.Data
+					.Select(x => new UpTransaction()
+					{
+						Id = x.Id,
+						CreatedAt = x.Attributes.CreatedAt,
+						Amount = x.Attributes.Amount,
+						Cashback = x.Attributes.Cashback,
+						Description = x.Attributes.Description,
+						Message = x.Attributes.Message,
+						RawText = x.Attributes.RawText,
+						Status = x.Attributes.Status,
+						AccountId = x.Relationships.Account?.Data?.Id,
+						ForeignAmount = x.Attributes.ForeignAmount,
+						HoldInfo = x.Attributes.HoldInfo,
+						IsCategorizable = x.Attributes.IsCategorizable,
+						RoundUp = x.Attributes.RoundUp,
+						SettledAt = x.Attributes.SettledAt,
+						CardPurchaseMethod = x.Attributes.CardPurchaseMethod,
+						Category = x.Relationships.Category?.Data,
+						CategoryParent = x.Relationships.ParentCategory?.Data,
+						Tags = x.Relationships.Tags?.Data ?? [],
+						TransferAccountId = x.Relationships.TransferAccount?.Data?.Id
+					})
+			);
+
+			if (!string.IsNullOrWhiteSpace(apiResponse.Response.Links.Next))
+			{
+				TransactionCacheMessage?.Invoke(this, "Loading next page of transactions...");
+				// We still pass in the previous parameters if Up changes their API implementation
+				transactions.AddRange(await GetTransactionsFromApi(apiResponse.Response.Links.Next, since, until, pageSize));
+			}
+		}
+
+		return transactions;
 	}
 
 	public async Task<IReadOnlyList<Transaction>> CacheTransactionsForAccount(string accountId, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = 20)
 	{
+		// TODO: combine this into get transactions with a bool bypasscache
+		throw new NotSupportedException();
 		// TODO: this is mostly just testing code for now
 		try
 		{
@@ -192,6 +313,8 @@ public class UpApiService
 
 	private async Task RetrieveNextPageOfTransactions(TransactionResponse transactionResponse, List<Transaction> transactions)
 	{
+		// TODO: reimplement this similar to retrieving accounts from the api
+		throw new NotSupportedException();
 		var nextTransactions = await _upBankApi.GetNextTransactionPage(transactionResponse);
 		if (nextTransactions is { Success: true, Response: not null })
 		{
@@ -200,23 +323,23 @@ public class UpApiService
 		}
 	}
 
-	private Expression<Func<Transaction, bool>> BuildTransactionQuery(string accountId, DateTimeOffset? since = null, DateTimeOffset? until = null)
+	private Expression<Func<UpTransaction, bool>> BuildTransactionQuery(string? accountId = null, DateTimeOffset? since = null, DateTimeOffset? until = null)
 	{
-		Expression<Func<Transaction, bool>>? baseFunc = null;
+		Expression<Func<UpTransaction, bool>>? baseFunc = null;
 
 		if (!string.IsNullOrWhiteSpace(accountId))
 		{
-			baseFunc = baseFunc.And(x => x.Relationships.Account.Data.Id == accountId);
+			baseFunc = baseFunc.And(x => x.AccountId == accountId);
 		}
 
 		if (since.HasValue)
 		{
-			baseFunc = baseFunc.And(x => since.Value.ToUniversalTime() <= x.Attributes.CreatedAt);
+			baseFunc = baseFunc.And(x => since.Value.ToUniversalTime() <= x.CreatedAt);
 		}
 
 		if (until.HasValue)
 		{
-			baseFunc = baseFunc.And(x => x.Attributes.CreatedAt <= until.Value.ToUniversalTime());
+			baseFunc = baseFunc.And(x => x.CreatedAt <= until.Value.ToUniversalTime());
 		}
 
 		// Return an "empty" expression if we have a criteria object, but no criteria to act on
@@ -230,6 +353,8 @@ public class UpApiService
 		return baseFunc;
 	}
 
+	#endregion
+
 	private Task<IReadOnlyList<UpAccount>> LoadAccountsFromCacheAsync(IDocumentSession documentSession)
 	{
 		return documentSession.Query<UpAccount>()
@@ -237,11 +362,11 @@ public class UpApiService
 			.ToListAsync();
 	}
 
-	private Task<IPagedList<Transaction>> LoadTransactionsFromCacheAsync(IDocumentSession documentSession, int pageSize = 20, int pageNumber = 1, Expression<Func<Transaction, bool>>? expression = null)
+	private Task<IPagedList<UpTransaction>> LoadTransactionsFromCacheAsync(IDocumentSession documentSession, int pageSize = 20, int pageNumber = 1, Expression<Func<UpTransaction, bool>>? expression = null)
 	{
-		return documentSession.Query<Transaction>()
+		return documentSession.Query<UpTransaction>()
 			.Where(expression ?? (x => true))
-			.OrderByDescending(x => x.Attributes.CreatedAt)
+			.OrderByDescending(x => x.CreatedAt)
 			.ToPagedListAsync(pageNumber, pageSize);
 	}
 }

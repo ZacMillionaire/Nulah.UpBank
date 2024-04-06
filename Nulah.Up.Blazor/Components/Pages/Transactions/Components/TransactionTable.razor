@@ -1,0 +1,146 @@
+﻿@using Nulah.Up.Blazor.Models
+@using Marten.Pagination
+<MudCard Class="pa-3">
+    <MudDateRangePicker @bind-DateRange="@TransactionDateRange" Margin="Margin.Dense"
+                        Editable="false"
+                        Clearable="true"
+                        AutoClose="false"
+                        DateFormat="dddd, dd MMMM, yyyy" TitleDateFormat="MMMM dd"
+                        PlaceholderStart="Start Date" PlaceholderEnd="End Date"/>
+    @* <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="CacheAccountTransactions"> *@
+    @*     Refresh Cache *@
+    @* </MudButton> *@
+</MudCard>
+
+<MudDataGrid @ref="TransactionDataGrid"
+             ServerData="LoadData"
+             T="UpTransaction"
+             Filterable="false"
+             SortMode="@SortMode.None"
+             Dense="true"
+             Groupable="false"
+             FixedHeader="true"
+             RowsPerPage="@(PageSize ?? 20)"
+             CurrentPage="@(Page ?? 0)">
+    <ColGroup>
+        <col style="min-width: 20px; width: 1%"/>
+        <col style="width: 15%"/>
+        <col style="width: 70%"/>
+        <col style="min-width: 100px; width: 7%"/>
+        <col style="min-width: 100px; width: 7%"/>
+    </ColGroup>
+    <Columns>
+        <HierarchyColumn T="UpTransaction"/>
+        <PropertyColumn Property="x => x.CreatedAt"/>
+        <PropertyColumn Property="x => x.Description"/>
+        <TemplateColumn Title="In" CellStyle="color: rgb(0,163,68);">
+            <CellTemplate>
+                @if (context.Item!.Amount.ValueInBaseUnits >= 0)
+                {
+                    @decimal.Parse(context.Item.Amount.Value).ToString("C")
+                }
+            </CellTemplate>
+        </TemplateColumn>
+        <TemplateColumn Title="Out" CellStyle="color: rgb(242,28,13);">
+            <CellTemplate>
+                @if (context.Item!.Amount.ValueInBaseUnits < 0)
+                {
+                    @decimal.Parse(context.Item.Amount.Value).ToString("C")
+                }
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+    <ChildRowContent>
+        <MudCard>
+            <MudSimpleTable Bordered="true" Dense="true" Elevation="0" Class="ma-0">
+                <tbody>
+                <tr>
+                    <td>Payee</td>
+                    <td>@context.Item.Description</td>
+                </tr>
+                <tr>
+                    <td>Message</td>
+                    <td>@context.Item.Message</td>
+                </tr>
+                <tr>
+                    <td>Raw Text</td>
+                    <td>@context.Item.RawText</td>
+                </tr>
+                <tr>
+                    <td>Created</td>
+                    <td>@(context.Item.CreatedAt.ToString("f"))</td>
+                </tr>
+                <tr>
+                    <td>Settled</td>
+                    <td>@(context.Item.SettledAt?.ToString("f"))</td>
+                </tr>
+                </tbody>
+            </MudSimpleTable>
+        </MudCard>
+    </ChildRowContent>
+    <PagerContent>
+        <MudDataGridPager T="UpTransaction" PageSizeOptions="new int[] { 10, 20, 50, 100 }"/>
+    </PagerContent>
+</MudDataGrid>
+
+@code {
+
+    [Parameter]
+    public int? PageSize { get; set; }
+
+    [Parameter]
+    public int? Page { get; set; }
+
+    [Parameter]
+    public Func<DateTimeOffset?, DateTimeOffset?, int, int, Task<IPagedList<UpTransaction>>>? RetrieveTransactions { get; set; }
+
+    public MudDataGrid<UpTransaction>? TransactionDataGrid { get; set; }
+
+    private DateRange _transactionDateRange = new(
+        new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
+        new DateTime(DateTime.Now.Year, DateTime.Now.Month,
+            DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)
+        )
+    );
+
+    [Parameter]
+    public DateRange TransactionDateRange
+    {
+        get => _transactionDateRange;
+        set
+        {
+            _transactionDateRange = value;
+            TransactionDataGrid?.ReloadServerData();
+        }
+    }
+
+    private async Task<GridData<UpTransaction>> LoadData(GridState<UpTransaction> state)
+    {
+        if (RetrieveTransactions == null)
+        {
+            return new GridData<UpTransaction>();
+        }
+
+        if (_transactionDateRange is { End: not null })
+        {
+            _transactionDateRange.End = new DateTime(
+                _transactionDateRange.End.Value.Year,
+                _transactionDateRange.End.Value.Month,
+                _transactionDateRange.End.Value.Day,
+                23, 59, 59, DateTimeKind.Local
+            );
+        }
+
+        var transactions = await RetrieveTransactions(_transactionDateRange?.Start,
+            _transactionDateRange?.End,
+            state.PageSize,
+            state.Page + 1);
+
+        return new GridData<UpTransaction>()
+        {
+            Items = transactions,
+            TotalItems = (int)transactions.TotalItemCount
+        };
+    }
+
+}

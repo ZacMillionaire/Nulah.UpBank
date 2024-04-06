@@ -1,7 +1,6 @@
-﻿namespace Nulah.UpApi.Lib.Models.Shared
+﻿namespace Nulah.UpApi.Lib.Models.Shared;
+
+public class RelatedLink
 {
-    public class RelatedLink
-    {
-        public string Related { get; set; }
-    }
+    public string Related { get; set; }
 }

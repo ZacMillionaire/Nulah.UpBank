@@ -1,4 +1,6 @@
+using System.Data.Common;
 using Marten;
+using Marten.Services.Json;
 using Nulah.Up.Blazor.Components;
 using MudBlazor.Services;
 using Nulah.Up.Blazor.Models;
@@ -39,6 +41,8 @@ public class Program
 			{
 				// Establish the connection string to your Marten database
 				options.Connection(builder.Configuration.GetConnectionString("Postgres"));
+				
+				options.UseDefaultSerialization(serializerType: SerializerType.SystemTextJson);
 
 				// If we're running in development mode, let Marten just take care
 				// of all necessary schema building and patching behind the scenes
