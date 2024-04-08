@@ -13,6 +13,7 @@ public class UpApiService
 {
 	private readonly UpBankApi _upBankApi;
 	private readonly IDocumentStore _documentStore;
+	private const int DefaultPageSize = 25;
 
 	public event EventHandler? AccountsUpdating;
 	public event EventHandler<IReadOnlyList<UpAccount>>? AccountsUpdated;
@@ -146,7 +147,7 @@ public class UpApiService
 
 	#region Transactions
 
-	public async Task<IPagedList<UpTransaction>> GetTransactions(string? accountId = null, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = 20, int pageNumber = 1)
+	public async Task<IPagedList<UpTransaction>> GetTransactions(string? accountId = null, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = DefaultPageSize, int pageNumber = 1)
 	{
 		await using var session = _documentStore.LightweightSession();
 		var existingAccounts = await LoadTransactionsFromCacheAsync(session, pageSize, pageNumber, BuildTransactionQuery(accountId, since, until));
@@ -170,8 +171,8 @@ public class UpApiService
 		// shims to get a max result via Marten and sidestep any deserialisation exceptions.
 		// Whenever I find a solution to those I'll be able to add these back into a query batch
 		var transactionsCached = session.Query<UpTransaction>().Count();
-		var firstTransaction = session.Query<DateTime>("select MIN(d.data ->> 'CreatedAt')::timestamptz as data from public.mt_doc_uptransaction as d").FirstOrDefault();
-		var latestTransaction = session.Query<DateTime>("select MAX(d.data ->> 'CreatedAt')::timestamptz as data from public.mt_doc_uptransaction as d").FirstOrDefault();
+		var firstTransaction = session.Query<DateTime>("select MIN(d.data ->> 'CreatedAt')::timestamp as data from public.mt_doc_uptransaction as d").FirstOrDefault();
+		var latestTransaction = session.Query<DateTime>("select MAX(d.data ->> 'CreatedAt')::timestamp as data from public.mt_doc_uptransaction as d").FirstOrDefault();
 
 		return new TransactionCacheStats()
 		{
@@ -179,6 +180,34 @@ public class UpApiService
 			MostRecentTransactionDate = latestTransaction,
 			FirstTransactionDate = firstTransaction
 		};
+	}
+
+	/// <summary>
+	/// Returns a string representing a user friendly description of what transactions are being collected.
+	/// </summary>
+	/// <param name="since"></param>
+	/// <param name="until"></param>
+	/// <param name="pageSize"></param>
+	/// <returns></returns>
+	private string GetSinceUntilString(DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = DefaultPageSize)
+	{
+		// TODO: this feels gross but I was getting sick of trying to mentally translate the temporal when developing
+		if (since == null && until == null)
+		{
+			return $"Loading <strong>all transactions</strong> available until the first transaction ever made across all accounts with page size of {pageSize}";
+		}
+
+		if (since == null && until != null)
+		{
+			return $"Loading all transactions from before <strong>{since:dddd, dd MMMM, yyyy}</strong> until the first transaction ever made across all accounts with page size of {pageSize}";
+		}
+
+		if (since != null && until == null)
+		{
+			return $"Loading all transactions from <strong>{since:dddd, dd MMMM, yyyy}</strong> until midnight, <strong>{DateTime.Now:dddd, dd MMMM, yyyy}</strong> with page size of {pageSize}";
+		}
+
+		return $"Loading all transactions from <strong>{since:dddd, dd MMMM, yyyy}</strong> until <strong>{until:dddd, dd MMMM, yyyy}</strong> with page size of {pageSize}";
 	}
 
 	/// <summary>
@@ -190,7 +219,7 @@ public class UpApiService
 	/// <param name="pageSize"></param>
 	/// <param name="pageNumber">Minimum value is 1</param>
 	/// <returns></returns>
-	public async Task<IPagedList<UpTransaction>> CacheTransactions(string? accountId = null, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = 20)
+	public async Task<IPagedList<UpTransaction>> CacheTransactions(string? accountId = null, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = DefaultPageSize)
 	{
 		try
 		{
@@ -198,7 +227,7 @@ public class UpApiService
 			var sinceString = since != null ? since?.ToString("f") : "right now";
 			var untilString = until != null ? until?.ToString("f") : "the very beginning";
 
-			TransactionCacheMessage?.Invoke(this, $"Loading transactions since {sinceString} until {untilString} with page size of {pageSize}");
+			TransactionCacheMessage?.Invoke(this, GetSinceUntilString(since, until, pageSize));
 			// load transactions from the api
 			var transactions = await GetTransactionsFromApi(null, since, until, pageSize);
 			TransactionCacheMessage?.Invoke(this, "All transactions loaded.");
@@ -236,7 +265,7 @@ public class UpApiService
 	/// <param name="until"></param>
 	/// <param name="pageSize"></param>
 	/// <returns></returns>
-	private async Task<List<UpTransaction>> GetTransactionsFromApi(string? nextPage = null, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = 20)
+	private async Task<List<UpTransaction>> GetTransactionsFromApi(string? nextPage = null, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = DefaultPageSize)
 	{
 		var transactions = new List<UpTransaction>();
 		var apiResponse = await _upBankApi.GetTransactions(since, until, pageSize, nextPage);
@@ -281,7 +310,7 @@ public class UpApiService
 		return transactions;
 	}
 
-	public async Task<IReadOnlyList<Transaction>> CacheTransactionsForAccount(string accountId, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = 20)
+	public async Task<IReadOnlyList<Transaction>> CacheTransactionsForAccount(string accountId, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = DefaultPageSize)
 	{
 		// TODO: combine this into get transactions with a bool bypasscache
 		throw new NotSupportedException();
@@ -362,7 +391,7 @@ public class UpApiService
 			.ToListAsync();
 	}
 
-	private Task<IPagedList<UpTransaction>> LoadTransactionsFromCacheAsync(IDocumentSession documentSession, int pageSize = 20, int pageNumber = 1, Expression<Func<UpTransaction, bool>>? expression = null)
+	private Task<IPagedList<UpTransaction>> LoadTransactionsFromCacheAsync(IDocumentSession documentSession, int pageSize = DefaultPageSize, int pageNumber = 1, Expression<Func<UpTransaction, bool>>? expression = null)
 	{
 		return documentSession.Query<UpTransaction>()
 			.Where(expression ?? (x => true))

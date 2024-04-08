@@ -41,8 +41,8 @@ public class Program
 			{
 				// Establish the connection string to your Marten database
 				options.Connection(builder.Configuration.GetConnectionString("Postgres"));
-				
-				options.UseDefaultSerialization(serializerType: SerializerType.SystemTextJson);
+
+				options.UseSystemTextJsonForSerialization();
 
 				// If we're running in development mode, let Marten just take care
 				// of all necessary schema building and patching behind the scenes
@@ -57,7 +57,8 @@ public class Program
 				});
 
 
-				options.Schema.For<Transaction>().Index(x => x.Relationships.Account.Data.Id, x => x.Name = "account_id");
+				options.Schema.For<UpTransaction>()
+					.Index(x => x.AccountId, x => x.Name = "account_id");
 			})
 			.ApplyAllDatabaseChangesOnStartup()
 			.OptimizeArtifactWorkflow()

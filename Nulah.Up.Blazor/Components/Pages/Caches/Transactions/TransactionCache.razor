@@ -20,7 +20,7 @@
         <MudCard>
             <MudCardHeader>
                 <CardHeaderContent>
-                    <MudText Typo="Typo.h6">Most recent transaction</MudText>
+                    <MudText Typo="Typo.h6">Most recent cached transaction</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
@@ -32,7 +32,7 @@
         <MudCard>
             <MudCardHeader>
                 <CardHeaderContent>
-                    <MudText Typo="Typo.h6">First Transaction Date</MudText>
+                    <MudText Typo="Typo.h6">First cached Transaction Date</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
@@ -68,10 +68,12 @@
         var options = new DialogOptions
         {
             CloseOnEscapeKey = false,
-            DisableBackdropClick = true
+            DisableBackdropClick = true,
+            // FullScreen = true
         };
 
         var parameters = new DialogParameters<CacheDialog>();
+        parameters.Add(x => x.Since, CacheStats?.MostRecentTransactionDate?.DateTime);
 
         await DialogService.ShowAsync<CacheDialog>("Cache transactions", parameters, options);
     }

@@ -1,27 +1,49 @@
 ﻿@using Nulah.Up.Blazor.Services
 @implements IDisposable
-<MudDialog>
+<MudDialog Style="min-width: 1020px">
     <DialogContent>
-        @if (CacheInProgress)
-        {
-            <MudProgressLinear Color="Color.Primary" Size="Size.Large" Indeterminate="true" Class="my-7"/>
-        }
-        <MudContainer Style="max-height: 300px; overflow-y: scroll">
-            @foreach (var cacheEventMessage in CacheMessages)
+        <MudStack>
+            <MudCard Class="pa-3">
+                <MudTimeline>
+                    <MudTimelineItem>
+                        <MudStack>
+                            <MudDatePicker Label="Until" @bind-Date="@Until" Margin="Margin.Dense" Clearable="true"
+                                           DateFormat="dddd, dd MMMM, yyyy" TitleDateFormat="MMMM dd"/>
+                            <MudText Typo="Typo.caption">
+                                Most recent transaction date. If empty, all transactions until <strong>today</strong> will be cached.
+                            </MudText>
+                        </MudStack>
+                    </MudTimelineItem>
+                    <MudTimelineItem>
+                        <MudStack>
+                            <MudDatePicker Label="Since" @bind-Date="@Since" Margin="Margin.Dense" Clearable="true"
+                                           DateFormat="dddd, dd MMMM, yyyy" TitleDateFormat="MMMM dd" MaxDate="@DateTime.Now"/>
+                            <MudText Typo="Typo.caption">Oldest transaction to cache from.</MudText>
+                        </MudStack>
+                    </MudTimelineItem>
+                </MudTimeline>
+            </MudCard>
+            @if (CacheInProgress)
             {
-                <MudText>@cacheEventMessage</MudText>
+                <MudProgressLinear Color="Color.Primary" Size="Size.Large" Indeterminate="true" Class="my-7"/>
             }
-        </MudContainer>
+            @if (CacheInProgress || CacheComplete)
+            {
+                <MudContainer Style="max-height: 300px; overflow-y: scroll">
+                    @foreach (var cacheEventMessage in CacheMessages)
+                    {
+                        <MudText>@cacheEventMessage</MudText>
+                    }
+                </MudContainer>
+            }
+            <MudText>@((MarkupString)PreCacheExplaination)</MudText>
+        </MudStack>
     </DialogContent>
     <DialogActions>
-        @if (!CacheComplete)
-        {
-            <MudButton Color="Color.Primary" OnClick="StartCache" Disabled="CacheInProgress">Start Cache</MudButton>
-        }
-        else
-        {
-            <MudButton Color="Color.Success" OnClick="CloseDialog">Close</MudButton>
-        }
+        <MudStack Row="true">
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="StartCache" Disabled="CacheInProgress">Start Cache</MudButton>
+            <MudButton Color="Color.Success" OnClick="CloseDialog" Disabled="CacheInProgress">Close</MudButton>
+        </MudStack>
     </DialogActions>
 </MudDialog>
 
@@ -29,6 +51,38 @@
 
     [Inject]
     private UpApiService _upBankApi { get; set; }
+
+    [Parameter]
+    public DateTime? Since { get; set; }
+
+    [Parameter]
+    public DateTime? Until { get; set; }
+
+    // lol, this is here because the Api can be a bit confusing with since/until and what it does, so this is more for 
+    // my benefit than actually making sense
+    public string PreCacheExplaination
+    {
+        get
+        {
+            if (Since == null && Until == null)
+            {
+                return "Will cache <strong>all transactions</strong> available until the first transaction ever made across all accounts.";
+            }
+
+            if (Since == null && Until != null)
+            {
+                return $"Will cache all transactions from before <strong>{Until:dddd, dd MMMM, yyyy}</strong> until the first transaction ever made across all accounts.";
+            }
+
+            if (Since != null && Until == null)
+            {
+                return $"Will cache all transactions from <strong>{Since:dddd, dd MMMM, yyyy}</strong> until midnight, <strong>{DateTime.Now:dddd, dd MMMM, yyyy}</strong>.";
+            }
+
+            return $"Will cache all transactions from <strong>{Since:dddd, dd MMMM, yyyy}</strong> until midnight, <strong>{Until:dddd, dd MMMM, yyyy}</strong>.";
+        }
+    }
+
 
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; }
@@ -43,6 +97,7 @@
         _upBankApi.TransactionCacheStarted += UpBankApiOnTransactionCacheStarted;
         _upBankApi.TransactionCacheFinished += UpBankApiOnTransactionCacheFinished;
         _upBankApi.TransactionCacheMessage += UpBankApiOnTransactionCacheMessage;
+
         base.OnInitialized();
     }
 
@@ -55,6 +110,7 @@
     private void UpBankApiOnTransactionCacheFinished(object? sender, EventArgs e)
     {
         CacheInProgress = false;
+        CacheComplete = true;
         StateHasChanged();
     }
 
@@ -66,8 +122,11 @@
 
     private async void StartCache()
     {
-        var transactions = await _upBankApi.CacheTransactions(pageSize: 100);
-        //MudDialog.Close(DialogResult.Ok(true));
+        CacheMessages.Clear();
+        var transactions = await _upBankApi.CacheTransactions(pageSize: 100,
+            since: Since,
+            until: Until ?? new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 49, 59, DateTimeKind.Local)
+        );
     }
 
     public void Dispose()
@@ -81,5 +140,7 @@
     {
         MudDialog.Close(DialogResult.Ok(true));
     }
+
+    private DateRange TransactionDateRange { get; set; }
 
 }
