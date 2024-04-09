@@ -1,6 +1,68 @@
 ﻿@page "/Cache/Accounts"
+@using Nulah.Up.Blazor.Components.Dialogs
+@using Nulah.Up.Blazor.Components.Pages.Accounts.Components
 <h3>AccountCache</h3>
+<MudButton Color="Color.Primary" OnClick="RecacheAccounts">Update account cache</MudButton>
+<MudGrid>
+    @foreach (var account in LoadedAccounts)
+    {
+        <AccountCard Account="account">
+            <ViewTransactionButton>
+                <MudButton Variant="Variant.Text" Color="Color.Primary">
+                    <a href="/Account/@account.Id/Transactions">View Transactions</a>
+                </MudButton>
+            </ViewTransactionButton>
+        </AccountCard>
+    }
+</MudGrid>
 
 @code {
+
+    [Inject]
+    public UpApiService UpApiService { get; set; }
+
+    [Inject]
+    private IDialogService DialogService { get; set; } = null!;
+
+    private bool _isLoading = true;
+
+    private IReadOnlyList<UpAccount> LoadedAccounts { get; set; } = new List<UpAccount>();
+
+    private async void RecacheAccounts() => await LoadAccounts(true);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // This page _always_ loads accounts explicitly, so does not use the events exposed by the service.
+            // You can think of this page as the source of any events that would trigger accounts to be loaded/cache updated
+            await LoadAccounts();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task LoadAccounts(bool updateCache = false)
+    {
+        _isLoading = true;
+        try
+        {
+            LoadedAccounts = await UpApiService.GetAccounts(updateCache);
+        }
+        catch (Exception ex)
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+
+            var parameters = new DialogParameters<ErrorDialog>();
+            parameters.Add(x => x.ContentText, ex.Message);
+
+            await DialogService.ShowAsync<ErrorDialog>("Error when loading accounts", parameters, options);
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
+    }
 
 }
