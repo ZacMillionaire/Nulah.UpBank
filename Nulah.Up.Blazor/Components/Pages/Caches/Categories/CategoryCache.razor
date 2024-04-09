@@ -1,6 +1,92 @@
 ﻿@page "/Cache/Categories"
+@using Nulah.Up.Blazor.Components.Dialogs
 <h3>CategoryCache</h3>
+<MudButton Color="Color.Primary" OnClick="RecacheCategories">Update account cache</MudButton>
+
+@if (_isLoading)
+{
+    <h1>Loading lol</h1>
+}
+else
+{
+    <MudTable Hover="true" Breakpoint="Breakpoint.Sm" FixedHeader="true"
+              Items="@LoadedCategories.Where(x => x.ParentCategoryId != null)"
+              GroupBy="@_groupDefinition"
+              GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
+              GroupFooterClass="mb-4"
+              Dense="true"
+              @ref="_tableRef">
+        <ColGroup>
+            <col style="width: 60px;"/>
+            <col/>
+        </ColGroup>
+        <HeaderContent>
+            <MudTh>Name</MudTh>
+        </HeaderContent>
+        <GroupHeaderTemplate>
+            <MudTh Class="mud-table-cell-custom-group" colspan="5">@($"{context.Key}") </MudTh>
+        </GroupHeaderTemplate>
+        <RowTemplate>
+            <MudTd DataLabel="Nr">@context.Name</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
 
 @code {
-    
+
+    [Inject]
+    public UpApiService UpApiService { get; set; }
+
+    [Inject]
+    private IDialogService DialogService { get; set; } = null!;
+
+    private IReadOnlyList<UpCategory> LoadedCategories { get; set; } = new List<UpCategory>();
+
+    private async void RecacheCategories() => await LoadCategories(true);
+    private bool _isLoading = true;
+
+    private MudTable<UpCategory> _tableRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadCategories();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task LoadCategories(bool updateCache = false)
+    {
+        _isLoading = true;
+        try
+        {
+            var categories = await UpApiService.GetCategories(updateCache);
+            LoadedCategories = categories;
+        }
+        catch (Exception ex)
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+
+            var parameters = new DialogParameters<ErrorDialog>();
+            parameters.Add(x => x.ContentText, ex.Message);
+
+            await DialogService.ShowAsync<ErrorDialog>("Error when loading categories", parameters, options);
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private TableGroupDefinition<UpCategory> _groupDefinition = new()
+    {
+        Indentation = false,
+        Expandable = true,
+        IsInitiallyExpanded = true,
+        Selector = (e) => e.Parent?.Name
+    };
+
 }

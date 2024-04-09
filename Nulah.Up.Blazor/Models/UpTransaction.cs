@@ -82,8 +82,8 @@ public class UpTransaction
 	/// </summary>
 	public DateTime CreatedAt { get; set; }
 
-	public Category? Category { get; set; }
-	public Category? CategoryParent { get; set; }
+	public UpCategory? Category { get; set; }
+	public UpCategory? CategoryParent { get; set; }
 	public List<Tag> Tags { get; set; } = new();
 	public string? TransferAccountId { get; set; }
 }

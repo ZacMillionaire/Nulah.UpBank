@@ -3,49 +3,50 @@
 @using Marten.Pagination
 <h3>TransactionCache</h3>
 
-<MudGrid>
-    <MudItem xs="12" md="4">
-        <MudCard>
-            <MudCardHeader>
-                <CardHeaderContent>
-                    <MudText Typo="Typo.h6">Cached Transactions</MudText>
-                </CardHeaderContent>
-            </MudCardHeader>
-            <MudCardContent>
-                <MudText>@CacheStats?.Count</MudText>
-            </MudCardContent>
-        </MudCard>
-    </MudItem>
-    <MudItem xs="12" md="4">
-        <MudCard>
-            <MudCardHeader>
-                <CardHeaderContent>
-                    <MudText Typo="Typo.h6">Most recent cached transaction</MudText>
-                </CardHeaderContent>
-            </MudCardHeader>
-            <MudCardContent>
-                <MudText>@CacheStats?.MostRecentTransactionDate?.LocalDateTime</MudText>
-            </MudCardContent>
-        </MudCard>
-    </MudItem>
-    <MudItem xs="12" md="4">
-        <MudCard>
-            <MudCardHeader>
-                <CardHeaderContent>
-                    <MudText Typo="Typo.h6">First cached Transaction Date</MudText>
-                </CardHeaderContent>
-            </MudCardHeader>
-            <MudCardContent>
-                <MudText>@CacheStats?.FirstTransactionDate?.LocalDateTime</MudText>
-            </MudCardContent>
-        </MudCard>
-    </MudItem>
-</MudGrid>
+<MudStack>
+    <MudGrid>
+        <MudItem xs="12" md="4">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Cached Transactions</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText>@CacheStats?.Count</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" md="4">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Most recent cached transaction</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText>@(CacheStats?.MostRecentTransactionDate?.LocalDateTime.ToString() ?? "No cache")</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" md="4">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">First cached Transaction Date</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText>@(CacheStats?.FirstTransactionDate?.LocalDateTime.ToString() ?? "No cache")</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
 
-<h1>TODO: add filters for until/since for button</h1>
-<MudButton OnClick="CacheAllTransactions">Cache all transactions</MudButton>
+    <MudButton OnClick="CacheAllTransactions" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary">Cache all transactions</MudButton>
 
-<TransactionTable TransactionDateRange="@(new DateRange())" @ref="TransactionTableComponent" Page="Page" PageSize="PageSize" RetrieveTransactions="GetTransactions"/>
+    <TransactionTable TransactionDateRange="@(new DateRange())" @ref="TransactionTableComponent" Page="Page" PageSize="PageSize" RetrieveTransactions="GetTransactions"/>
+</MudStack>
 
 @code {
 
@@ -76,6 +77,11 @@
         parameters.Add(x => x.Since, CacheStats?.MostRecentTransactionDate?.DateTime);
 
         await DialogService.ShowAsync<CacheDialog>("Cache transactions", parameters, options);
+        // Refresh stats and data table
+        CacheStats = await _upBankApi.GetTransactionCacheStats();
+        // Assume that by this stage, we have all components available and correctly initialised
+        await TransactionTableComponent!.TransactionDataGrid!.ReloadServerData();
+        StateHasChanged();
     }
 
     private TransactionTable? TransactionTableComponent { get; set; }

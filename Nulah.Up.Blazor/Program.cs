@@ -56,9 +56,12 @@ public class Program
 					x.LastModified.MapTo(y => y.ModifiedAt);
 				});
 
-
 				options.Schema.For<UpTransaction>()
-					.Index(x => x.AccountId, x => x.Name = "account_id");
+					.Index(x => x.AccountId, x => x.Name = "account_id")
+					.Index(x => x.Category.Id, x => x.Name = "category_id");
+
+				options.Schema.For<UpCategory>()
+					.Index(x => x.ParentCategoryId, x => x.Name = "parent_category_id");
 			})
 			.ApplyAllDatabaseChangesOnStartup()
 			.OptimizeArtifactWorkflow()

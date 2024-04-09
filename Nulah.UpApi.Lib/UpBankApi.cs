@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Nulah.UpApi.Lib.Models;
 using Nulah.UpApi.Lib.Models.Accounts;
+using Nulah.UpApi.Lib.Models.Categories;
 using Nulah.UpApi.Lib.Models.Converters;
 using Nulah.UpApi.Lib.Models.Enums;
 using Nulah.UpApi.Lib.Models.Transactions;
@@ -108,6 +109,29 @@ public class UpBankApi
 			: nextPage, queryDict);
 
 		return accounts;
+	}
+
+	/// <summary>
+	/// Returns all categories from the Up API.
+	/// <para>
+	///	This is not currently a paginated API, but functionality exists if implementation changes in the future.
+	/// </para>
+	/// </summary>
+	/// <param name="nextPage"></param>
+	/// <returns></returns>
+	/// <exception cref="Exception"></exception>
+	public async Task<ApiResponse<CategoryResponse>> GetCategories(string? nextPage)
+	{
+		if (!await IsAuthorised())
+		{
+			throw new Exception("Api token is invalid");
+		}
+
+		var categories = await HttpGet<CategoryResponse>(string.IsNullOrWhiteSpace(nextPage)
+			? $"{_configuration.ApiBaseAddress}/categories"
+			: nextPage);
+
+		return categories;
 	}
 
 	public async Task<ApiResponse<TransactionResponse>> GetTransactionsByAccountId(string accountId, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = 20)

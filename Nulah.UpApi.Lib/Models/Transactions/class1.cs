@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using Nulah.UpApi.Lib.Models.Accounts;
+﻿using Nulah.UpApi.Lib.Models.Accounts;
+using Nulah.UpApi.Lib.Models.Categories;
 using Nulah.UpApi.Lib.Models.Enums;
 using Nulah.UpApi.Lib.Models.Shared;
 
@@ -72,45 +72,6 @@ public class TransactionParentCategory
 {
 	public Category? Data { get; set; }
 	public RelatedLink? Links { get; set; }
-}
-
-public class Category
-{
-	/// <summary>
-	/// Will always be the string "categories" in v1 of the API
-	/// </summary>
-	public string Type { get; set; }
-
-	/// <summary>
-	/// The unique identifier of the resource within its type.
-	/// </summary>
-	public string Id { get; set; }
-
-	public CategoryAttribute? Attributes { get; set; }
-	public CategoryRelationship? Relationships { get; set; }
-}
-
-// TODO: move these category classes to their own thing when I implement them
-public class CategoryRelationship
-{
-	public CategoryParent parent { get; set; }
-	public CategoryChild children { get; set; }
-}
-
-public class CategoryParent
-{
-	public CategoryData data { get; set; }
-}
-
-public class CategoryChild
-{
-	public List<CategoryData> data { get; set; }
-}
-
-public class CategoryData
-{
-	public string type { get; set; }
-	public string id { get; set; }
 }
 
 public class TransactionTags

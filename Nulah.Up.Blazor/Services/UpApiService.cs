@@ -20,6 +20,8 @@ public class UpApiService
 	public event EventHandler? TransactionCacheStarted;
 	public event EventHandler? TransactionCacheFinished;
 	public event EventHandler<string>? TransactionCacheMessage;
+	public event EventHandler? CategoriesUpdating;
+	public event EventHandler<IReadOnlyList<UpCategory>>? CategoriesUpdated;
 
 	public UpApiService(UpBankApi upBankApi, IDocumentStore documentStore)
 	{
@@ -100,6 +102,11 @@ public class UpApiService
 		return accounts;
 	}
 
+	/// <summary>
+	/// Returns the account summary by given <paramref name="accountId"/>
+	/// </summary>
+	/// <param name="accountId"></param>
+	/// <returns></returns>
 	public async Task<UpAccount> GetAccount(string accountId)
 	{
 		try
@@ -147,6 +154,15 @@ public class UpApiService
 
 	#region Transactions
 
+	/// <summary>
+	/// Returns all transactions based on given parameters.
+	/// </summary>
+	/// <param name="accountId"></param>
+	/// <param name="since"></param>
+	/// <param name="until"></param>
+	/// <param name="pageSize"></param>
+	/// <param name="pageNumber">Defaults to 1, must be greater than 0.</param>
+	/// <returns></returns>
 	public async Task<IPagedList<UpTransaction>> GetTransactions(string? accountId = null, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = DefaultPageSize, int pageNumber = 1)
 	{
 		await using var session = _documentStore.LightweightSession();
@@ -155,6 +171,10 @@ public class UpApiService
 		return existingAccounts;
 	}
 
+	/// <summary>
+	/// Returns a stat object exposing various aspects of the transaction cache.
+	/// </summary>
+	/// <returns></returns>
 	public async Task<TransactionCacheStats> GetTransactionCacheStats()
 	{
 		await using var session = _documentStore.LightweightSession();
@@ -171,14 +191,26 @@ public class UpApiService
 		// shims to get a max result via Marten and sidestep any deserialisation exceptions.
 		// Whenever I find a solution to those I'll be able to add these back into a query batch
 		var transactionsCached = session.Query<UpTransaction>().Count();
-		var firstTransaction = session.Query<DateTime>("select MIN(d.data ->> 'CreatedAt')::timestamp as data from public.mt_doc_uptransaction as d").FirstOrDefault();
-		var latestTransaction = session.Query<DateTime>("select MAX(d.data ->> 'CreatedAt')::timestamp as data from public.mt_doc_uptransaction as d").FirstOrDefault();
+		var firstTransaction = session.Query<DateTime>(
+				"select MIN(d.data ->> 'CreatedAt')::timestamp as data from public.mt_doc_uptransaction as d"
+			)
+			.FirstOrDefault();
+		var latestTransaction = session.Query<DateTime>(
+				"select MAX(d.data ->> 'CreatedAt')::timestamp as data from public.mt_doc_uptransaction as d"
+			)
+			.FirstOrDefault();
 
+		// If we have no transaction dates (due to nothing being cached), we'll need to return null, and we can't default the
+		// above to null as marten cannot return null for scalar DateTime
 		return new TransactionCacheStats()
 		{
 			Count = transactionsCached,
-			MostRecentTransactionDate = latestTransaction,
-			FirstTransactionDate = firstTransaction
+			MostRecentTransactionDate = latestTransaction == DateTime.MinValue 
+				? null
+				: latestTransaction,
+			FirstTransactionDate = firstTransaction == DateTime.MinValue 
+				? null
+				: firstTransaction
 		};
 	}
 
@@ -211,7 +243,10 @@ public class UpApiService
 	}
 
 	/// <summary>
-	/// 
+	/// Caches all transactions given appropriate parameters.
+	/// <para>
+	/// Caching transactions by <paramref name="accountId"/> is not currently implemented
+	/// </para>
 	/// </summary>
 	/// <param name="accountId"></param>
 	/// <param name="since"></param>
@@ -224,8 +259,6 @@ public class UpApiService
 		try
 		{
 			TransactionCacheStarted?.Invoke(this, EventArgs.Empty);
-			var sinceString = since != null ? since?.ToString("f") : "right now";
-			var untilString = until != null ? until?.ToString("f") : "the very beginning";
 
 			TransactionCacheMessage?.Invoke(this, GetSinceUntilString(since, until, pageSize));
 			// load transactions from the api
@@ -292,8 +325,20 @@ public class UpApiService
 						RoundUp = x.Attributes.RoundUp,
 						SettledAt = x.Attributes.SettledAt,
 						CardPurchaseMethod = x.Attributes.CardPurchaseMethod,
-						Category = x.Relationships.Category?.Data,
-						CategoryParent = x.Relationships.ParentCategory?.Data,
+						Category = x.Relationships.Category?.Data == null
+							? null
+							: new UpCategory()
+							{
+								Id = x.Relationships.Category.Data.Id,
+								Type = x.Relationships.Category.Data.Type
+							},
+						CategoryParent = x.Relationships.ParentCategory?.Data == null
+							? null
+							: new UpCategory()
+							{
+								Id = x.Relationships.ParentCategory.Data.Id,
+								Type = x.Relationships.ParentCategory.Data.Type
+							},
 						Tags = x.Relationships.Tags?.Data ?? [],
 						TransferAccountId = x.Relationships.TransferAccount?.Data?.Id
 					})
@@ -310,48 +355,16 @@ public class UpApiService
 		return transactions;
 	}
 
-	public async Task<IReadOnlyList<Transaction>> CacheTransactionsForAccount(string accountId, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = DefaultPageSize)
-	{
-		// TODO: combine this into get transactions with a bool bypasscache
-		throw new NotSupportedException();
-		// TODO: this is mostly just testing code for now
-		try
-		{
-			await using var session = _documentStore.LightweightSession();
-
-			var transactionsForAccount = await _upBankApi.GetTransactionsByAccountId(accountId, since, until, pageSize);
-
-			if (transactionsForAccount is { Success: true, Response: not null })
-			{
-				// retrieve any other pages of transactions
-				await RetrieveNextPageOfTransactions(transactionsForAccount.Response, transactionsForAccount.Response.Data);
-
-				await _documentStore.BulkInsertAsync(transactionsForAccount.Response.Data, BulkInsertMode.OverwriteExisting);
-				await session.SaveChangesAsync();
-
-				return transactionsForAccount.Response.Data;
-			}
-
-			return new List<Transaction>();
-		}
-		catch
-		{
-			throw;
-		}
-	}
-
-	private async Task RetrieveNextPageOfTransactions(TransactionResponse transactionResponse, List<Transaction> transactions)
-	{
-		// TODO: reimplement this similar to retrieving accounts from the api
-		throw new NotSupportedException();
-		var nextTransactions = await _upBankApi.GetNextTransactionPage(transactionResponse);
-		if (nextTransactions is { Success: true, Response: not null })
-		{
-			transactions.AddRange(nextTransactions.Response.Data);
-			await RetrieveNextPageOfTransactions(nextTransactions.Response, transactions);
-		}
-	}
-
+	/// <summary>
+	/// Creates a predicate for linq to sql to filter transactions as appropriate.
+	/// <para>
+	/// Calling this method with no arguments results in a query that will return all results.
+	/// </para>
+	/// </summary>
+	/// <param name="accountId"></param>
+	/// <param name="since"></param>
+	/// <param name="until"></param>
+	/// <returns></returns>
 	private Expression<Func<UpTransaction, bool>> BuildTransactionQuery(string? accountId = null, DateTimeOffset? since = null, DateTimeOffset? until = null)
 	{
 		Expression<Func<UpTransaction, bool>>? baseFunc = null;
@@ -384,6 +397,79 @@ public class UpApiService
 
 	#endregion
 
+	#region Categories
+
+	public async Task<IReadOnlyList<UpCategory>> GetCategories(bool bypassCache = false)
+	{
+		var categories = await GetCategoriesInternal(bypassCache);
+
+		// Populate categories with a parent - we can't do this from the database just yet.
+		// Maybe in the future this may be possible but for now this is fine, and honestly we could probably
+		// just do this before we cache records and combine this public with the internal below.
+		foreach (var category in categories.Where(x => x.ParentCategoryId != null))
+		{
+			category.Parent = categories.FirstOrDefault(x => x.Id == category.ParentCategoryId);
+		}
+
+		return categories;
+	}
+
+	private async Task<IReadOnlyList<UpCategory>> GetCategoriesInternal(bool bypassCache = false)
+	{
+		CategoriesUpdating?.Invoke(this, EventArgs.Empty);
+
+		await using var session = _documentStore.LightweightSession();
+
+		if (!bypassCache)
+		{
+			var existingCategories = await LoadCategoriesFromCacheAsync(session);
+
+			// We duplicate code slightly here to retrieve categories from the Api if _no_ categories
+			// exist in the database.
+			if (existingCategories.Count != 0)
+			{
+				CategoriesUpdated?.Invoke(this, existingCategories);
+				return existingCategories;
+			}
+		}
+
+		var categories = await GetCategoriesFromApi();
+
+		session.Store((IEnumerable<UpCategory>)categories);
+		await session.SaveChangesAsync();
+
+		CategoriesUpdated?.Invoke(this, categories);
+		return categories;
+	}
+
+
+	private async Task<List<UpCategory>> GetCategoriesFromApi(string? nextPage = null)
+	{
+		var categories = new List<UpCategory>();
+		var apiResponse = await _upBankApi.GetCategories(nextPage);
+
+		if (apiResponse is { Success: true, Response: not null })
+		{
+			categories.AddRange(apiResponse.Response.Data
+				.Select(x => new UpCategory()
+				{
+					Id = x.Id,
+					Name = x.Attributes.Name,
+					Type = x.Type,
+					ParentCategoryId = x.Relationships?.parent.data?.id
+				}));
+		}
+
+		return categories;
+	}
+
+	#endregion
+
+	/// <summary>
+	/// Returns all accounts from the cache.
+	/// </summary>
+	/// <param name="documentSession"></param>
+	/// <returns></returns>
 	private Task<IReadOnlyList<UpAccount>> LoadAccountsFromCacheAsync(IDocumentSession documentSession)
 	{
 		return documentSession.Query<UpAccount>()
@@ -391,12 +477,38 @@ public class UpApiService
 			.ToListAsync();
 	}
 
-	private Task<IPagedList<UpTransaction>> LoadTransactionsFromCacheAsync(IDocumentSession documentSession, int pageSize = DefaultPageSize, int pageNumber = 1, Expression<Func<UpTransaction, bool>>? expression = null)
+	/// <summary>
+	/// Returns all transactions from the cache by given 
+	/// </summary>
+	/// <param name="documentSession"></param>
+	/// <param name="pageSize"></param>
+	/// <param name="pageNumber">Defaults to 1. Must be greater than 0.</param>
+	/// <param name="queryExpression">
+	/// Either generated from <see cref="BuildTransactionQuery"/> or passed in raw. Defaults to ((UpTransaction)x => true)
+	/// if null.
+	/// </param>
+	/// <returns></returns>
+	private Task<IPagedList<UpTransaction>> LoadTransactionsFromCacheAsync(IDocumentSession documentSession,
+		int pageSize = DefaultPageSize,
+		int pageNumber = 1,
+		Expression<Func<UpTransaction, bool>>? queryExpression = null)
 	{
 		return documentSession.Query<UpTransaction>()
-			.Where(expression ?? (x => true))
+			.Where(queryExpression ?? (x => true))
 			.OrderByDescending(x => x.CreatedAt)
 			.ToPagedListAsync(pageNumber, pageSize);
+	}
+
+	/// <summary>
+	/// Returns all categories from the cache - does not populate parent categories.
+	/// </summary>
+	/// <param name="documentSession"></param>
+	/// <returns></returns>
+	private Task<IReadOnlyList<UpCategory>> LoadCategoriesFromCacheAsync(IDocumentSession documentSession)
+	{
+		return documentSession.Query<UpCategory>()
+			.OrderBy(x => x.Name)
+			.ToListAsync();
 	}
 }
 
@@ -420,6 +532,13 @@ internal static class PredicateBuilder
 		return f => false;
 	}
 
+	/// <summary>
+	/// Returns the combined expressions as a logical OrElse if <paramref name="expr1"/> is not null. Otherwise returns <paramref name="expr2"/>
+	/// </summary>
+	/// <param name="expr1"></param>
+	/// <param name="expr2"></param>
+	/// <typeparam name="T"></typeparam>
+	/// <returns></returns>
 	internal static Expression<Func<T, bool>> Or<T>(
 		this Expression<Func<T, bool>>? expr1,
 		Expression<Func<T, bool>> expr2)
@@ -435,7 +554,7 @@ internal static class PredicateBuilder
 	}
 
 	/// <summary>
-	/// Returns the combined expressions if <paramref name="expr1"/> is not null. Otherwise returns <paramref name="expr2"/>
+	/// Returns the combined expressions as a logical AndAlso if <paramref name="expr1"/> is not null. Otherwise returns <paramref name="expr2"/>
 	/// </summary>
 	/// <param name="expr1"></param>
 	/// <param name="expr2"></param>
