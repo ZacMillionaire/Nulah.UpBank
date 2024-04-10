@@ -200,6 +200,39 @@ public class UpApiService
 				"select MAX(d.data ->> 'CreatedAt')::timestamp as data from public.mt_doc_uptransaction as d"
 			)
 			.FirstOrDefault();
+		// Wow this looks like a disgusting mess!
+		// The answer is yes, this is me doing things with Marten that would be better off handled with EF.
+		// No I refuse to learn my lesson and I'll mark my tombstone with a TODO shortly.
+		// What this query basically does is collect all counts by category, but first lumps transactions that can't be
+		// categorised (these are generally bonus, interest, or transfers or covers between accounts) as 'uncategorisable',
+		// those that can be categorised but aren't categorised (because a user simply forgot or somehow caching failed to populate an id),
+		// and then finally the CategoryId.
+		// I've used double quotes for the column aliases to ensure the column names are the correct case to match with the type properties,
+		// turning every row into json, and then letting Marten take the wheel to turn it into what we actually want
+		// If god isn't dead this query is a testament to why he is.
+		// TODO: Update this to something sane when I eventually separate things to EF
+		var categories = session.Query<CategoryStat>("""
+		                                             SELECT row_to_json(result)
+		                                             FROM (SELECT CASE
+		                                                              WHEN (d.data -> 'Category' -> 'Id') IS NULL AND d.data -> 'IsCategorizable' = 'false'
+		                                                                  THEN 'uncategorisable'
+		                                                              WHEN (d.data -> 'Category' -> 'Id') IS NULL AND d.data -> 'IsCategorizable' = 'true'
+		                                                                  THEN 'uncategorised'
+		                                                              ELSE (d.data -> 'Category' ->> 'Id')
+		                                                 END               AS "CategoryId"
+		                                                        , CASE
+		                                                              WHEN (c.data -> 'Name') IS NULL AND d.data -> 'IsCategorizable' = 'false'
+		                                                                  THEN 'Uncategorisable'
+		                                                              WHEN (c.data -> 'Name') IS NULL AND d.data -> 'IsCategorizable' = 'true'
+		                                                                  THEN 'Uncategorised'
+		                                                              ELSE (c.data ->> 'Name')
+		                                                     END           AS "Name"
+		                                                        , count(*) AS "Count"
+		                                                   FROM mt_doc_uptransaction AS d
+		                                                            -- the id column for the category table/document is the category id from Up (ie - it's not a guid)
+		                                                            LEFT JOIN mt_doc_upcategory as c ON (d.data -> 'Category' ->> 'Id') = c.id
+		                                                   GROUP BY "CategoryId", "Name") AS result
+		                                             """);
 
 		// If we have no transaction dates (due to nothing being cached), we'll need to return null, and we can't default the
 		// above to null as marten cannot return null for scalar DateTime
@@ -211,7 +244,8 @@ public class UpApiService
 				: latestTransaction,
 			FirstTransactionDate = firstTransaction == DateTime.MinValue
 				? null
-				: firstTransaction
+				: firstTransaction,
+			CategoryStats = categories
 		};
 	}
 
@@ -361,55 +395,6 @@ public class UpApiService
 	}
 
 	/// <summary>
-	/// <para>
-	/// Returns a category for transactions when caching. If <paramref name="rawCategory"/> is null, null is returned.
-	/// </para>
-	/// <para>
-	///	If <paramref name="categoryLookup"/> is null or contains no elements, or the id from <paramref name="rawCategory"/> cannot be found
-	/// as a key value, a category is returned with the id and type from <paramref name="rawCategory"/>.
-	/// </para>
-	/// <para>
-	///	Otherwise the matched category by id is returned from <paramref name="categoryLookup"/>
-	/// </para>
-	/// </summary>
-	/// <param name="rawCategory"></param>
-	/// <param name="categoryLookup"></param>
-	/// <returns></returns>
-	private UpCategory? LookupCategory(Category? rawCategory = null, Dictionary<string, UpCategory>? categoryLookup = null)
-	{
-		// If we have no category return no category
-		if (rawCategory == null)
-		{
-			return null;
-		}
-
-		// If we have no lookup dictionary, guess a category from the raw category given. We'll be missing some information
-		// but that's still adequate
-		if (categoryLookup == null || categoryLookup.Count == 0)
-		{
-			return new UpCategory()
-			{
-				Id = rawCategory.Id,
-				Type = rawCategory.Type
-			};
-		}
-
-		// Try find the category by id and return the populated and previously cached (hopefully) category with full details
-		if (categoryLookup.TryGetValue(rawCategory.Id, out var categoryMatch))
-		{
-			return categoryMatch;
-		}
-
-		// otherwise our fallback is to create a category from the raw category given which contains the Id that we'll be indexing
-		// and querying off anyway. Name is a nice to have essentially
-		return new UpCategory()
-		{
-			Id = rawCategory.Id,
-			Type = rawCategory.Type
-		};
-	}
-
-	/// <summary>
 	/// Creates a predicate for linq to sql to filter transactions as appropriate.
 	/// <para>
 	/// Calling this method with no arguments results in a query that will return all results.
@@ -505,6 +490,56 @@ public class UpApiService
 		}
 
 		return categories;
+	}
+
+
+	/// <summary>
+	/// <para>
+	/// Returns a category for transactions when caching. If <paramref name="rawCategory"/> is null, null is returned.
+	/// </para>
+	/// <para>
+	///	If <paramref name="categoryLookup"/> is null or contains no elements, or the id from <paramref name="rawCategory"/> cannot be found
+	/// as a key value, a category is returned with the id and type from <paramref name="rawCategory"/>.
+	/// </para>
+	/// <para>
+	///	Otherwise the matched category by id is returned from <paramref name="categoryLookup"/>
+	/// </para>
+	/// </summary>
+	/// <param name="rawCategory"></param>
+	/// <param name="categoryLookup"></param>
+	/// <returns></returns>
+	private UpCategory? LookupCategory(Category? rawCategory = null, Dictionary<string, UpCategory>? categoryLookup = null)
+	{
+		// If we have no category return no category
+		if (rawCategory == null)
+		{
+			return null;
+		}
+
+		// If we have no lookup dictionary, guess a category from the raw category given. We'll be missing some information
+		// but that's still adequate
+		if (categoryLookup == null || categoryLookup.Count == 0)
+		{
+			return new UpCategory()
+			{
+				Id = rawCategory.Id,
+				Type = rawCategory.Type
+			};
+		}
+
+		// Try find the category by id and return the populated and previously cached (hopefully) category with full details
+		if (categoryLookup.TryGetValue(rawCategory.Id, out var categoryMatch))
+		{
+			return categoryMatch;
+		}
+
+		// otherwise our fallback is to create a category from the raw category given which contains the Id that we'll be indexing
+		// and querying off anyway. Name is a nice to have essentially
+		return new UpCategory()
+		{
+			Id = rawCategory.Id,
+			Type = rawCategory.Type
+		};
 	}
 
 	#endregion
