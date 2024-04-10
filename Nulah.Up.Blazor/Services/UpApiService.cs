@@ -5,6 +5,7 @@ using Marten.Pagination;
 using Nulah.Up.Blazor.Models;
 using Nulah.UpApi.Lib;
 using Nulah.UpApi.Lib.Models.Accounts;
+using Nulah.UpApi.Lib.Models.Categories;
 using Nulah.UpApi.Lib.Models.Transactions;
 
 namespace Nulah.Up.Blazor.Services;
@@ -205,10 +206,10 @@ public class UpApiService
 		return new TransactionCacheStats()
 		{
 			Count = transactionsCached,
-			MostRecentTransactionDate = latestTransaction == DateTime.MinValue 
+			MostRecentTransactionDate = latestTransaction == DateTime.MinValue
 				? null
 				: latestTransaction,
-			FirstTransactionDate = firstTransaction == DateTime.MinValue 
+			FirstTransactionDate = firstTransaction == DateTime.MinValue
 				? null
 				: firstTransaction
 		};
@@ -261,8 +262,17 @@ public class UpApiService
 			TransactionCacheStarted?.Invoke(this, EventArgs.Empty);
 
 			TransactionCacheMessage?.Invoke(this, GetSinceUntilString(since, until, pageSize));
+
+			// Get categories for populating transaction objects.
+			// If we had a relational database we wouldn't need to do this, however at present we're using Marten for
+			// everything so we build the document ahead of time.
+			// TODO: In the future I might look at separating these concerns and move to EF first with a proper schema, and then using Marten as a cache layer.
+			TransactionCacheMessage?.Invoke(this, "Retrieving categories");
+			var categories = await GetCategories();
+			var categoryLookup = categories.ToDictionary(x => x.Id, x => x);
+
 			// load transactions from the api
-			var transactions = await GetTransactionsFromApi(null, since, until, pageSize);
+			var transactions = await GetTransactionsFromApi(null, categoryLookup, since, until, pageSize);
 			TransactionCacheMessage?.Invoke(this, "All transactions loaded.");
 
 			TransactionCacheMessage?.Invoke(this, $"Caching loaded transactions...");
@@ -294,11 +304,16 @@ public class UpApiService
 	/// </para>
 	/// </summary>
 	/// <param name="nextPage"></param>
+	/// <param name="categoryLookup"></param>
 	/// <param name="since"></param>
 	/// <param name="until"></param>
 	/// <param name="pageSize"></param>
 	/// <returns></returns>
-	private async Task<List<UpTransaction>> GetTransactionsFromApi(string? nextPage = null, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = DefaultPageSize)
+	private async Task<List<UpTransaction>> GetTransactionsFromApi(string? nextPage = null,
+		Dictionary<string, UpCategory>? categoryLookup = null,
+		DateTimeOffset? since = null,
+		DateTimeOffset? until = null,
+		int pageSize = DefaultPageSize)
 	{
 		var transactions = new List<UpTransaction>();
 		var apiResponse = await _upBankApi.GetTransactions(since, until, pageSize, nextPage);
@@ -325,20 +340,10 @@ public class UpApiService
 						RoundUp = x.Attributes.RoundUp,
 						SettledAt = x.Attributes.SettledAt,
 						CardPurchaseMethod = x.Attributes.CardPurchaseMethod,
-						Category = x.Relationships.Category?.Data == null
-							? null
-							: new UpCategory()
-							{
-								Id = x.Relationships.Category.Data.Id,
-								Type = x.Relationships.Category.Data.Type
-							},
-						CategoryParent = x.Relationships.ParentCategory?.Data == null
-							? null
-							: new UpCategory()
-							{
-								Id = x.Relationships.ParentCategory.Data.Id,
-								Type = x.Relationships.ParentCategory.Data.Type
-							},
+						// This feels weird here, but this is the first point we can update these without re-enumerating
+						// the list. Plus it's not really a big issue performance-wise (yet).
+						Category = LookupCategory(x.Relationships.Category?.Data, categoryLookup),
+						CategoryParent = LookupCategory(x.Relationships.ParentCategory?.Data, categoryLookup),
 						Tags = x.Relationships.Tags?.Data ?? [],
 						TransferAccountId = x.Relationships.TransferAccount?.Data?.Id
 					})
@@ -348,11 +353,60 @@ public class UpApiService
 			{
 				TransactionCacheMessage?.Invoke(this, "Loading next page of transactions...");
 				// We still pass in the previous parameters if Up changes their API implementation
-				transactions.AddRange(await GetTransactionsFromApi(apiResponse.Response.Links.Next, since, until, pageSize));
+				transactions.AddRange(await GetTransactionsFromApi(apiResponse.Response.Links.Next, since: since, until: until, pageSize: pageSize));
 			}
 		}
 
 		return transactions;
+	}
+
+	/// <summary>
+	/// <para>
+	/// Returns a category for transactions when caching. If <paramref name="rawCategory"/> is null, null is returned.
+	/// </para>
+	/// <para>
+	///	If <paramref name="categoryLookup"/> is null or contains no elements, or the id from <paramref name="rawCategory"/> cannot be found
+	/// as a key value, a category is returned with the id and type from <paramref name="rawCategory"/>.
+	/// </para>
+	/// <para>
+	///	Otherwise the matched category by id is returned from <paramref name="categoryLookup"/>
+	/// </para>
+	/// </summary>
+	/// <param name="rawCategory"></param>
+	/// <param name="categoryLookup"></param>
+	/// <returns></returns>
+	private UpCategory? LookupCategory(Category? rawCategory = null, Dictionary<string, UpCategory>? categoryLookup = null)
+	{
+		// If we have no category return no category
+		if (rawCategory == null)
+		{
+			return null;
+		}
+
+		// If we have no lookup dictionary, guess a category from the raw category given. We'll be missing some information
+		// but that's still adequate
+		if (categoryLookup == null || categoryLookup.Count == 0)
+		{
+			return new UpCategory()
+			{
+				Id = rawCategory.Id,
+				Type = rawCategory.Type
+			};
+		}
+
+		// Try find the category by id and return the populated and previously cached (hopefully) category with full details
+		if (categoryLookup.TryGetValue(rawCategory.Id, out var categoryMatch))
+		{
+			return categoryMatch;
+		}
+
+		// otherwise our fallback is to create a category from the raw category given which contains the Id that we'll be indexing
+		// and querying off anyway. Name is a nice to have essentially
+		return new UpCategory()
+		{
+			Id = rawCategory.Id,
+			Type = rawCategory.Type
+		};
 	}
 
 	/// <summary>
@@ -401,21 +455,6 @@ public class UpApiService
 
 	public async Task<IReadOnlyList<UpCategory>> GetCategories(bool bypassCache = false)
 	{
-		var categories = await GetCategoriesInternal(bypassCache);
-
-		// Populate categories with a parent - we can't do this from the database just yet.
-		// Maybe in the future this may be possible but for now this is fine, and honestly we could probably
-		// just do this before we cache records and combine this public with the internal below.
-		foreach (var category in categories.Where(x => x.ParentCategoryId != null))
-		{
-			category.Parent = categories.FirstOrDefault(x => x.Id == category.ParentCategoryId);
-		}
-
-		return categories;
-	}
-
-	private async Task<IReadOnlyList<UpCategory>> GetCategoriesInternal(bool bypassCache = false)
-	{
 		CategoriesUpdating?.Invoke(this, EventArgs.Empty);
 
 		await using var session = _documentStore.LightweightSession();
@@ -434,6 +473,11 @@ public class UpApiService
 		}
 
 		var categories = await GetCategoriesFromApi();
+
+		foreach (var category in categories.Where(x => x.ParentCategoryId != null))
+		{
+			category.Parent = categories.FirstOrDefault(x => x.Id == category.ParentCategoryId);
+		}
 
 		session.Store((IEnumerable<UpCategory>)categories);
 		await session.SaveChangesAsync();

@@ -1,6 +1,7 @@
 ﻿@page "/Cache/Transactions"
 @using Nulah.Up.Blazor.Components.Pages.Transactions.Components
 @using Marten.Pagination
+@implements IDisposable
 <h3>TransactionCache</h3>
 
 <MudStack>
@@ -77,11 +78,6 @@
         parameters.Add(x => x.Since, CacheStats?.MostRecentTransactionDate?.DateTime);
 
         await DialogService.ShowAsync<CacheDialog>("Cache transactions", parameters, options);
-        // Refresh stats and data table
-        CacheStats = await _upBankApi.GetTransactionCacheStats();
-        // Assume that by this stage, we have all components available and correctly initialised
-        await TransactionTableComponent!.TransactionDataGrid!.ReloadServerData();
-        StateHasChanged();
     }
 
     private TransactionTable? TransactionTableComponent { get; set; }
@@ -91,6 +87,7 @@
         await base.OnParametersSetAsync();
         try
         {
+            _upBankApi.TransactionCacheFinished += TransactionCacheFinish;
             CacheStats = await _upBankApi.GetTransactionCacheStats();
             StateHasChanged();
             if (TransactionTableComponent != null)
@@ -104,9 +101,23 @@
         }
     }
 
+    private async void TransactionCacheFinish(object? sender, EventArgs e)
+    {
+        // Refresh stats and data table
+        CacheStats = await _upBankApi.GetTransactionCacheStats();
+        // Assume that by this stage, we have all components available and correctly initialised
+        await TransactionTableComponent!.TransactionDataGrid!.ReloadServerData();
+        StateHasChanged();
+    }
+
     private async Task<IPagedList<UpTransaction>> GetTransactions(DateTimeOffset? since, DateTimeOffset? until, int pageSize, int page)
     {
         return await _upBankApi.GetTransactions(null, since, until, pageSize, page);
+    }
+
+    public void Dispose()
+    {
+        _upBankApi.TransactionCacheFinished -= TransactionCacheFinish;
     }
 
 }

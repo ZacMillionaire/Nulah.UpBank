@@ -37,6 +37,8 @@
                 </MudContainer>
             }
             <MudText>@((MarkupString)PreCacheExplaination)</MudText>
+            <MudText>Additionally caching transactions will also cache categories, so this will also ensure categories are kept up to date.</MudText>
+            <MudText>If you've changed categories for a transaction, caching again will update all relevant details. Changing transactions within this app will always ensure the transaction reflects the api at the time of update.</MudText>
         </MudStack>
     </DialogContent>
     <DialogActions>

@@ -75,6 +75,14 @@
                         <td>Settled</td>
                         <td>@(context.Item.SettledAt?.ToString("f"))</td>
                     </tr>
+                    <tr>
+                        <td>Parent Category</td>
+                        <td>@(context.Item.CategoryParent?.Name)</td>
+                    </tr>
+                    <tr>
+                        <td>Category</td>
+                        <td>@(context.Item.Category?.Name)</td>
+                    </tr>
                     </tbody>
                 </MudSimpleTable>
             </MudCard>
