@@ -2,16 +2,25 @@
 @using Marten.Pagination
 <MudStack>
     <MudCard Class="pa-3">
-        <MudDateRangePicker @bind-DateRange="@TransactionDateRange" Margin="Margin.Dense"
-                            Editable="false"
-                            Clearable="true"
-                            AutoClose="false"
-                            DateFormat="dddd, dd MMMM, yyyy" TitleDateFormat="MMMM dd"
-                            PlaceholderStart="Start Date" PlaceholderEnd="End Date"/>
-        <MudSwitch @bind-Value="@ExcludeUncategorisableTransactions" Label="Exclude Uncategorisable Transactions" Color="Color.Info"/>
-        @* <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="CacheAccountTransactions"> *@
-        @*     Refresh Cache *@
-        @* </MudButton> *@
+        <MudStack>
+            <MudDateRangePicker @bind-DateRange="@TransactionDateRange" Margin="Margin.Dense"
+                                Editable="false"
+                                Clearable="true"
+                                AutoClose="false"
+                                DateFormat="dddd, dd MMMM, yyyy" TitleDateFormat="MMMM dd"
+                                PlaceholderStart="Start Date" PlaceholderEnd="End Date"/>
+            <MudSwitch @bind-Value="@ExcludeUncategorisableTransactions" Label="Exclude Uncategorisable Transactions" Color="Color.Info"/>
+            <MudSelect T="string" Label="Transaction Types" MultiSelection="true"
+                       @bind-SelectedValues="_selectedTransactionTypes">
+                @foreach (var state in Enum.GetValues<TransactionType>())
+                {
+                    <MudSelectItem T="string" Value="@state.ToString()">@state</MudSelectItem>
+                }
+            </MudSelect>
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="FilterTransactions">
+                Filter
+            </MudButton>
+        </MudStack>
     </MudCard>
 
     <MudGrid Justify="Justify.FlexEnd">
@@ -155,7 +164,7 @@
                 <td>
                     <MudIcon Icon="@Icons.Material.Filled.AttachMoney"/>
                 </td>
-                <td>Transaction/purchase</td>
+                <td>Transaction/purchase/payment received from PayID or some other external means.</td>
             </tr>
             <tr>
                 <td>
@@ -216,67 +225,50 @@
     public int? Page { get; set; }
 
     [Parameter]
-    public Func<DateTimeOffset?, DateTimeOffset?, bool, int, int, Task<IPagedList<UpTransaction>>>? RetrieveTransactions { get; set; }
+    public Func<DateTimeOffset?, DateTimeOffset?, bool, IEnumerable<TransactionType>, int, int, Task<IPagedList<UpTransaction>>>? RetrieveTransactions { get; set; }
 
     public MudDataGrid<UpTransaction>? TransactionDataGrid { get; set; }
-
-    private DateRange _transactionDateRange = new(
-        new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
-        new DateTime(DateTime.Now.Year, DateTime.Now.Month,
-            DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)
-        )
-    );
 
     private bool visible;
     private DialogOptions dialogOptions = new() { };
     void ShowHideHelpDialog(bool show) => visible = show;
 
     [Parameter]
-    public DateRange TransactionDateRange
-    {
-        get => _transactionDateRange;
-        set
-        {
-            _transactionDateRange = value;
-            TransactionDataGrid?.ReloadServerData();
-        }
-    }
-
-    private bool _excludeUncategorisableTransactions;
+    public DateRange TransactionDateRange { get; set; } = new(
+        new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
+        new DateTime(DateTime.Now.Year, DateTime.Now.Month,
+            DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)
+        )
+    );
 
     [Parameter]
-    public bool ExcludeUncategorisableTransactions
-    {
-        get => _excludeUncategorisableTransactions;
-        set
-        {
-            _excludeUncategorisableTransactions = value;
-            TransactionDataGrid?.ReloadServerData();
-        }
-    }
+    public bool ExcludeUncategorisableTransactions { get; set; }
+
+    private IEnumerable<string> _selectedTransactionTypes { get; set; } = new HashSet<string>() { };
 
     private async Task<GridData<UpTransaction>> LoadData(GridState<UpTransaction> state)
     {
-        // toggling ExcludeUncategorisableTransactions will cause this to be called twice for...some reason,
-        // resulting in page location being lost. This is annoying but I can't quite figure out whats causing it yet
+        // I think this will get called twice on first render due to server side pre-rendering.
+        // TODO: investigate that
         if (RetrieveTransactions == null)
         {
             return new GridData<UpTransaction>();
         }
 
-        if (_transactionDateRange is { End: not null })
+        if (TransactionDateRange is { End: not null })
         {
-            _transactionDateRange.End = new DateTime(
-                _transactionDateRange.End.Value.Year,
-                _transactionDateRange.End.Value.Month,
-                _transactionDateRange.End.Value.Day,
+            TransactionDateRange.End = new DateTime(
+                TransactionDateRange.End.Value.Year,
+                TransactionDateRange.End.Value.Month,
+                TransactionDateRange.End.Value.Day,
                 23, 59, 59, DateTimeKind.Local
             );
         }
 
-        var transactions = await RetrieveTransactions(_transactionDateRange?.Start,
-            _transactionDateRange?.End,
-            _excludeUncategorisableTransactions,
+        var transactions = await RetrieveTransactions(TransactionDateRange?.Start,
+            TransactionDateRange?.End,
+            ExcludeUncategorisableTransactions,
+            _selectedTransactionTypes.Select(Enum.Parse<TransactionType>),
             state.PageSize,
             state.Page + 1);
 
@@ -289,22 +281,27 @@
 
     private string CellStyle(UpTransaction transaction)
     {
-        if (transaction.Description.StartsWith("Cover"))
+        if (transaction.InferredType == TransactionType.Cover)
         {
             return $"background-color: {Colors.Yellow.Lighten5}";
         }
 
-        if (transaction.Description.StartsWith("Forward"))
+        if (transaction.InferredType == TransactionType.Forward)
         {
             return $"background-color: {Colors.LightBlue.Lighten5}";
         }
 
-        if (transaction.Description.StartsWith("Transfer"))
+        if (transaction.InferredType == TransactionType.Transfer)
         {
             return $"background-color: {Colors.Indigo.Lighten5}";
         }
 
         return string.Empty;
+    }
+
+    private void FilterTransactions(MouseEventArgs obj)
+    {
+        TransactionDataGrid?.ReloadServerData();
     }
 
 }

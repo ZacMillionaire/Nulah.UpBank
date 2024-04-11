@@ -47,30 +47,30 @@
     <MudExpansionPanels>
         <MudExpansionPanel Text="TODO: visual stats">
             <MudStack>
-            <MudStack Row="true" Wrap="Wrap.Wrap">
-                @foreach (var categoryStat in CacheStats.CategoryStats.OrderByDescending(x => x.Count))
-                {
-                    <MudPaper Class="pa-3">
-                        <MudText>
-                            @categoryStat.Name
-                        </MudText>
-                        <MudText>
-                            @categoryStat.Count
-                        </MudText>
-                    </MudPaper>
-                }
-            </MudStack>
-            <MudStack>
-                @foreach (var categoryStat in CacheStats.CategoryStats.OrderByDescending(x => x.Count))
-                {
-                    <MudProgressLinear Color="Color.Tertiary" Value="@((categoryStat.Count / (double)CacheStats.Count) * 100)" Style="height: 25px">
-                        <ChildContent>
-                            <MudText Align="Align.Left">@categoryStat.Name</MudText>
-                            <MudText Align="Align.Left">@categoryStat.Count</MudText>
-                        </ChildContent>
-                    </MudProgressLinear>
-                }
-            </MudStack>
+                <MudStack Row="true" Wrap="Wrap.Wrap">
+                    @foreach (var categoryStat in CacheStats.CategoryStats.OrderByDescending(x => x.Count))
+                    {
+                        <MudPaper Class="pa-3">
+                            <MudText>
+                                @categoryStat.Name
+                            </MudText>
+                            <MudText>
+                                @categoryStat.Count
+                            </MudText>
+                        </MudPaper>
+                    }
+                </MudStack>
+                <MudStack>
+                    @foreach (var categoryStat in CacheStats.CategoryStats.OrderByDescending(x => x.Count))
+                    {
+                        <MudProgressLinear Color="Color.Tertiary" Value="@((categoryStat.Count / (double)CacheStats.Count) * 100)" Style="height: 25px">
+                            <ChildContent>
+                                <MudText Align="Align.Left">@categoryStat.Name</MudText>
+                                <MudText Align="Align.Left">@categoryStat.Count</MudText>
+                            </ChildContent>
+                        </MudProgressLinear>
+                    }
+                </MudStack>
             </MudStack>
         </MudExpansionPanel>
     </MudExpansionPanels>
@@ -145,6 +145,7 @@
     private async Task<IPagedList<UpTransaction>> GetTransactions(DateTimeOffset? since,
         DateTimeOffset? until,
         bool excludeUncategorisableTransactions,
+        IEnumerable<TransactionType> transactionTypes,
         int pageSize,
         int page
     )
@@ -153,7 +154,8 @@
             {
                 Since = since,
                 Until = until,
-                ExcludeUncategorisableTransactions = excludeUncategorisableTransactions
+                ExcludeUncategorisableTransactions = excludeUncategorisableTransactions,
+                TransactionTypes = transactionTypes.ToList()
             },
             pageSize: pageSize, pageNumber: page);
     }

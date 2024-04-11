@@ -426,6 +426,25 @@ public class UpApiService
 			baseFunc = baseFunc.And(x => x.IsCategorizable);
 		}
 
+		if (transactionQueryCriteria.TransactionTypes.Count > 0)
+		{
+			Expression<Func<UpTransaction, bool>>? transactionTypeQuery = null;
+
+			foreach (var transactionType in transactionQueryCriteria.TransactionTypes)
+			{
+				transactionTypeQuery = transactionTypeQuery.Or(x => x.InferredType == transactionType);
+			}
+
+			transactionTypeQuery ??= x => true;
+
+			if (transactionTypeQuery.CanReduce)
+			{
+				transactionTypeQuery.Reduce();
+			}
+
+			baseFunc = baseFunc.And(transactionTypeQuery);
+		}
+
 		// Return an "empty" expression if we have a criteria object, but no criteria to act on
 		baseFunc ??= x => true;
 

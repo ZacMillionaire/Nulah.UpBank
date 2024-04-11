@@ -129,6 +129,7 @@
     private async Task<IPagedList<UpTransaction>> GetTransactions(DateTimeOffset? since,
         DateTimeOffset? until,
         bool excludeUncategorisableTransactions,
+        IEnumerable<TransactionType> transactionTypes,
         int pageSize,
         int page
     )
@@ -138,7 +139,8 @@
                 AccountId = AccountId,
                 Since = since,
                 Until = until,
-                ExcludeUncategorisableTransactions = excludeUncategorisableTransactions
+                ExcludeUncategorisableTransactions = excludeUncategorisableTransactions,
+                TransactionTypes = transactionTypes.ToList()
             },
             pageSize: pageSize, pageNumber: page);
     }
