@@ -126,9 +126,21 @@
         }
     }
 
-    private async Task<IPagedList<UpTransaction>> GetTransactions(DateTimeOffset? since, DateTimeOffset? until, int pageSize, int page)
+    private async Task<IPagedList<UpTransaction>> GetTransactions(DateTimeOffset? since,
+        DateTimeOffset? until,
+        bool excludeUncategorisableTransactions,
+        int pageSize,
+        int page
+    )
     {
-        return await _upBankApi.GetTransactions(AccountId, since, until, pageSize, page);
+        return await _upBankApi.GetTransactions(new()
+            {
+                AccountId = AccountId,
+                Since = since,
+                Until = until,
+                ExcludeUncategorisableTransactions = excludeUncategorisableTransactions
+            },
+            pageSize: pageSize, pageNumber: page);
     }
 
     private void DisplayAccountRaw(Account account)

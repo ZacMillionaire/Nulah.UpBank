@@ -8,11 +8,17 @@
                             AutoClose="false"
                             DateFormat="dddd, dd MMMM, yyyy" TitleDateFormat="MMMM dd"
                             PlaceholderStart="Start Date" PlaceholderEnd="End Date"/>
+        <MudSwitch @bind-Value="@ExcludeUncategorisableTransactions" Label="Exclude Uncategorisable Transactions" Color="Color.Info"/>
         @* <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="CacheAccountTransactions"> *@
         @*     Refresh Cache *@
         @* </MudButton> *@
     </MudCard>
 
+    <MudGrid Justify="Justify.FlexEnd">
+        <MudItem>
+            <MudIconButton Icon="@Icons.Material.Filled.HelpOutline" OnClick="@(() => ShowHideHelpDialog(true))"/>
+        </MudItem>
+    </MudGrid>
     <MudDataGrid @ref="TransactionDataGrid"
                  ServerData="LoadData"
                  T="UpTransaction"
@@ -21,7 +27,6 @@
                  Dense="true"
                  Groupable="false"
                  FixedHeader="true"
-                 RowStyleFunc="RowStyleFunc"
                  RowsPerPage="@(PageSize ?? PageSizeDefault)"
                  CurrentPage="@(Page ?? FirstPageDefault)">
         <ColGroup>
@@ -30,11 +35,12 @@
             <col style="width: 70%"/>
             <col style="min-width: 100px; width: 7%"/>
             <col style="min-width: 100px; width: 7%"/>
+            <col/>
         </ColGroup>
         <Columns>
             <HierarchyColumn T="UpTransaction"/>
             <PropertyColumn Property="x => x.CreatedAt"/>
-            <PropertyColumn Property="x => x.Description"/>
+            <PropertyColumn Property="x => x.Description" CellStyleFunc="@(transaction => CellStyle(transaction))"/>
             <TemplateColumn Title="In" CellStyle="color: rgb(0,163,68);">
                 <CellTemplate>
                     @if (context.Item!.Amount.ValueInBaseUnits >= 0)
@@ -49,6 +55,37 @@
                     {
                         @decimal.Parse(context.Item.Amount.Value).ToString("C")
                     }
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn Title="Type">
+                <CellTemplate>
+                    <MudStack Row="true">
+                        @switch (context.Item.InferredType)
+                        {
+                            case TransactionType.Transaction:
+                                <MudIcon Icon="@Icons.Material.Filled.AttachMoney"/>
+                                break;
+                            case TransactionType.Cover:
+                                <MudIcon Icon="@Icons.Material.Filled.SwapHoriz"/>
+                                break;
+                            case TransactionType.Forward:
+                                <MudIcon Icon="@Icons.Material.Filled.ArrowForward"/>
+                                break;
+                            case TransactionType.Transfer:
+                                <MudIcon Icon="@Icons.Material.Filled.ArrowOutward"/>
+                                break;
+                            case TransactionType.Interest:
+                                <MudIcon Icon="@Icons.Material.Filled.TrendingUp"/>
+                                break;
+                            case TransactionType.Bonus:
+                                <MudIcon Icon="@Icons.Material.Filled.AutoAwesome"/>
+                                break;
+                            case TransactionType.Unknown:
+                            default:
+                                <MudIcon Icon="@Icons.Material.Filled.QuestionMark"/>
+                                break;
+                        }
+                    </MudStack>
                 </CellTemplate>
             </TemplateColumn>
         </Columns>
@@ -94,10 +131,83 @@
     </MudDataGrid>
 </MudStack>
 
+
+<MudDialog @bind-IsVisible="visible" Options="dialogOptions">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3"/> Edit rating
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudSimpleTable Dense="true">
+            <colgroup>
+                <col style="width: 10%"/>
+                <col/>
+            </colgroup>
+            <thead>
+            <tr>
+                <th>Icon</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <MudIcon Icon="@Icons.Material.Filled.AttachMoney"/>
+                </td>
+                <td>Transaction/purchase</td>
+            </tr>
+            <tr>
+                <td>
+                    <MudIcon Icon="@Icons.Material.Filled.SwapHoriz"/>
+                </td>
+                <td>Spending account cover. Cover to means a transaction was covered by an account, cover from means that account covered spending.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MudIcon Icon="@Icons.Material.Filled.ArrowForward"/>
+                </td>
+                <td>Forward to/from an account - transactions such as forwarding a payment from someone else to one of your savings accounts will display as this.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MudIcon Icon="@Icons.Material.Filled.ArrowOutward"/>
+                </td>
+                <td>Transfer to/from an account - different from a forward, transfers are moving balance between your accounts and are effectively zero-sum for your total balance.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MudIcon Icon="@Icons.Material.Filled.TrendingUp"/>
+                </td>
+                <td>Account interest earned.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MudIcon Icon="@Icons.Material.Filled.AutoAwesome"/>
+                </td>
+                <td>Bonus payment from Up - Upsider bonus or other promotional amount.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MudIcon Icon="@Icons.Material.Filled.QuestionMark"/>
+                </td>
+                <td>Transaction type wasn't able to be inferred, or caching was interrupted.</td>
+            </tr>
+            </tbody>
+        </MudSimpleTable>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => ShowHideHelpDialog(false))" Class="px-10">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
 @code {
 
     private const int PageSizeDefault = 50;
     private const int FirstPageDefault = 0;
+
+    [CascadingParameter]
+    private IDialogService DialogService { get; set; }
 
     [Parameter]
     public int? PageSize { get; set; }
@@ -106,7 +216,7 @@
     public int? Page { get; set; }
 
     [Parameter]
-    public Func<DateTimeOffset?, DateTimeOffset?, int, int, Task<IPagedList<UpTransaction>>>? RetrieveTransactions { get; set; }
+    public Func<DateTimeOffset?, DateTimeOffset?, bool, int, int, Task<IPagedList<UpTransaction>>>? RetrieveTransactions { get; set; }
 
     public MudDataGrid<UpTransaction>? TransactionDataGrid { get; set; }
 
@@ -116,6 +226,10 @@
             DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)
         )
     );
+
+    private bool visible;
+    private DialogOptions dialogOptions = new() { };
+    void ShowHideHelpDialog(bool show) => visible = show;
 
     [Parameter]
     public DateRange TransactionDateRange
@@ -128,8 +242,23 @@
         }
     }
 
+    private bool _excludeUncategorisableTransactions;
+
+    [Parameter]
+    public bool ExcludeUncategorisableTransactions
+    {
+        get => _excludeUncategorisableTransactions;
+        set
+        {
+            _excludeUncategorisableTransactions = value;
+            TransactionDataGrid?.ReloadServerData();
+        }
+    }
+
     private async Task<GridData<UpTransaction>> LoadData(GridState<UpTransaction> state)
     {
+        // toggling ExcludeUncategorisableTransactions will cause this to be called twice for...some reason,
+        // resulting in page location being lost. This is annoying but I can't quite figure out whats causing it yet
         if (RetrieveTransactions == null)
         {
             return new GridData<UpTransaction>();
@@ -147,6 +276,7 @@
 
         var transactions = await RetrieveTransactions(_transactionDateRange?.Start,
             _transactionDateRange?.End,
+            _excludeUncategorisableTransactions,
             state.PageSize,
             state.Page + 1);
 
@@ -157,13 +287,23 @@
         };
     }
 
-    private string RowStyleFunc(UpTransaction transaction, int rowNumber)
+    private string CellStyle(UpTransaction transaction)
     {
-        if (!transaction.IsCategorizable)
+        if (transaction.Description.StartsWith("Cover"))
         {
-            return $"background-color: {Colors.Grey.Lighten3}";
+            return $"background-color: {Colors.Yellow.Lighten5}";
         }
-        
+
+        if (transaction.Description.StartsWith("Forward"))
+        {
+            return $"background-color: {Colors.LightBlue.Lighten5}";
+        }
+
+        if (transaction.Description.StartsWith("Transfer"))
+        {
+            return $"background-color: {Colors.Indigo.Lighten5}";
+        }
+
         return string.Empty;
     }
 

@@ -3,8 +3,8 @@ using Marten;
 using Marten.Linq.LastModified;
 using Marten.Pagination;
 using Nulah.Up.Blazor.Models;
+using Nulah.Up.Blazor.Models.Criteria;
 using Nulah.UpApi.Lib;
-using Nulah.UpApi.Lib.Models.Accounts;
 using Nulah.UpApi.Lib.Models.Categories;
 using Nulah.UpApi.Lib.Models.Transactions;
 
@@ -158,16 +158,21 @@ public class UpApiService
 	/// <summary>
 	/// Returns all transactions based on given parameters.
 	/// </summary>
-	/// <param name="accountId"></param>
-	/// <param name="since"></param>
-	/// <param name="until"></param>
+	/// <param name="criteria"></param>
 	/// <param name="pageSize"></param>
 	/// <param name="pageNumber">Defaults to 1, must be greater than 0.</param>
 	/// <returns></returns>
-	public async Task<IPagedList<UpTransaction>> GetTransactions(string? accountId = null, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = DefaultPageSize, int pageNumber = 1)
+	public async Task<IPagedList<UpTransaction>> GetTransactions(TransactionQueryCriteria? criteria,
+		int pageSize = DefaultPageSize,
+		int pageNumber = 1)
 	{
 		await using var session = _documentStore.LightweightSession();
-		var existingAccounts = await LoadTransactionsFromCacheAsync(session, pageSize, pageNumber, BuildTransactionQuery(accountId, since, until));
+		// TODO: investigate moving to EF for storage of transaction information so we can reduce zero sum transaction pairs
+		// eg: a cover will generate a pair that can be matched by CreatedBy that count as no difference and can potentially be excluded.
+		// For now a criteria will be used to simply exclude uncategorisable transactions, as a future API update (if one ever happens...),
+		// could expose where a transaction was covered and these uncategorisable transactions may not come through, or may have additional
+		// metadata that can allow me to better display them.
+		var existingAccounts = await LoadTransactionsFromCacheAsync(session, pageSize, pageNumber, BuildTransactionQuery(criteria));
 
 		return existingAccounts;
 	}
@@ -179,7 +184,7 @@ public class UpApiService
 	public async Task<TransactionCacheStats> GetTransactionCacheStats()
 	{
 		await using var session = _documentStore.LightweightSession();
-		
+
 		var statQueryBatch = session.CreateBatchQuery();
 		var transactionsCached = statQueryBatch.Query<UpTransaction>().Count();
 		var firstTransaction = statQueryBatch.Query<UpTransaction>().Min(x => x.CreatedAt);
@@ -219,7 +224,7 @@ public class UpApiService
 		                                                             GROUP BY "CategoryId", "Name") AS result
 		                                                       """);
 		await statQueryBatch.Execute();
-		
+
 		return new TransactionCacheStats()
 		{
 			Count = await transactionsCached,
@@ -367,7 +372,8 @@ public class UpApiService
 						Category = LookupCategory(x.Relationships.Category?.Data, categoryLookup),
 						CategoryParent = LookupCategory(x.Relationships.ParentCategory?.Data, categoryLookup),
 						Tags = x.Relationships.Tags?.Data ?? [],
-						TransferAccountId = x.Relationships.TransferAccount?.Data?.Id
+						TransferAccountId = x.Relationships.TransferAccount?.Data?.Id,
+						InferredType = CategoriseTransactionTypeFromDescription(x.Attributes.Description)
 					})
 			);
 
@@ -385,30 +391,39 @@ public class UpApiService
 	/// <summary>
 	/// Creates a predicate for linq to sql to filter transactions as appropriate.
 	/// <para>
-	/// Calling this method with no arguments results in a query that will return all results.
+	/// Calling this method with no criteria results in a query that will return all results, excluding transactions that cannot be categorised.
 	/// </para>
 	/// </summary>
-	/// <param name="accountId"></param>
-	/// <param name="since"></param>
-	/// <param name="until"></param>
+	/// <param name="transactionQueryCriteria"></param>
 	/// <returns></returns>
-	private Expression<Func<UpTransaction, bool>> BuildTransactionQuery(string? accountId = null, DateTimeOffset? since = null, DateTimeOffset? until = null)
+	private Expression<Func<UpTransaction, bool>> BuildTransactionQuery(TransactionQueryCriteria? transactionQueryCriteria)
 	{
+		// Set criteria to a new instance if null is given
+		transactionQueryCriteria ??= new TransactionQueryCriteria();
+
 		Expression<Func<UpTransaction, bool>>? baseFunc = null;
 
-		if (!string.IsNullOrWhiteSpace(accountId))
+		if (!string.IsNullOrWhiteSpace(transactionQueryCriteria.AccountId))
 		{
-			baseFunc = baseFunc.And(x => x.AccountId == accountId);
+			baseFunc = baseFunc.And(x => x.AccountId == transactionQueryCriteria.AccountId);
 		}
 
-		if (since.HasValue)
+		if (transactionQueryCriteria.Since.HasValue)
 		{
-			baseFunc = baseFunc.And(x => since.Value.ToUniversalTime() <= x.CreatedAt);
+			baseFunc = baseFunc.And(x => transactionQueryCriteria.Since.Value.ToUniversalTime() <= x.CreatedAt);
 		}
 
-		if (until.HasValue)
+		if (transactionQueryCriteria.Until.HasValue)
 		{
-			baseFunc = baseFunc.And(x => x.CreatedAt <= until.Value.ToUniversalTime());
+			baseFunc = baseFunc.And(x => x.CreatedAt <= transactionQueryCriteria.Until.Value.ToUniversalTime());
+		}
+
+		// This defaults to false, so default criteria behaviour should return all transactions that are not covers.
+		// A cover transaction is a zero-sum between 2 accounts where the parent is a users spending account.
+		// This should not affect any cache stats as these do not use this method for query building.
+		if (transactionQueryCriteria.ExcludeUncategorisableTransactions)
+		{
+			baseFunc = baseFunc.And(x => x.IsCategorizable);
 		}
 
 		// Return an "empty" expression if we have a criteria object, but no criteria to act on
@@ -420,6 +435,43 @@ public class UpApiService
 		}
 
 		return baseFunc;
+	}
+
+	/// <summary>
+	/// Returns the logical type of a transaction from its <see cref="TransactionAttributes.Description"/>, which is currently the name of the merchant.
+	///
+	/// The type returned is inferred from various keywords and may not be correct if a merchant name happens to overlap.
+	/// </summary>
+	/// <param name="description"></param>
+	/// <returns></returns>
+	private TransactionType CategoriseTransactionTypeFromDescription(string description)
+	{
+		if (description.StartsWith("Cover to") || description.StartsWith("Cover from"))
+		{
+			return TransactionType.Cover;
+		}
+
+		if (description.StartsWith("Forward to") || description.StartsWith("Forward from"))
+		{
+			return TransactionType.Forward;
+		}
+
+		if (description.StartsWith("Transfer to") || description.StartsWith("Transfer from"))
+		{
+			return TransactionType.Transfer;
+		}
+
+		if (description.StartsWith("Interest"))
+		{
+			return TransactionType.Interest;
+		}
+
+		if (description.StartsWith("Bonus Payment"))
+		{
+			return TransactionType.Bonus;
+		}
+
+		return TransactionType.Transaction;
 	}
 
 	#endregion

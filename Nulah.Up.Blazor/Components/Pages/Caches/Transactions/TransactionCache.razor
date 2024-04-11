@@ -44,34 +44,40 @@
         </MudItem>
     </MudGrid>
 
-    <MudStack Row="true" Wrap="Wrap.Wrap">
-        @foreach (var categoryStat in CacheStats.CategoryStats.OrderByDescending(x => x.Count))
-        {
-            <MudPaper Class="pa-3">
-                <MudText>
-                    @categoryStat.Name
-                </MudText>
-                <MudText>
-                    @categoryStat.Count
-                </MudText>
-            </MudPaper>
-        }
-    </MudStack>
-
-    <MudStack>
-        @foreach (var categoryStat in CacheStats.CategoryStats.OrderByDescending(x => x.Count))
-        {
-            <MudProgressLinear Color="Color.Tertiary" Value="@((categoryStat.Count / (double)CacheStats.Count) * 100)" Style="height: 25px">
-                <ChildContent>
-                    <MudText Align="Align.Left">@categoryStat.Name</MudText>
-                    <MudText Align="Align.Left">@categoryStat.Count</MudText>
-                </ChildContent>
-            </MudProgressLinear>
-        }
-    </MudStack>
+    <MudExpansionPanels>
+        <MudExpansionPanel Text="TODO: visual stats">
+            <MudStack>
+            <MudStack Row="true" Wrap="Wrap.Wrap">
+                @foreach (var categoryStat in CacheStats.CategoryStats.OrderByDescending(x => x.Count))
+                {
+                    <MudPaper Class="pa-3">
+                        <MudText>
+                            @categoryStat.Name
+                        </MudText>
+                        <MudText>
+                            @categoryStat.Count
+                        </MudText>
+                    </MudPaper>
+                }
+            </MudStack>
+            <MudStack>
+                @foreach (var categoryStat in CacheStats.CategoryStats.OrderByDescending(x => x.Count))
+                {
+                    <MudProgressLinear Color="Color.Tertiary" Value="@((categoryStat.Count / (double)CacheStats.Count) * 100)" Style="height: 25px">
+                        <ChildContent>
+                            <MudText Align="Align.Left">@categoryStat.Name</MudText>
+                            <MudText Align="Align.Left">@categoryStat.Count</MudText>
+                        </ChildContent>
+                    </MudProgressLinear>
+                }
+            </MudStack>
+            </MudStack>
+        </MudExpansionPanel>
+    </MudExpansionPanels>
 
     <MudButton OnClick="CacheAllTransactions" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary">Cache all transactions</MudButton>
 
+    @* We pass in a new date range instance here to ensure the default behaviour of this month is prevented *@
     <TransactionTable TransactionDateRange="@(new DateRange())" @ref="TransactionTableComponent" Page="Page" PageSize="PageSize" RetrieveTransactions="GetTransactions"/>
 </MudStack>
 
@@ -136,9 +142,20 @@
         StateHasChanged();
     }
 
-    private async Task<IPagedList<UpTransaction>> GetTransactions(DateTimeOffset? since, DateTimeOffset? until, int pageSize, int page)
+    private async Task<IPagedList<UpTransaction>> GetTransactions(DateTimeOffset? since,
+        DateTimeOffset? until,
+        bool excludeUncategorisableTransactions,
+        int pageSize,
+        int page
+    )
     {
-        return await _upBankApi.GetTransactions(null, since, until, pageSize, page);
+        return await _upBankApi.GetTransactions(new()
+            {
+                Since = since,
+                Until = until,
+                ExcludeUncategorisableTransactions = excludeUncategorisableTransactions
+            },
+            pageSize: pageSize, pageNumber: page);
     }
 
     public void Dispose()

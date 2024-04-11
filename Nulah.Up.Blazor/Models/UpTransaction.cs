@@ -86,4 +86,5 @@ public class UpTransaction
 	public UpCategory? CategoryParent { get; set; }
 	public List<Tag> Tags { get; set; } = new();
 	public string? TransferAccountId { get; set; }
+	public TransactionType InferredType { get; set; }
 }
