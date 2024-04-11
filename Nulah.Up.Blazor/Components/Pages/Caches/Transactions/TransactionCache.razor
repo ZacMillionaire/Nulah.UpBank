@@ -45,7 +45,7 @@
     </MudGrid>
 
     <MudStack Row="true" Wrap="Wrap.Wrap">
-        @foreach (var categoryStat in CacheStats?.CategoryStats.OrderByDescending(x => x.Count))
+        @foreach (var categoryStat in CacheStats.CategoryStats.OrderByDescending(x => x.Count))
         {
             <MudPaper Class="pa-3">
                 <MudText>
@@ -59,7 +59,7 @@
     </MudStack>
 
     <MudStack>
-        @foreach (var categoryStat in CacheStats?.CategoryStats.OrderByDescending(x => x.Count))
+        @foreach (var categoryStat in CacheStats.CategoryStats.OrderByDescending(x => x.Count))
         {
             <MudProgressLinear Color="Color.Tertiary" Value="@((categoryStat.Count / (double)CacheStats.Count) * 100)" Style="height: 25px">
                 <ChildContent>
@@ -89,7 +89,7 @@
     [SupplyParameterFromQuery]
     public int? Page { get; set; }
 
-    private TransactionCacheStats? CacheStats;
+    private TransactionCacheStats CacheStats = new();
 
     private async void CacheAllTransactions(MouseEventArgs obj)
     {

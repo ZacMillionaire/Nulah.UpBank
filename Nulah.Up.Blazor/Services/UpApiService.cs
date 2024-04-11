@@ -179,27 +179,12 @@ public class UpApiService
 	public async Task<TransactionCacheStats> GetTransactionCacheStats()
 	{
 		await using var session = _documentStore.LightweightSession();
-
-		/*
-		// Commented out as Min/Max currently cause deserialisation exceptions
+		
 		var statQueryBatch = session.CreateBatchQuery();
 		var transactionsCached = statQueryBatch.Query<UpTransaction>().Count();
-		var latestTransaction = statQueryBatch.Query<UpTransaction>().Max(x => x.CreatedAt);
 		var firstTransaction = statQueryBatch.Query<UpTransaction>().Min(x => x.CreatedAt);
-		await statQueryBatch.Execute();
-		*/
+		var latestTransaction = statQueryBatch.Query<UpTransaction>().Max(x => x.CreatedAt);
 
-		// shims to get a max result via Marten and sidestep any deserialisation exceptions.
-		// Whenever I find a solution to those I'll be able to add these back into a query batch
-		var transactionsCached = session.Query<UpTransaction>().Count();
-		var firstTransaction = session.Query<DateTime>(
-				"select MIN(d.data ->> 'CreatedAt')::timestamp as data from public.mt_doc_uptransaction as d"
-			)
-			.FirstOrDefault();
-		var latestTransaction = session.Query<DateTime>(
-				"select MAX(d.data ->> 'CreatedAt')::timestamp as data from public.mt_doc_uptransaction as d"
-			)
-			.FirstOrDefault();
 		// Wow this looks like a disgusting mess!
 		// The answer is yes, this is me doing things with Marten that would be better off handled with EF.
 		// No I refuse to learn my lesson and I'll mark my tombstone with a TODO shortly.
@@ -211,41 +196,44 @@ public class UpApiService
 		// turning every row into json, and then letting Marten take the wheel to turn it into what we actually want
 		// If god isn't dead this query is a testament to why he is.
 		// TODO: Update this to something sane when I eventually separate things to EF
-		var categories = session.Query<CategoryStat>("""
-		                                             SELECT row_to_json(result)
-		                                             FROM (SELECT CASE
-		                                                              WHEN (d.data -> 'Category' -> 'Id') IS NULL AND d.data -> 'IsCategorizable' = 'false'
-		                                                                  THEN 'uncategorisable'
-		                                                              WHEN (d.data -> 'Category' -> 'Id') IS NULL AND d.data -> 'IsCategorizable' = 'true'
-		                                                                  THEN 'uncategorised'
-		                                                              ELSE (d.data -> 'Category' ->> 'Id')
-		                                                 END               AS "CategoryId"
-		                                                        , CASE
-		                                                              WHEN (c.data -> 'Name') IS NULL AND d.data -> 'IsCategorizable' = 'false'
-		                                                                  THEN 'Uncategorisable'
-		                                                              WHEN (c.data -> 'Name') IS NULL AND d.data -> 'IsCategorizable' = 'true'
-		                                                                  THEN 'Uncategorised'
-		                                                              ELSE (c.data ->> 'Name')
-		                                                     END           AS "Name"
-		                                                        , count(*) AS "Count"
-		                                                   FROM mt_doc_uptransaction AS d
-		                                                            -- the id column for the category table/document is the category id from Up (ie - it's not a guid)
-		                                                            LEFT JOIN mt_doc_upcategory as c ON (d.data -> 'Category' ->> 'Id') = c.id
-		                                                   GROUP BY "CategoryId", "Name") AS result
-		                                             """);
-
-		// If we have no transaction dates (due to nothing being cached), we'll need to return null, and we can't default the
-		// above to null as marten cannot return null for scalar DateTime
+		var categoryStats = statQueryBatch.Query<CategoryStat>("""
+		                                                       SELECT row_to_json(result)
+		                                                       FROM (SELECT CASE
+		                                                                        WHEN (d.data -> 'Category' -> 'Id') IS NULL AND d.data -> 'IsCategorizable' = 'false'
+		                                                                            THEN 'uncategorisable'
+		                                                                        WHEN (d.data -> 'Category' -> 'Id') IS NULL AND d.data -> 'IsCategorizable' = 'true'
+		                                                                            THEN 'uncategorised'
+		                                                                        ELSE (d.data -> 'Category' ->> 'Id')
+		                                                           END               AS "CategoryId"
+		                                                                  , CASE
+		                                                                        WHEN (c.data -> 'Name') IS NULL AND d.data -> 'IsCategorizable' = 'false'
+		                                                                            THEN 'Uncategorisable'
+		                                                                        WHEN (c.data -> 'Name') IS NULL AND d.data -> 'IsCategorizable' = 'true'
+		                                                                            THEN 'Uncategorised'
+		                                                                        ELSE (c.data ->> 'Name')
+		                                                               END           AS "Name"
+		                                                                  , count(*) AS "Count"
+		                                                             FROM mt_doc_uptransaction AS d
+		                                                                      -- the id column for the category table/document is the category id from Up (ie - it's not a guid)
+		                                                                      LEFT JOIN mt_doc_upcategory as c ON (d.data -> 'Category' ->> 'Id') = c.id
+		                                                             GROUP BY "CategoryId", "Name") AS result
+		                                                       """);
+		await statQueryBatch.Execute();
+		
 		return new TransactionCacheStats()
 		{
-			Count = transactionsCached,
-			MostRecentTransactionDate = latestTransaction == DateTime.MinValue
+			Count = await transactionsCached,
+			// If we have no transaction dates (due to nothing being cached), we'll need to return null, and we can't default the
+			// above to null as marten cannot return null for scalar DateTime.
+			// These queries are a bit gross as they're a batch query and we await on the result of each.
+			// We also check if the date back is a min value and also return null in those cases.
+			MostRecentTransactionDate = await latestTransaction is var lastDate && lastDate == DateTime.MinValue
 				? null
-				: latestTransaction,
-			FirstTransactionDate = firstTransaction == DateTime.MinValue
+				: lastDate,
+			FirstTransactionDate = await firstTransaction is var firstDate && firstDate == DateTime.MinValue
 				? null
-				: firstTransaction,
-			CategoryStats = categories
+				: firstDate,
+			CategoryStats = await categoryStats
 		};
 	}
 
