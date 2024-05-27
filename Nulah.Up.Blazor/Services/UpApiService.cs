@@ -5,15 +5,18 @@ using Marten.Pagination;
 using Nulah.Up.Blazor.Models;
 using Nulah.Up.Blazor.Models.Criteria;
 using Nulah.UpApi.Lib;
-using Nulah.UpApi.Lib.Models.Categories;
-using Nulah.UpApi.Lib.Models.Transactions;
+using Nulah.UpApi.Lib.ApiModels.Categories;
+using Nulah.UpApi.Lib.ApiModels.Transactions;
+using Nulah.UpApi.Lib.Controllers;
+using Nulah.UpApi.Lib.Models;
 
 namespace Nulah.Up.Blazor.Services;
 
 public class UpApiService
 {
-	private readonly UpBankApi _upBankApi;
+	private readonly IUpBankApi _upBankApi;
 	private readonly IDocumentStore _documentStore;
+	internal readonly AccountController Accounts;
 	private const int DefaultPageSize = 25;
 
 	public event EventHandler? AccountsUpdating;
@@ -24,20 +27,37 @@ public class UpApiService
 	public event EventHandler? CategoriesUpdating;
 	public event EventHandler<IReadOnlyList<UpCategory>>? CategoriesUpdated;
 
-	public UpApiService(UpBankApi upBankApi, IDocumentStore documentStore)
+	public UpApiService(IUpBankApi upBankApi, IDocumentStore documentStore, AccountController accountController)
 	{
 		_upBankApi = upBankApi;
 		_documentStore = documentStore;
+		Accounts = accountController;
+		accountController.AccountsUpdating = AccountsUpdatingHandler;
+		accountController.AccountsUpdated = AccountsUpdatedHandler;
+	}
+
+	private void AccountsUpdatedHandler(AccountController controller, IReadOnlyList<UpAccount> accounts)
+	{
+		AccountsUpdated?.Invoke(controller, accounts);
+	}
+
+	private void AccountsUpdatingHandler(AccountController controller, EventArgs eventArgs)
+	{
+		AccountsUpdating?.Invoke(controller, eventArgs);
 	}
 
 	#region Accounts
+
+/*
+	public event EventHandler? AccountsUpdating;
+	public event EventHandler<IReadOnlyList<UpAccount>>? AccountsUpdated;
 
 	/// <summary>
 	///	Retrieves all accounts from the Up Api.
 	///
 	/// If this is the first time called, no accounts are in the database, or <paramref name="bypassCache"/> is true,
 	/// the accounts will be first retrieved from the Up Api then cached nad returned.
-	/// Otherwise the results will be returned from the cache. 
+	/// Otherwise the results will be returned from the cache.
 	/// </summary>
 	/// <param name="bypassCache"></param>
 	/// <returns></returns>
@@ -150,6 +170,8 @@ public class UpApiService
 			throw;
 		}
 	}
+
+*/
 
 	#endregion
 
@@ -603,17 +625,6 @@ public class UpApiService
 
 	#endregion
 
-	/// <summary>
-	/// Returns all accounts from the cache.
-	/// </summary>
-	/// <param name="documentSession"></param>
-	/// <returns></returns>
-	private Task<IReadOnlyList<UpAccount>> LoadAccountsFromCacheAsync(IDocumentSession documentSession)
-	{
-		return documentSession.Query<UpAccount>()
-			.OrderByDescending(x => x.AccountType)
-			.ToListAsync();
-	}
 
 	/// <summary>
 	/// Returns all transactions from the cache by given 

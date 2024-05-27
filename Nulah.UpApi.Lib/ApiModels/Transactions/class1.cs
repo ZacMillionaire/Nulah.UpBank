@@ -1,14 +1,100 @@
-﻿using Nulah.UpApi.Lib.ApiModels.Enums;
+﻿using Nulah.UpApi.Lib.ApiModels.Accounts;
+using Nulah.UpApi.Lib.ApiModels.Categories;
+using Nulah.UpApi.Lib.ApiModels.Enums;
 using Nulah.UpApi.Lib.ApiModels.Shared;
-using Nulah.UpApi.Lib.ApiModels.Transactions;
 
-namespace Nulah.Up.Blazor.Models;
+namespace Nulah.UpApi.Lib.ApiModels.Transactions;
 
-public class UpTransaction
+public class TransactionResponse
 {
-	public string Id { get; set; } = null!;
-	public string? AccountId { get; set; }
+	public List<Transaction> Data { get; set; }
+	public PaginationLinks Links { get; set; }
+}
 
+public class Transaction
+{
+	/// <summary>
+	/// Will always be the string "transactions" in v1 of the API
+	/// </summary>
+	public string Type { get; set; }
+
+	/// <summary>
+	/// The unique identifier for this transaction.
+	/// </summary>
+	public string Id { get; set; }
+
+	public TransactionAttributes Attributes { get; set; }
+	public TransactionRelationships Relationships { get; set; }
+	public SelfLink Links { get; set; }
+}
+
+public class TransactionRelationships
+{
+	/// <summary>
+	/// If this transaction is a transfer between accounts, this relationship will contain the account the transaction went to/came from.
+	/// The amount field can be used to determine the direction of the transfer.
+	/// </summary>
+	public AccountResponse? TransferAccount { get; set; }
+
+	public AccountResponse? Account { get; set; }
+
+	public TransactionCategory? Category { get; set; }
+	public TransactionParentCategory? ParentCategory { get; set; }
+	public TransactionTags? Tags { get; set; }
+}
+
+public class TransactionTransferAccount
+{
+	public Account? Data { get; set; }
+	public RelatedLink? Links { get; set; }
+}
+
+public class TransactionCategory
+{
+	public Category? Data { get; set; }
+	public TransactionLinks? Links { get; set; }
+}
+
+public class TransactionLinks
+{
+	/// <summary>
+	/// The link to retrieve or modify linkage between this resources and the related resource(s) in this relationship.
+	/// </summary>
+	public string Self { get; set; }
+
+	/// <summary>
+	/// The link to retrieve the related resource(s) in this relationship.
+	/// </summary>
+	public string? Related { get; set; }
+}
+
+public class TransactionParentCategory
+{
+	public Category? Data { get; set; }
+	public RelatedLink? Links { get; set; }
+}
+
+public class TransactionTags
+{
+	public List<Tag> Data { get; set; }
+	public SelfLink? Links { get; set; }
+}
+
+public class Tag
+{
+	/// <summary>
+	/// Will always be the string "tags" in v1 of the API
+	/// </summary>
+	public string Type { get; set; }
+
+	/// <summary>
+	/// The label of the tag, which also acts as the tag’s unique identifier.
+	/// </summary>
+	public string Id { get; set; }
+}
+
+public class TransactionAttributes
+{
 	/// <summary>
 	/// The current processing status of this transaction, according to whether or not this transaction has settled or is still held.
 	/// </summary>
@@ -18,12 +104,12 @@ public class UpTransaction
 	/// The original, unprocessed text of the transaction. This is often not a perfect indicator of the actual merchant,
 	/// but it is useful for reconciliation purposes in some cases.
 	/// </summary>
-	public string? RawText { get; set; }
+	public string RawText { get; set; }
 
 	/// <summary>
 	/// A short description for this transaction. Usually the merchant name for purchases.
 	/// </summary>
-	public string Description { get; set; } = null!;
+	public string Description { get; set; }
 
 	/// <summary>
 	/// Attached message for this transaction, such as a payment message, or a transfer note.
@@ -50,14 +136,14 @@ public class UpTransaction
 	/// <summary>
 	/// If all or part of this transaction was instantly reimbursed in the form of cashback, details of the reimbursement.
 	/// </summary>
-	public Cashback? Cashback { get; set; }
+	public Cashback Cashback { get; set; }
 
 	/// <summary>
 	/// The amount of this transaction in Australian dollars. 
 	/// For transactions that were once <see cref="TransactionStatus.HELD"/> but are now <see cref="TransactionStatus.SETTLED"/>,
 	/// refer to the <see cref="HoldInfo"/> field for the original <see cref="HoldInfo.Amount"/> the transaction was <see cref="TransactionStatus.HELD"/> at.
 	/// </summary>
-	public MoneyObject? Amount { get; set; }
+	public MoneyObject Amount { get; set; }
 
 	/// <summary>
 	/// The foreign currency amount of this transaction. This field will be null for domestic transactions. 
@@ -69,7 +155,7 @@ public class UpTransaction
 	/// <summary>
 	/// Information about the card used for this transaction, if applicable.
 	/// </summary>
-	public CardPurchaseMethod? CardPurchaseMethod { get; set; }
+	public CardPurchaseMethod CardPurchaseMethod { get; set; }
 
 	/// <summary>
 	/// The date-time at which this transaction settled. This field will be null for transactions
@@ -81,10 +167,4 @@ public class UpTransaction
 	/// The date-time at which this transaction was first encountered.
 	/// </summary>
 	public DateTime CreatedAt { get; set; }
-
-	public UpCategory? Category { get; set; }
-	public UpCategory? CategoryParent { get; set; }
-	public List<Tag> Tags { get; set; } = new();
-	public string? TransferAccountId { get; set; }
-	public TransactionType InferredType { get; set; }
 }
