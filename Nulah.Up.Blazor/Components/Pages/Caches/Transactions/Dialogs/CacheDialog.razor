@@ -125,7 +125,7 @@
     private async void StartCache()
     {
         CacheMessages.Clear();
-        var transactions = await _upBankApi.CacheTransactions(pageSize: 100,
+        var transactions = await _upBankApi.Transactions.CacheTransactions(pageSize: 100,
             since: Since,
             until: Until ?? new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 49, 59, DateTimeKind.Local)
         );

@@ -1,218 +1,39 @@
-﻿using Marten;
-using Nulah.UpApi.Lib;
-using Nulah.UpApi.Lib.Controllers;
+﻿using System.Linq.Expressions;
+using Marten;
+using Marten.Pagination;
+using Microsoft.Extensions.Logging;
+using Nulah.UpApi.Lib.ApiModels.Transactions;
 using Nulah.UpApi.Lib.Models;
+using Nulah.UpApi.Lib.Models.Transactions;
+using Nulah.UpApi.Lib.Models.Transactions.Criteria;
 
-namespace Nulah.Up.Blazor.Services;
+namespace Nulah.UpApi.Lib.Controllers;
 
-public class UpApiService
+public class TransactionController
 {
+	private const int DefaultPageSize = 25;
 	private readonly IUpBankApi _upBankApi;
 	private readonly IDocumentStore _documentStore;
-	internal readonly AccountController Accounts;
-	internal readonly TransactionController Transactions;
-	internal readonly CategoryController Categories;
-	private const int DefaultPageSize = 25;
+	private readonly CategoryController _categoryController;
+	private readonly ILogger<TransactionController> _logger;
 
-	public event EventHandler? AccountsUpdating;
-	public event EventHandler<IReadOnlyList<UpAccount>>? AccountsUpdated;
-	public event EventHandler? TransactionCacheStarted;
-	public event EventHandler? TransactionCacheFinished;
-	public event EventHandler<string>? TransactionCacheMessage;
-	public event EventHandler? CategoriesUpdating;
-	public event EventHandler<IReadOnlyList<UpCategory>>? CategoriesUpdated;
 
-	public UpApiService(IUpBankApi upBankApi,
+	public Action<TransactionController, EventArgs>? TransactionCacheStarted;
+	public Action<TransactionController, EventArgs>? TransactionCacheFinished;
+	public Action<TransactionController, string>? TransactionCacheMessage;
+
+	public TransactionController(IUpBankApi upBankApi,
 		IDocumentStore documentStore,
-		AccountController accountController,
-		TransactionController transactionController,
-		CategoryController categoryController)
+		CategoryController categoryController,
+		ILogger<TransactionController> logger
+	)
 	{
 		_upBankApi = upBankApi;
 		_documentStore = documentStore;
-
-		Accounts = accountController;
-		Transactions = transactionController;
-		Categories = categoryController;
-
-		accountController.AccountsUpdating = AccountsUpdatingHandler;
-		accountController.AccountsUpdated = AccountsUpdatedHandler;
-
-		transactionController.TransactionCacheStarted = TransactionCacheStartedHandler;
-		transactionController.TransactionCacheFinished = TransactionCacheFinishedHandler;
-		transactionController.TransactionCacheMessage = TransactionCacheMessageHandler;
-
-		categoryController.CategoriesUpdating = CategoriesUpdatingHandler;
-		categoryController.CategoriesUpdated = CategoriesUpdatedHandler;
+		_categoryController = categoryController;
+		_logger = logger;
 	}
 
-	private void AccountsUpdatedHandler(AccountController controller, IReadOnlyList<UpAccount> accounts)
-	{
-		AccountsUpdated?.Invoke(controller, accounts);
-	}
-
-	private void AccountsUpdatingHandler(AccountController controller, EventArgs eventArgs)
-	{
-		AccountsUpdating?.Invoke(controller, eventArgs);
-	}
-
-	private void TransactionCacheStartedHandler(TransactionController transactionController, EventArgs eventArgs)
-	{
-		TransactionCacheStarted?.Invoke(transactionController, eventArgs);
-	}
-
-	private void TransactionCacheFinishedHandler(TransactionController transactionController, EventArgs eventArgs)
-	{
-		TransactionCacheFinished?.Invoke(transactionController, eventArgs);
-	}
-
-	private void TransactionCacheMessageHandler(TransactionController transactionController, string cacheMessage)
-	{
-		TransactionCacheMessage?.Invoke(transactionController, cacheMessage);
-	}
-
-	private void CategoriesUpdatingHandler(CategoryController categroyController, EventArgs eventArgs)
-	{
-		CategoriesUpdating?.Invoke(categroyController, eventArgs);
-	}
-
-	private void CategoriesUpdatedHandler(CategoryController categroyController, IReadOnlyList<UpCategory> categories)
-	{
-		CategoriesUpdated?.Invoke(categroyController, categories);
-	}
-
-	#region Accounts
-
-/*
-	public event EventHandler? AccountsUpdating;
-	public event EventHandler<IReadOnlyList<UpAccount>>? AccountsUpdated;
-
-	/// <summary>
-	///	Retrieves all accounts from the Up Api.
-	///
-	/// If this is the first time called, no accounts are in the database, or <paramref name="bypassCache"/> is true,
-	/// the accounts will be first retrieved from the Up Api then cached nad returned.
-	/// Otherwise the results will be returned from the cache.
-	/// </summary>
-	/// <param name="bypassCache"></param>
-	/// <returns></returns>
-	public async Task<IReadOnlyList<UpAccount>> GetAccounts(bool bypassCache = false)
-	{
-		AccountsUpdating?.Invoke(this, EventArgs.Empty);
-
-		await using var session = _documentStore.LightweightSession();
-
-		if (!bypassCache)
-		{
-			var existingAccounts = await LoadAccountsFromCacheAsync(session);
-
-			// We duplicate code slightly here to retrieve accounts from the Api if _no_ accounts
-			// exist in the database.
-			// This means that if the user has no accounts ever (unlikely as an Up customer should always have a spending account)
-			// this method will potentially hit the Api every single call.
-			// I don't really care about that though, if the user has no accounts then the Up Api will be doing no
-			// work to return nothing so ¯\_(ツ)_/¯
-			if (existingAccounts.Count != 0)
-			{
-				AccountsUpdated?.Invoke(this, existingAccounts);
-				return existingAccounts;
-			}
-		}
-
-		var accounts = await GetAccountsFromApi();
-
-		session.Store((IEnumerable<UpAccount>)accounts);
-		await session.SaveChangesAsync();
-
-		AccountsUpdated?.Invoke(this, accounts);
-		return accounts;
-	}
-
-	private async Task<List<UpAccount>> GetAccountsFromApi(string? nextPage = null)
-	{
-		var accounts = new List<UpAccount>();
-		var apiResponse = await _upBankApi.GetAccounts(nextPage);
-
-		if (apiResponse is { Success: true, Response: not null })
-		{
-			accounts.AddRange(
-				apiResponse.Response.Data
-					.Select(x => new UpAccount()
-					{
-						Balance = x.Attributes.Balance,
-						Id = x.Id,
-						Type = x.Type,
-						AccountType = x.Attributes.AccountType,
-						CreatedAt = x.Attributes.CreatedAt,
-						DisplayName = x.Attributes.DisplayName,
-						OwnershipType = x.Attributes.OwnershipType
-					})
-			);
-
-			if (!string.IsNullOrWhiteSpace(apiResponse.Response.Links.Next))
-			{
-				await GetAccountsFromApi(apiResponse.Response.Links.Next);
-			}
-		}
-
-		return accounts;
-	}
-
-	/// <summary>
-	/// Returns the account summary by given <paramref name="accountId"/>
-	/// </summary>
-	/// <param name="accountId"></param>
-	/// <returns></returns>
-	public async Task<UpAccount> GetAccount(string accountId)
-	{
-		try
-		{
-			await using var session = _documentStore.LightweightSession();
-			var account = await session.Query<UpAccount>()
-				.FirstOrDefaultAsync(x =>
-					x.Id == accountId
-					// only return an account if it's "fresh" which is a modified date less than a day old (currently)
-					// TODO: configure this
-					&& x.ModifiedBefore(DateTime.UtcNow.AddDays(1))
-				);
-
-			if (account == null)
-			{
-				var accounts = await _upBankApi.GetAccount(accountId);
-
-				if (accounts is { Success: true, Response: not null })
-				{
-					account = new UpAccount()
-					{
-						Balance = accounts.Response.Data.Attributes.Balance,
-						Id = accounts.Response.Data.Id,
-						Type = accounts.Response.Data.Type,
-						AccountType = accounts.Response.Data.Attributes.AccountType,
-						CreatedAt = accounts.Response.Data.Attributes.CreatedAt,
-						DisplayName = accounts.Response.Data.Attributes.DisplayName,
-						OwnershipType = accounts.Response.Data.Attributes.OwnershipType
-					};
-
-					session.Store(account);
-					await session.SaveChangesAsync();
-				}
-			}
-
-			return account;
-		}
-		catch
-		{
-			throw;
-		}
-	}
-
-*/
-
-	#endregion
-
-	#region Transactions
-
-/*
 	/// <summary>
 	/// Returns all transactions based on given parameters.
 	/// </summary>
@@ -353,7 +174,7 @@ public class UpApiService
 			// everything so we build the document ahead of time.
 			// TODO: In the future I might look at separating these concerns and move to EF first with a proper schema, and then using Marten as a cache layer.
 			TransactionCacheMessage?.Invoke(this, "Retrieving categories");
-			var categories = await GetCategories();
+			var categories = await _categoryController.GetCategories();
 			var categoryLookup = categories.ToDictionary(x => x.Id, x => x);
 
 			// load transactions from the api
@@ -427,8 +248,8 @@ public class UpApiService
 						CardPurchaseMethod = x.Attributes.CardPurchaseMethod,
 						// This feels weird here, but this is the first point we can update these without re-enumerating
 						// the list. Plus it's not really a big issue performance-wise (yet).
-						Category = LookupCategory(x.Relationships.Category?.Data, categoryLookup),
-						CategoryParent = LookupCategory(x.Relationships.ParentCategory?.Data, categoryLookup),
+						Category = _categoryController.LookupCategory(x.Relationships.Category?.Data, categoryLookup),
+						CategoryParent = _categoryController.LookupCategory(x.Relationships.ParentCategory?.Data, categoryLookup),
 						Tags = x.Relationships.Tags?.Data ?? [],
 						TransferAccountId = x.Relationships.TransferAccount?.Data?.Id,
 						InferredType = CategoriseTransactionTypeFromDescription(x.Attributes.Description)
@@ -550,119 +371,26 @@ public class UpApiService
 
 		return TransactionType.Transaction;
 	}
-*/
-
-	#endregion
-
-	#region Categories
-
-/*
-	public async Task<IReadOnlyList<UpCategory>> GetCategories(bool bypassCache = false)
-	{
-		CategoriesUpdating?.Invoke(this, EventArgs.Empty);
-
-		await using var session = _documentStore.LightweightSession();
-
-		if (!bypassCache)
-		{
-			var existingCategories = await LoadCategoriesFromCacheAsync(session);
-
-			// We duplicate code slightly here to retrieve categories from the Api if _no_ categories
-			// exist in the database.
-			if (existingCategories.Count != 0)
-			{
-				CategoriesUpdated?.Invoke(this, existingCategories);
-				return existingCategories;
-			}
-		}
-
-		var categories = await GetCategoriesFromApi();
-
-		foreach (var category in categories.Where(x => x.ParentCategoryId != null))
-		{
-			category.Parent = categories.FirstOrDefault(x => x.Id == category.ParentCategoryId);
-		}
-
-		session.Store((IEnumerable<UpCategory>)categories);
-		await session.SaveChangesAsync();
-
-		CategoriesUpdated?.Invoke(this, categories);
-		return categories;
-	}
-
-
-	private async Task<List<UpCategory>> GetCategoriesFromApi(string? nextPage = null)
-	{
-		var categories = new List<UpCategory>();
-		var apiResponse = await _upBankApi.GetCategories(nextPage);
-
-		if (apiResponse is { Success: true, Response: not null })
-		{
-			categories.AddRange(apiResponse.Response.Data
-				.Select(x => new UpCategory()
-				{
-					Id = x.Id,
-					Name = x.Attributes.Name,
-					Type = x.Type,
-					ParentCategoryId = x.Relationships?.parent.data?.id
-				}));
-		}
-
-		return categories;
-	}
-
 
 	/// <summary>
-	/// <para>
-	/// Returns a category for transactions when caching. If <paramref name="rawCategory"/> is null, null is returned.
-	/// </para>
-	/// <para>
-	///	If <paramref name="categoryLookup"/> is null or contains no elements, or the id from <paramref name="rawCategory"/> cannot be found
-	/// as a key value, a category is returned with the id and type from <paramref name="rawCategory"/>.
-	/// </para>
-	/// <para>
-	///	Otherwise the matched category by id is returned from <paramref name="categoryLookup"/>
-	/// </para>
+	/// Returns all transactions from the cache by given 
 	/// </summary>
-	/// <param name="rawCategory"></param>
-	/// <param name="categoryLookup"></param>
+	/// <param name="documentSession"></param>
+	/// <param name="pageSize"></param>
+	/// <param name="pageNumber">Defaults to 1. Must be greater than 0.</param>
+	/// <param name="queryExpression">
+	/// Either generated from <see cref="BuildTransactionQuery"/> or passed in raw. Defaults to ((UpTransaction)x => true)
+	/// if null.
+	/// </param>
 	/// <returns></returns>
-	private UpCategory? LookupCategory(Category? rawCategory = null, Dictionary<string, UpCategory>? categoryLookup = null)
+	private Task<IPagedList<UpTransaction>> LoadTransactionsFromCacheAsync(IDocumentSession documentSession,
+		int pageSize = DefaultPageSize,
+		int pageNumber = 1,
+		Expression<Func<UpTransaction, bool>>? queryExpression = null)
 	{
-		// If we have no category return no category
-		if (rawCategory == null)
-		{
-			return null;
-		}
-
-		// If we have no lookup dictionary, guess a category from the raw category given. We'll be missing some information
-		// but that's still adequate
-		if (categoryLookup == null || categoryLookup.Count == 0)
-		{
-			return new UpCategory()
-			{
-				Id = rawCategory.Id,
-				Type = rawCategory.Type
-			};
-		}
-
-		// Try find the category by id and return the populated and previously cached (hopefully) category with full details
-		if (categoryLookup.TryGetValue(rawCategory.Id, out var categoryMatch))
-		{
-			return categoryMatch;
-		}
-
-		// otherwise our fallback is to create a category from the raw category given which contains the Id that we'll be indexing
-		// and querying off anyway. Name is a nice to have essentially
-		return new UpCategory()
-		{
-			Id = rawCategory.Id,
-			Type = rawCategory.Type
-		};
+		return documentSession.Query<UpTransaction>()
+			.Where(queryExpression ?? (x => true))
+			.OrderByDescending(x => x.CreatedAt)
+			.ToPagedListAsync(pageNumber, pageSize);
 	}
-*/
-
-	#endregion
 }
-
-// whatever I copy pasted from another project of mine because it's insane to make a single nuget package just for my own stuff and push that on to others (just yet)

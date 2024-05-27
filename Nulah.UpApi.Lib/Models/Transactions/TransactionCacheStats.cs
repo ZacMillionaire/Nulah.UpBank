@@ -1,4 +1,4 @@
-﻿namespace Nulah.Up.Blazor.Models;
+﻿namespace Nulah.UpApi.Lib.Models.Transactions;
 
 public class TransactionCacheStats
 {

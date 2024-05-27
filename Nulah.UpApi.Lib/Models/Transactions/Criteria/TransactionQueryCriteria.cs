@@ -1,4 +1,4 @@
-﻿namespace Nulah.Up.Blazor.Models.Criteria;
+﻿namespace Nulah.UpApi.Lib.Models.Transactions.Criteria;
 
 public class TransactionQueryCriteria
 {

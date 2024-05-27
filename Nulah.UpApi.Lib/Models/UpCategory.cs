@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Nulah.Up.Blazor.Models;
+namespace Nulah.UpApi.Lib.Models;
 
 public class UpCategory
 {

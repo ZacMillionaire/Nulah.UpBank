@@ -1,7 +1,6 @@
 using Marten;
 using Nulah.Up.Blazor.Components;
 using MudBlazor.Services;
-using Nulah.Up.Blazor.Models;
 using Nulah.Up.Blazor.Services;
 using Nulah.UpApi.Lib;
 using Nulah.UpApi.Lib.Controllers;
@@ -35,6 +34,8 @@ public class Program
 		builder.Services.AddScoped<IUpBankApi, UpBankApi>();
 
 		builder.Services.AddScoped<AccountController>();
+		builder.Services.AddScoped<TransactionController>();
+		builder.Services.AddScoped<CategoryController>();
 
 		builder.Services.AddScoped<UpApiService>();
 

@@ -1,8 +1,9 @@
 ﻿using Nulah.UpApi.Lib.ApiModels.Enums;
 using Nulah.UpApi.Lib.ApiModels.Shared;
 using Nulah.UpApi.Lib.ApiModels.Transactions;
+using Nulah.UpApi.Lib.Models.Transactions;
 
-namespace Nulah.Up.Blazor.Models;
+namespace Nulah.UpApi.Lib.Models;
 
 public class UpTransaction
 {
