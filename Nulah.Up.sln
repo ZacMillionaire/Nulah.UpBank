@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nulah.Up.App", "Nulah.Up.Ap
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0170FF4D-656B-4889-85F6-6290AE3E42CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nulah.Up.UnitTests", "Nulah.Up.UnitTests\Nulah.Up.UnitTests.csproj", "{7F9D1432-3CB9-4439-BC00-5556B4E543F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nulah.Up.IntegrationTests", "Nulah.Up.IntegrationTests\Nulah.Up.IntegrationTests.csproj", "{7F9D1432-3CB9-4439-BC00-5556B4E543F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
