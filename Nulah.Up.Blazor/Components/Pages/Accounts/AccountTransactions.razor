@@ -3,7 +3,9 @@
 @using Marten.Pagination
 @using Nulah.Up.Blazor.Components.Pages.Accounts.Dialogs
 @using Nulah.Up.Blazor.Components.Pages.Transactions.Components
-@using Nulah.Up.Blazor.Models
+@using Nulah.UpApi.Lib.ApiModels.Accounts
+@using Nulah.UpApi.Lib.Models
+@using Nulah.UpApi.Lib.Models.Transactions
 @rendermode InteractiveServer
 @implements IDisposable
 
@@ -108,7 +110,7 @@
         _accountLoading = true;
         try
         {
-            LoadedAccount = await _upBankApi.GetAccount(AccountId);
+            LoadedAccount = await _upBankApi.Accounts.GetAccount(AccountId);
         }
         catch (Exception ex)
         {
@@ -134,7 +136,7 @@
         int page
     )
     {
-        return await _upBankApi.GetTransactions(new()
+        return await _upBankApi.Transactions.GetTransactions(new()
             {
                 AccountId = AccountId,
                 Since = since,

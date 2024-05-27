@@ -1,12 +1,10 @@
-using System.Data.Common;
 using Marten;
-using Marten.Services.Json;
 using Nulah.Up.Blazor.Components;
 using MudBlazor.Services;
-using Nulah.Up.Blazor.Models;
 using Nulah.Up.Blazor.Services;
 using Nulah.UpApi.Lib;
-using Nulah.UpApi.Lib.Models.Transactions;
+using Nulah.UpApi.Lib.Controllers;
+using Nulah.UpApi.Lib.Models;
 using Weasel.Core;
 
 namespace Nulah.Up.Blazor;
@@ -33,7 +31,11 @@ public class Program
 		{
 			AccessToken = builder.Configuration["Api:UpBank"]
 		});
-		builder.Services.AddScoped<UpBankApi>();
+		builder.Services.AddScoped<IUpBankApi, UpBankApi>();
+
+		builder.Services.AddScoped<AccountController>();
+		builder.Services.AddScoped<TransactionController>();
+		builder.Services.AddScoped<CategoryController>();
 
 		builder.Services.AddScoped<UpApiService>();
 
@@ -41,6 +43,7 @@ public class Program
 			{
 				// Establish the connection string to your Marten database
 				options.Connection(builder.Configuration.GetConnectionString("Postgres"));
+				options.DisableNpgsqlLogging = true;
 
 				options.UseSystemTextJsonForSerialization();
 

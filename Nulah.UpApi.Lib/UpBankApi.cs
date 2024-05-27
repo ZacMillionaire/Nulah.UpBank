@@ -1,16 +1,16 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using Nulah.UpApi.Lib.Models;
-using Nulah.UpApi.Lib.Models.Accounts;
-using Nulah.UpApi.Lib.Models.Categories;
-using Nulah.UpApi.Lib.Models.Converters;
-using Nulah.UpApi.Lib.Models.Enums;
-using Nulah.UpApi.Lib.Models.Transactions;
+using Nulah.UpApi.Lib.ApiModels.Accounts;
+using Nulah.UpApi.Lib.ApiModels;
+using Nulah.UpApi.Lib.ApiModels.Categories;
+using Nulah.UpApi.Lib.ApiModels.Converters;
+using Nulah.UpApi.Lib.ApiModels.Enums;
+using Nulah.UpApi.Lib.ApiModels.Transactions;
 
 namespace Nulah.UpApi.Lib;
 
-public class UpBankApi
+public class UpBankApi : IUpBankApi
 {
 	private readonly UpConfiguration _configuration;
 	private readonly HttpClient _httpClient;

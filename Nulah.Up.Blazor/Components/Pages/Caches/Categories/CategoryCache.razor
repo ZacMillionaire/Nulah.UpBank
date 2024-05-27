@@ -1,5 +1,6 @@
 ﻿@page "/Cache/Categories"
 @using Nulah.Up.Blazor.Components.Dialogs
+@using Nulah.UpApi.Lib.Models
 <h3>CategoryCache</h3>
 <MudButton Color="Color.Primary" OnClick="RecacheCategories">Update account cache</MudButton>
 
@@ -62,7 +63,7 @@ else
         _isLoading = true;
         try
         {
-            var categories = await UpApiService.GetCategories(updateCache);
+            var categories = await UpApiService.Categories.GetCategories(updateCache);
             LoadedCategories = categories;
         }
         catch (Exception ex)

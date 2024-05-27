@@ -1,5 +1,7 @@
 ﻿@page "/Cache/Transactions"
 @using Nulah.Up.Blazor.Components.Pages.Transactions.Components
+@using Nulah.UpApi.Lib.Models.Transactions
+@using Nulah.UpApi.Lib.Models
 @using Marten.Pagination
 @implements IDisposable
 <h3>TransactionCache</h3>
@@ -120,7 +122,7 @@
         try
         {
             _upBankApi.TransactionCacheFinished += TransactionCacheFinish;
-            CacheStats = await _upBankApi.GetTransactionCacheStats();
+            CacheStats = await _upBankApi.Transactions.GetTransactionCacheStats();
             StateHasChanged();
             if (TransactionTableComponent != null)
             {
@@ -136,7 +138,7 @@
     private async void TransactionCacheFinish(object? sender, EventArgs e)
     {
         // Refresh stats and data table
-        CacheStats = await _upBankApi.GetTransactionCacheStats();
+        CacheStats = await _upBankApi.Transactions.GetTransactionCacheStats();
         // Assume that by this stage, we have all components available and correctly initialised
         await TransactionTableComponent!.TransactionDataGrid!.ReloadServerData();
         StateHasChanged();
@@ -150,7 +152,7 @@
         int page
     )
     {
-        return await _upBankApi.GetTransactions(new()
+        return await _upBankApi.Transactions.GetTransactions(new()
             {
                 Since = since,
                 Until = until,

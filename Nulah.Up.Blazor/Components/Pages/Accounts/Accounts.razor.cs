@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Nulah.Up.Blazor.Components.Dialogs;
 using Nulah.Up.Blazor.Components.Pages.Accounts.Dialogs;
-using Nulah.Up.Blazor.Models;
 using Nulah.Up.Blazor.Services;
+using Nulah.UpApi.Lib.Models;
 
 namespace Nulah.Up.Blazor.Components.Pages.Accounts;
 
@@ -39,7 +39,7 @@ public partial class Accounts : IDisposable
 		_isLoading = true;
 		try
 		{
-			LoadedAccounts = await UpBankApi.GetAccounts(updateCache);
+			LoadedAccounts = await UpBankApi.Accounts.GetAccounts(updateCache);
 		}
 		catch (Exception ex)
 		{

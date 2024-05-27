@@ -1,0 +1,14 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "Postgres": "Host=localhost:55432;Database=Nulah.Up.Test;Username=postgres;Password=mysecretpassword"
+  },
+  "Api": {
+    "UpBank": ""
+  }
+}

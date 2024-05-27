@@ -1,7 +1,5 @@
 ﻿@using Nulah.Up.Blazor.Services
-@using Nulah.UpApi.Lib.Models.Accounts
-@using Nulah.Up.Blazor.Components.Dialogs
-@using Nulah.Up.Blazor.Models
+@using Nulah.UpApi.Lib.Models
 @implements IDisposable
 
 <MudNavMenu Dense="true">
@@ -69,7 +67,7 @@
         if (expandedState && LoadedAccounts.Count == 0)
         {
             // trigger a load that wil then fire off any events that will then update the list
-            await UpBankApi.GetAccounts();
+            await UpBankApi.Accounts.GetAccounts();
         }
     }
 

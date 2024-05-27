@@ -1,5 +1,6 @@
-﻿@using Nulah.Up.Blazor.Models
-@using Marten.Pagination
+﻿@using Marten.Pagination
+@using Nulah.UpApi.Lib.Models
+@using Nulah.UpApi.Lib.Models.Transactions
 <MudStack>
     <MudCard Class="pa-3">
         <MudStack>
@@ -99,17 +100,25 @@
             </TemplateColumn>
         </Columns>
         <ChildRowContent>
-            <MudCard>
-                <MudSimpleTable Bordered="true" Dense="true" Elevation="0" Class="ma-0">
+            <MudStack Spacing="3">
+
+                <MudSimpleTable Bordered="true" Dense="true" Elevation="1">
+                    <colgroup>
+                        <col style="width:10%">
+                        <col>
+                    </colgroup>
                     <tbody>
                     <tr>
                         <td>Payee</td>
                         <td>@context.Item.Description</td>
                     </tr>
-                    <tr>
-                        <td>Message</td>
-                        <td>@context.Item.Message</td>
-                    </tr>
+                    @if (!string.IsNullOrWhiteSpace(context.Item.Message))
+                    {
+                        <tr>
+                            <td>Message</td>
+                            <td>@context.Item.Message</td>
+                        </tr>
+                    }
                     <tr>
                         <td>Raw Text</td>
                         <td>@context.Item.RawText</td>
@@ -118,10 +127,13 @@
                         <td>Created</td>
                         <td>@(context.Item.CreatedAt.ToString("f"))</td>
                     </tr>
-                    <tr>
-                        <td>Settled</td>
-                        <td>@(context.Item.SettledAt?.ToString("f"))</td>
-                    </tr>
+                    @if (context.Item.SettledAt != null)
+                    {
+                        <tr>
+                            <td>Settled</td>
+                            <td>@(context.Item.SettledAt.Value.ToString("f"))</td>
+                        </tr>
+                    }
                     <tr>
                         <td>Parent Category</td>
                         <td>@(context.Item.CategoryParent?.Name)</td>
@@ -130,9 +142,21 @@
                         <td>Category</td>
                         <td>@(context.Item.Category?.Name)</td>
                     </tr>
+                    <tr>
+                        <td>Tags</td>
+                        <td>
+                            @foreach (var tag in context.Item.Tags)
+                            {
+                                <MudChip Icon="@Icons.Material.Filled.Sell" IconColor="Color.Info" Variant="Variant.Outlined">@tag.Id</MudChip>
+                            }
+                        </td>
+                    </tr>
                     </tbody>
                 </MudSimpleTable>
-            </MudCard>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary">
+                    Edit
+                </MudButton>
+            </MudStack>
         </ChildRowContent>
         <PagerContent>
             <MudDataGridPager T="UpTransaction" PageSizeOptions="new int[] { 10, 20, 50, 100 }"/>
