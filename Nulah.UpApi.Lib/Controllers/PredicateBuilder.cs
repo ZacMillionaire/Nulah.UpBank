@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 
 namespace Nulah.UpApi.Lib.Controllers;
-
+// whatever I copy pasted from another project of mine because it's insane to make a single nuget package just for my own stuff and push that on to others (just yet)
 /// <summary>
 /// Helper methods for combining linq queries for EF conversions at a trivial level. Honestly I just wanted something lazy for my lazy specification system lol
 /// <para>
