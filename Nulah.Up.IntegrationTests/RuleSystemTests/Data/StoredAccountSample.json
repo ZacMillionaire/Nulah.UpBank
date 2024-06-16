@@ -1,0 +1,3468 @@
+﻿[
+  {
+    "Id": "e49c0540-c2ad-4dd1-abd2-eecf0b268f8e",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "ccf391cc-3336-4157-a0ea-9020a8d53583 - Raw text",
+    "Description": "da224034-3d5e-46f7-a3df-f24c058f6903 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-62.91",
+        "ValueInBaseUnits": -6291
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-62.91",
+      "ValueInBaseUnits": -6291
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:48.456764+10:00",
+    "CreatedAt": "2024-06-16T18:50:48.456764+10:00",
+    "Category": {
+      "Id": "groceries",
+      "Name": "Groceries",
+      "Type": "categories",
+      "ParentCategoryId": "home",
+      "Parent": {
+        "Id": "home",
+        "Name": "Home",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "home",
+      "Name": "Home",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Expense"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "c4c19740-1542-4108-a5c0-d0e0e441d8cd",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "3609c0d4-a936-47a7-a94b-5eaf3e8efb51 - Raw text",
+    "Description": "d3323788-8c24-4321-bb2b-c94cd821117c - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "40.88",
+        "ValueInBaseUnits": 4088
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "40.88",
+      "ValueInBaseUnits": 4088
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:58.8358341+10:00",
+    "CreatedAt": "2024-06-16T18:50:58.8358341+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Work"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "56886770-9750-4496-90db-30ccb0e67c30",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "079e0dc3-bf6c-4298-ba95-e267b48631c6 - Raw text",
+    "Description": "184060c2-95d9-447e-ab57-184b0e51b2d1 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-62.99",
+      "ValueInBaseUnits": -6299
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:48.448836+10:00",
+    "CreatedAt": "2024-06-16T18:50:48.448836+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "0dede745-eff4-4109-ad81-e7409519ff53",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "e8c3be77-5711-40ae-a2bd-489999821681 - Raw text",
+    "Description": "8b9a8ce7-6a80-4595-9d4c-2fe5a1ce0063 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-1.67",
+        "ValueInBaseUnits": -167
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-1.67",
+      "ValueInBaseUnits": -167
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:54.5808375+10:00",
+    "CreatedAt": "2024-06-16T18:50:54.5808375+10:00",
+    "Category": {
+      "Id": "groceries",
+      "Name": "Groceries",
+      "Type": "categories",
+      "ParentCategoryId": "home",
+      "Parent": {
+        "Id": "home",
+        "Name": "Home",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "home",
+      "Name": "Home",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Expense"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "1f6d95e5-83f3-4b66-bd96-2b667a21c06f",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "cd40813b-f285-446c-97b3-5d891b9820cd - Raw text",
+    "Description": "de5d914a-9b9a-4178-99d8-e7e7b19fb603 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "62.22",
+      "ValueInBaseUnits": 6222
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:00.9698391+10:00",
+    "CreatedAt": "2024-06-16T18:51:00.9698391+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "645f8a7d-a2c9-4783-8c39-5dc5f74a247a",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "a948e017-66ef-4715-928e-b6ac6a51ea12 - Raw text",
+    "Description": "430a4e13-59b7-4cfc-ab58-3f22bc83171e - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-28.83",
+        "ValueInBaseUnits": -2883
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-28.83",
+      "ValueInBaseUnits": -2883
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:51.8648404+10:00",
+    "CreatedAt": "2024-06-16T18:50:51.8648404+10:00",
+    "Category": {
+      "Id": "takeaway",
+      "Name": "Takeaway",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Expense"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "7384f5e3-7e18-41d4-9fc6-e85d107721d8",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "f8cd60ff-f7bb-40dc-a40e-d946db7f3fd0 - Raw text",
+    "Description": "4cf68b25-3546-4dd7-a5bd-59d6690d8a31 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "86.10",
+      "ValueInBaseUnits": 8610
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:03.3578419+10:00",
+    "CreatedAt": "2024-06-16T18:51:03.3578419+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "53db5b5c-3746-4a52-99b3-783e76031afc",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "b398fc48-15b2-45fc-8273-abdb26bc38f1 - Raw text",
+    "Description": "172bd51e-1ba9-46d6-931a-01d9f32d3679 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-57.18",
+      "ValueInBaseUnits": -5718
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:49.0298432+10:00",
+    "CreatedAt": "2024-06-16T18:50:49.0298432+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "b78da816-5a60-4d5d-8dcb-dd9bbc8783a8",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "9b8eda98-c2b2-4e68-ba8a-84d82d9fadd2 - Raw text",
+    "Description": "c7824e89-c5c3-43fb-a425-872a68249d84 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-84.54",
+      "ValueInBaseUnits": -8454
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:46.2938446+10:00",
+    "CreatedAt": "2024-06-16T18:50:46.2938446+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d3",
+    "InferredType": 2
+  },
+  {
+    "Id": "44fa1588-286b-4f80-b703-be2bc8107451",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "04892481-0193-4983-b7de-34e77996ae57 - Raw text",
+    "Description": "ba4040b6-10b5-457d-85b2-282a6a36e7c0 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-44.09",
+      "ValueInBaseUnits": -4409
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:50.3388462+10:00",
+    "CreatedAt": "2024-06-16T18:50:50.3388462+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "54c75270-0cca-49e7-acf7-a410b608ddbd",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "c6cddb77-69a6-4022-b4cd-bffc93eacfdb - Raw text",
+    "Description": "68c02937-f6f1-4443-9d49-3c9bce9acda7 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-16.61",
+        "ValueInBaseUnits": -1661
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-16.61",
+      "ValueInBaseUnits": -1661
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:53.0868476+10:00",
+    "CreatedAt": "2024-06-16T18:50:53.0868476+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Work"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "84be1994-bdf5-4f9f-894f-32a4a9db3be0",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "1535cfe1-e530-4f1d-bfca-51f349fb0f72 - Raw text",
+    "Description": "4d6484d7-6898-4ff8-806b-00fad5c9ae87 - Description",
+    "Message": "Ipad And back again",
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-90.02",
+      "ValueInBaseUnits": -9002
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:45.745849+10:00",
+    "CreatedAt": "2024-06-16T18:50:45.745849+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d3",
+    "InferredType": 4
+  },
+  {
+    "Id": "5775aac4-af54-471e-b525-192a461c9a13",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "ad7632cb-882c-4f7b-8b0c-49061992f16a - Raw text",
+    "Description": "1ffa2a09-ca1f-4282-8cf6-74b1c78c7dcb - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "68.50",
+      "ValueInBaseUnits": 6850
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:01.5978505+10:00",
+    "CreatedAt": "2024-06-16T18:51:01.5978505+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "00c8e268-6aa4-4397-a655-2588e2fe3bbd",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "3d327b59-6bf4-4e83-b53a-8e191b386efa - Raw text",
+    "Description": "26630484-54f4-4f1c-89b2-cceb005b41b6 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-79.47",
+      "ValueInBaseUnits": -7947
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:46.8008518+10:00",
+    "CreatedAt": "2024-06-16T18:50:46.8008518+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d4",
+    "InferredType": 2
+  },
+  {
+    "Id": "a844e036-e317-495f-8b74-41c5ba6c7455",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "02aa1aa7-df72-450c-ba61-d8d6008bda58 - Raw text",
+    "Description": "5d7b8877-924b-4c68-8625-026e82810473 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "90.83",
+      "ValueInBaseUnits": 9083
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:03.8308532+10:00",
+    "CreatedAt": "2024-06-16T18:51:03.8308532+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "be13239e-6c10-40ad-99de-ae399b070d51",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 0,
+    "RawText": "ea45b5ab-b463-4cc3-b62f-f340fe944994 - Raw text",
+    "Description": "b20304c9-f348-4396-b39f-6899a2b32fec - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "33.63",
+        "ValueInBaseUnits": 3363
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "33.63",
+      "ValueInBaseUnits": 3363
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:58.1108548+10:00",
+    "CreatedAt": "2024-06-16T18:50:58.1108548+10:00",
+    "Category": {
+      "Id": "homeware-and-appliances",
+      "Name": "Homeware & Appliances",
+      "Type": "categories",
+      "ParentCategoryId": "home",
+      "Parent": {
+        "Id": "home",
+        "Name": "Home",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "home",
+      "Name": "Home",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "c3ce06c9-9c2e-4320-8ac3-447044850cc3",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "61382e2f-0825-4e16-9d35-6188019e0bb0 - Raw text",
+    "Description": "ee57e94a-85a2-4a98-909f-7c261562f042 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "70.71",
+      "ValueInBaseUnits": 7071
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:01.81886+10:00",
+    "CreatedAt": "2024-06-16T18:51:01.81886+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 3
+  },
+  {
+    "Id": "703b9fa2-04c0-4750-8f6f-5a4de5ef083c",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "7805e12c-b41e-427d-9520-7e080d849452 - Raw text",
+    "Description": "057a75fe-7c86-4923-89cd-fee38cd8cc3e - Description",
+    "Message": "Ipad And back again",
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-64.04",
+      "ValueInBaseUnits": -6404
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:48.3438614+10:00",
+    "CreatedAt": "2024-06-16T18:50:48.3438614+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 4
+  },
+  {
+    "Id": "cb243f4f-0381-4b5d-bdfa-72c765995591",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "452d9aae-b0da-4e55-8cd9-7cfc9c239178 - Raw text",
+    "Description": "1e240933-d0ba-4c46-9be3-ef913f1734f0 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "89.63",
+      "ValueInBaseUnits": 8963
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:03.7108627+10:00",
+    "CreatedAt": "2024-06-16T18:51:03.7108627+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "3094b60b-1365-4947-bfcd-f1e3e181e526",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "cfd53d76-ec8d-449b-be5a-d6a1ea258c01 - Raw text",
+    "Description": "3b8cab9c-6a42-416f-99ba-186366b58566 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "19.72",
+      "ValueInBaseUnits": 1972
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:56.7198639+10:00",
+    "CreatedAt": "2024-06-16T18:50:56.7198639+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "f6a25bba-3bf3-48da-be4f-73843bb8182c",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "68ab7b1a-58b9-4329-8fbd-91415a52d671 - Raw text",
+    "Description": "f5d489f5-42ad-4ba0-87b7-90abebe19a8b - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "58.70",
+      "ValueInBaseUnits": 5870
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:00.6178653+10:00",
+    "CreatedAt": "2024-06-16T18:51:00.6178653+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 3
+  },
+  {
+    "Id": "cf026039-3728-4d29-b902-744b0b807e14",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "364dbe2b-ea1b-4bdb-a81f-4253a4f54169 - Raw text",
+    "Description": "64a45d11-52f1-4e92-a355-fb455bd3f8dc - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-62.27",
+      "ValueInBaseUnits": -6227
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:48.5208665+10:00",
+    "CreatedAt": "2024-06-16T18:50:48.5208665+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "fafe7410-71be-4acd-9b17-46831a272811",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "a01d814e-9ae7-4be9-9c2e-f49e7141bd7e - Raw text",
+    "Description": "3e12e9ab-0c51-4c81-a6d3-028a00952098 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "9.37",
+      "ValueInBaseUnits": 937
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:55.6848678+10:00",
+    "CreatedAt": "2024-06-16T18:50:55.6848678+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "7efbb3ef-0f82-40a1-98bf-0a6bdd8dd4f4",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "1034c7f7-8582-423e-a06a-ed7294d6620b - Raw text",
+    "Description": "b75908e9-edb9-45ec-ada1-5f3f5bf3ede5 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "2.87",
+      "ValueInBaseUnits": 287
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:55.0348691+10:00",
+    "CreatedAt": "2024-06-16T18:50:55.0348691+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "a7b132a6-a739-4712-a8b6-48aa5bbb43b3",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "a1d84478-4b8b-48a3-ba3f-a9a7ca33edf9 - Raw text",
+    "Description": "8038a3aa-4b17-4fb2-a630-775cfad7da8e - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "3.69",
+      "ValueInBaseUnits": 369
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:55.1168703+10:00",
+    "CreatedAt": "2024-06-16T18:50:55.1168703+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "092726ed-b611-405b-865f-ebc3b94e756a",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "86ff1a0b-123a-44d4-a6fe-ba4b690019b9 - Raw text",
+    "Description": "2095f1bb-beb0-4dad-9d21-757b764da4ee - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-54.50",
+        "ValueInBaseUnits": -5450
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-54.50",
+      "ValueInBaseUnits": -5450
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:49.2978718+10:00",
+    "CreatedAt": "2024-06-16T18:50:49.2978718+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Work"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "539483e6-c5d9-4742-b8b2-48e9459327f0",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "9e6f5754-5c78-44cc-abb0-907f3a617ea1 - Raw text",
+    "Description": "4f2fc2db-e545-46e8-9dd7-bef787f4c68b - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "90.50",
+        "ValueInBaseUnits": 9050
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "90.50",
+      "ValueInBaseUnits": 9050
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:51:03.7978731+10:00",
+    "CreatedAt": "2024-06-16T18:51:03.7978731+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Work"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "fba855bc-2f17-4d6b-8402-0c61e3e2d15f",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "53ef0724-92f3-46d7-8736-89fe7a5f6046 - Raw text",
+    "Description": "8ea2a335-f63f-48d8-a0f7-fd13076bb72c - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "64.18",
+      "ValueInBaseUnits": 6418
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:01.1658744+10:00",
+    "CreatedAt": "2024-06-16T18:51:01.1658744+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "9b5d5e02-a4ef-40f0-b181-6952622977c2",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "21bb28c5-a943-4de1-a5d6-2fc27cad00ac - Raw text",
+    "Description": "2538fa4d-0531-4915-b6aa-31c1a5fe3309 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-94.68",
+      "ValueInBaseUnits": -9468
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:45.2798757+10:00",
+    "CreatedAt": "2024-06-16T18:50:45.2798757+10:00",
+    "Category": {
+      "Id": "car-repayments",
+      "Name": "Repayments",
+      "Type": "categories",
+      "ParentCategoryId": "transport",
+      "Parent": {
+        "Id": "transport",
+        "Name": "Transport",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "transport",
+      "Name": "Transport",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Bill"
+      },
+      {
+        "Type": "tags",
+        "Id": "Car"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "b1913483-62f8-448f-b495-e1ce9bdae7b4",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "60c6c299-1bd4-4878-b1ea-620ddc690ad7 - Raw text",
+    "Description": "32b18146-6eae-484d-9fbc-41168c2af552 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "24.40",
+        "ValueInBaseUnits": 2440
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "24.40",
+      "ValueInBaseUnits": 2440
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:57.187877+10:00",
+    "CreatedAt": "2024-06-16T18:50:57.187877+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Expense"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "4513d6a5-b399-4acc-9e2c-df33d429fd97",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "501d9463-1d8c-46ff-8810-d003a3c3ab26 - Raw text",
+    "Description": "b2dae477-0ff4-4ceb-b1db-479f23d37250 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-24.39",
+      "ValueInBaseUnits": -2439
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:52.3088784+10:00",
+    "CreatedAt": "2024-06-16T18:50:52.3088784+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "660bdc3f-3044-46d3-ad4d-c610e83be935",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "f6b274c4-1c30-470f-906a-16fd541694f1 - Raw text",
+    "Description": "bdf95453-2e7f-4c09-a5d2-5033b8d26f0c - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-55.17",
+      "ValueInBaseUnits": -5517
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:49.2308796+10:00",
+    "CreatedAt": "2024-06-16T18:50:49.2308796+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "84f6daa2-ec46-4a5d-ac74-37fe5facc21b",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "7c6ec177-9923-465b-8d86-e483e768f1e7 - Raw text",
+    "Description": "8ac683ec-2797-43c1-8f3e-55465d0f94f1 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "55.35",
+      "ValueInBaseUnits": 5535
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:00.2828808+10:00",
+    "CreatedAt": "2024-06-16T18:51:00.2828808+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "41cd9b6a-29e2-408d-8b05-a231bcd39a2f",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "5b92bf73-e5df-490f-b86c-b42471f42701 - Raw text",
+    "Description": "9b201157-381a-49ca-9626-7ed28d628526 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "47.98",
+      "ValueInBaseUnits": 4798
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:59.5458822+10:00",
+    "CreatedAt": "2024-06-16T18:50:59.5458822+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "105dac62-7a67-4b71-a6ad-fb90c6edd064",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "612ea0de-2291-4c02-bcb6-cffdc448f6d1 - Raw text",
+    "Description": "721fddba-7f73-4fe3-b70f-b3029b55f4e0 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-75.46",
+        "ValueInBaseUnits": -7546
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-75.46",
+      "ValueInBaseUnits": -7546
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:47.2018837+10:00",
+    "CreatedAt": "2024-06-16T18:50:47.2018837+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Work"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "ef0ba881-c64c-4fc1-b05c-afc89fd0793b",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "82114e4e-865e-4218-969b-318525dab8b7 - Raw text",
+    "Description": "310b976d-4d2f-41c1-8913-874217a14be6 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-10.58",
+        "ValueInBaseUnits": -1058
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-10.58",
+      "ValueInBaseUnits": -1058
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:53.6898851+10:00",
+    "CreatedAt": "2024-06-16T18:50:53.6898851+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Expense"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "e47a23d1-5f7d-4e28-a534-3eeec440035f",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "cb51c841-21a6-47b4-884a-e141f8717b63 - Raw text",
+    "Description": "d1ac22a0-0498-4f3c-95b8-8da177ec6531 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "24.29",
+        "ValueInBaseUnits": 2429
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "24.29",
+      "ValueInBaseUnits": 2429
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:57.1768887+10:00",
+    "CreatedAt": "2024-06-16T18:50:57.1768887+10:00",
+    "Category": {
+      "Id": "groceries",
+      "Name": "Groceries",
+      "Type": "categories",
+      "ParentCategoryId": "home",
+      "Parent": {
+        "Id": "home",
+        "Name": "Home",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "home",
+      "Name": "Home",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Expense"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "d7cce0f7-c98b-4dd4-89bf-c9448efadd45",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "09b73024-bc8a-425b-9a56-70323a94b96d - Raw text",
+    "Description": "767fe4ae-9893-4f32-a63e-b5548c15f052 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-80.67",
+      "ValueInBaseUnits": -8067
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:46.68089+10:00",
+    "CreatedAt": "2024-06-16T18:50:46.68089+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "c879c885-5e77-400e-9082-f7e92a87a4ca",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "b955992d-cd8b-460b-8480-3f6d85189612 - Raw text",
+    "Description": "9ea0cc1e-1af1-43a8-b36a-993ebb821451 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "22.99",
+      "ValueInBaseUnits": 2299
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:57.0468914+10:00",
+    "CreatedAt": "2024-06-16T18:50:57.0468914+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "c181aa2e-9782-49a0-86a8-3e4f58861e7e",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "cfad9364-6f89-48cd-88d1-e018cb24d751 - Raw text",
+    "Description": "2fa700f9-5e73-481c-b368-8ff38cf7e06b - Description",
+    "Message": "Ipad+pencil",
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-28.64",
+      "ValueInBaseUnits": -2864
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:51.8838926+10:00",
+    "CreatedAt": "2024-06-16T18:50:51.8838926+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 4
+  },
+  {
+    "Id": "459fd0e3-be89-4ea0-8675-53fb8c240a9c",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "b18da750-9e87-4ae5-b34b-9e807e637d3b - Raw text",
+    "Description": "3219e241-fec7-433f-97b4-38af78a79f0d - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-92.80",
+      "ValueInBaseUnits": -9280
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:45.4678939+10:00",
+    "CreatedAt": "2024-06-16T18:50:45.4678939+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "ff1a83ec-83d4-48eb-8bfb-285892ce0f43",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "be084931-d20d-44ea-a5e0-54b710d65550 - Raw text",
+    "Description": "6a416d8a-f7dd-4526-a337-2b21c9d05829 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-38.90",
+        "ValueInBaseUnits": -3890
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-38.90",
+      "ValueInBaseUnits": -3890
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:50.8578953+10:00",
+    "CreatedAt": "2024-06-16T18:50:50.8578953+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Work"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "4fe43d1f-a748-4aec-9d58-56bea747a124",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "4ffdc2b0-fc49-4852-914c-1e34522e2d3c - Raw text",
+    "Description": "c4d301f7-0595-4377-9f2f-06b2ce6f3f85 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-24.81",
+      "ValueInBaseUnits": -2481
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:52.2668968+10:00",
+    "CreatedAt": "2024-06-16T18:50:52.2668968+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "4224722f-39a6-428c-a761-a7d122112763",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "81351e91-5a36-442e-b091-a73608e4f738 - Raw text",
+    "Description": "60ba0c9b-5708-43d7-8653-e549252cb64d - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "89.15",
+      "ValueInBaseUnits": 8915
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:03.662898+10:00",
+    "CreatedAt": "2024-06-16T18:51:03.662898+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "3e9477f8-c4b3-4c5c-b715-e7e6cf0ccc80",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "4c358026-f295-4f34-a2ae-fe8db59054b7 - Raw text",
+    "Description": "116472a5-a3a2-45b3-90ce-46f41efdb096 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-94.62",
+      "ValueInBaseUnits": -9462
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:45.2858994+10:00",
+    "CreatedAt": "2024-06-16T18:50:45.2858994+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "6b02b477-b2ec-4a49-9ef7-ea18442cfa66",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "9b99ad01-8869-48aa-8944-b57cebcad1cf - Raw text",
+    "Description": "1619274f-1383-4ada-90d0-eaf4b3c6569a - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-67.43",
+        "ValueInBaseUnits": -6743
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-67.43",
+      "ValueInBaseUnits": -6743
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:48.0049007+10:00",
+    "CreatedAt": "2024-06-16T18:50:48.0049007+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Work"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "adedef59-3cbb-46e0-b9b8-cd315f7cdb0a",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "2199f578-b282-4782-8cb9-ca1fdbe7fd25 - Raw text",
+    "Description": "ec3e2fe3-dead-4a5f-9674-75dc03858212 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "94.84",
+      "ValueInBaseUnits": 9484
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:04.231902+10:00",
+    "CreatedAt": "2024-06-16T18:51:04.231902+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d4",
+    "InferredType": 2
+  },
+  {
+    "Id": "07bac7ba-33e3-4a8a-85b9-4ff9c7961b99",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "1d8127c4-2962-41f8-9654-f07aa4266937 - Raw text",
+    "Description": "a5e02b19-e043-4454-be20-c0bccfe902c1 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-90.23",
+      "ValueInBaseUnits": -9023
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:45.7249031+10:00",
+    "CreatedAt": "2024-06-16T18:50:45.7249031+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "945697d6-34f5-4bea-9f28-fc7099ce9b1e",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "65260e00-bf98-4e56-9240-6ea737be789d - Raw text",
+    "Description": "d3c21024-afad-4803-bdd9-ef6f36069c5c - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-53.30",
+      "ValueInBaseUnits": -5330
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:49.4179044+10:00",
+    "CreatedAt": "2024-06-16T18:50:49.4179044+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "81854828-085e-4c37-ab31-06b4d3a72842",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "6df3720f-0f65-4c35-b4d2-096c3b7a56f5 - Raw text",
+    "Description": "3aba49ed-9ec9-486d-bfc2-0921a3c9151b - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-12.31",
+        "ValueInBaseUnits": -1231
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-12.31",
+      "ValueInBaseUnits": -1231
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:53.5169058+10:00",
+    "CreatedAt": "2024-06-16T18:50:53.5169058+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Expense"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "3294addf-ae43-479c-9407-e245cfc21ed8",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "5db99e28-ba79-460e-8326-7ac5cef8e082 - Raw text",
+    "Description": "e951f9d9-3cd8-431e-8abb-e1d7ec61b210 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "57.02",
+      "ValueInBaseUnits": 5702
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:00.4499071+10:00",
+    "CreatedAt": "2024-06-16T18:51:00.4499071+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "8a28a31c-6e2b-425c-a4c4-30096c43342a",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "f25b9577-6ef3-4c23-80fe-61a1273ae80e - Raw text",
+    "Description": "6be13c40-f7ed-487e-a43f-2375937bbfd2 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-14.29",
+        "ValueInBaseUnits": -1429
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-14.29",
+      "ValueInBaseUnits": -1429
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:53.3189084+10:00",
+    "CreatedAt": "2024-06-16T18:50:53.3189084+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Expense"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "6e504f2a-8b4e-467c-8fc3-14140fda6f63",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "ca2352b6-ec53-4aeb-a468-b19fddd3f687 - Raw text",
+    "Description": "627a071b-f88c-43f7-bf3a-41c3dd7357f2 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-69.67",
+      "ValueInBaseUnits": -6967
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:47.7809098+10:00",
+    "CreatedAt": "2024-06-16T18:50:47.7809098+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "5b84c107-1c6d-4af2-9c15-594f59f991e6",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "3a5d1389-6ebd-40cd-ac38-2d770892ec21 - Raw text",
+    "Description": "3658f568-159d-4413-aba8-4d4105cf898f - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "75.28",
+      "ValueInBaseUnits": 7528
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:02.2759111+10:00",
+    "CreatedAt": "2024-06-16T18:51:02.2759111+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "ec01b5f7-1485-4a7a-9e1f-7d6b3f71d4ab",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "8befa378-1af5-42c5-9ae6-bce12d4ad1de - Raw text",
+    "Description": "ef39adc5-98db-489f-becb-3c39b9e832a2 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-43.42",
+      "ValueInBaseUnits": -4342
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:50.4059124+10:00",
+    "CreatedAt": "2024-06-16T18:50:50.4059124+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "f780abba-b66c-4db9-87f7-753e980eafdf",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 0,
+    "RawText": "9319e938-5745-4fdd-87b4-fae0adf2b3f1 - Raw text",
+    "Description": "c232143d-064a-4d22-9a62-4da4b66905f3 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "78.43",
+        "ValueInBaseUnits": 7843
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "78.43",
+      "ValueInBaseUnits": 7843
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:51:02.5909154+10:00",
+    "CreatedAt": "2024-06-16T18:51:02.5909154+10:00",
+    "Category": {
+      "Id": "technology",
+      "Name": "Technology",
+      "Type": "categories",
+      "ParentCategoryId": "personal",
+      "Parent": {
+        "Id": "personal",
+        "Name": "Personal",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "personal",
+      "Name": "Personal",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Bill"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "bf17143d-03ad-4b87-92d0-f2af4d4d8e4b",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "4d3ad577-8e08-4aa3-af48-a3429a6c3d45 - Raw text",
+    "Description": "41436bf1-919d-40dc-ab15-322edddf3b89 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "62.39",
+      "ValueInBaseUnits": 6239
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:00.9869167+10:00",
+    "CreatedAt": "2024-06-16T18:51:00.9869167+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "c1d5f87a-ef97-4cb8-911a-d653d7b26af6",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "4df44b9f-7734-4c68-be9b-f35d404c5042 - Raw text",
+    "Description": "07d651c1-ab90-4930-971a-c6ff461dac96 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "9.20",
+      "ValueInBaseUnits": 920
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:55.6679181+10:00",
+    "CreatedAt": "2024-06-16T18:50:55.6679181+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "4e78b337-c78e-4ded-b900-19fbfe847e12",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "c1f948ea-4174-425f-840e-d078b7da6555 - Raw text",
+    "Description": "064ebb51-1023-4fb8-a35b-a348ed4236b9 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-9.87",
+      "ValueInBaseUnits": -987
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:53.7609198+10:00",
+    "CreatedAt": "2024-06-16T18:50:53.7609198+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "0c989e08-e48b-4f98-8cd6-16ce969b9fe3",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "bd733f21-4af3-4dcc-a5de-8bc25b406fd0 - Raw text",
+    "Description": "533fa3bc-1bf6-4837-8240-c4071326a07e - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "39.67",
+      "ValueInBaseUnits": 3967
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:58.714921+10:00",
+    "CreatedAt": "2024-06-16T18:50:58.714921+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d3",
+    "InferredType": 2
+  },
+  {
+    "Id": "8f1a7488-92a8-4d64-b52d-7608e476dcb5",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "c13c6e1e-b9a9-4eff-90f9-d3de2ed4b675 - Raw text",
+    "Description": "b2dd9ec9-45d4-497e-bed1-797e22385f8f - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "71.04",
+        "ValueInBaseUnits": 7104
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "71.04",
+      "ValueInBaseUnits": 7104
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:51:01.8519224+10:00",
+    "CreatedAt": "2024-06-16T18:51:01.8519224+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Work"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "88018f72-3627-495a-88e3-693cf1c89366",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "3f577fe1-08ca-4679-99c4-51a08abf9084 - Raw text",
+    "Description": "ef94af8e-0ab0-433d-9cc7-af10930d3dda - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "14.47",
+      "ValueInBaseUnits": 1447
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:56.1949236+10:00",
+    "CreatedAt": "2024-06-16T18:50:56.1949236+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "cebb77e8-5e0a-4df6-88e1-b4a4dbfd971a",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "adee95da-3db7-435a-af6b-d532a2a021b5 - Raw text",
+    "Description": "5e91353d-865b-4003-9ebf-7619db1736ff - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-2.29",
+        "ValueInBaseUnits": -229
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-2.29",
+      "ValueInBaseUnits": -229
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:54.5189251+10:00",
+    "CreatedAt": "2024-06-16T18:50:54.5189251+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Expense"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "c891b5cc-2618-484c-9002-e3a428789a2a",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 0,
+    "RawText": "051ec919-a258-4fab-af09-bd501c553f11 - Raw text",
+    "Description": "bbca0039-4975-4496-98af-52572a47cadf - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "28.44",
+        "ValueInBaseUnits": 2844
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "28.44",
+      "ValueInBaseUnits": 2844
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:57.5919263+10:00",
+    "CreatedAt": "2024-06-16T18:50:57.5919263+10:00",
+    "Category": {
+      "Id": "homeware-and-appliances",
+      "Name": "Homeware & Appliances",
+      "Type": "categories",
+      "ParentCategoryId": "home",
+      "Parent": {
+        "Id": "home",
+        "Name": "Home",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "home",
+      "Name": "Home",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Expense"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "693f6ef6-4196-402f-90ec-2bd12fa0566f",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "99b1cb6c-16ba-449c-bbde-5efed109d1bc - Raw text",
+    "Description": "6adf90ca-f370-48dc-aaed-c739cdbdc00d - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-89.25",
+      "ValueInBaseUnits": -8925
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:45.8229276+10:00",
+    "CreatedAt": "2024-06-16T18:50:45.8229276+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "b9fba6b1-5eea-4f0e-a1a7-aced1ab41f56",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "2c180c0f-d335-4fcb-ba97-206022655235 - Raw text",
+    "Description": "8c63ba20-009d-4529-912a-da9a50063022 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "2.84",
+      "ValueInBaseUnits": 284
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:55.031929+10:00",
+    "CreatedAt": "2024-06-16T18:50:55.031929+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "b3e8bd6c-dccf-4a5c-8c43-47a55e3f962d",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "a2c3ab98-d901-4c5f-8e56-6175679ccb79 - Raw text",
+    "Description": "47e386d1-2f84-4b4a-bd1a-d7088d2075b3 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-97.70",
+      "ValueInBaseUnits": -9770
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:44.9779305+10:00",
+    "CreatedAt": "2024-06-16T18:50:44.9779305+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "241d3e05-6991-4e97-8c76-e4f621e5f439",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "d3ad1578-5f1a-4788-849b-313999309257 - Raw text",
+    "Description": "7b53aada-29f3-4544-a68b-525f8b7a85d1 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "27.46",
+      "ValueInBaseUnits": 2746
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:57.4939317+10:00",
+    "CreatedAt": "2024-06-16T18:50:57.4939317+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "08f44db4-c415-41f2-ad96-774d94a7dcd4",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "04ac0daf-40a9-4cbb-aa1a-eb477422661a - Raw text",
+    "Description": "17972a60-346c-4a95-8ad6-03e470cb7b5f - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "87.70",
+      "ValueInBaseUnits": 8770
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:03.5179331+10:00",
+    "CreatedAt": "2024-06-16T18:51:03.5179331+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "578cd67f-1dc0-437d-b82e-2ab8129eb454",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "570c18a7-e5a5-4118-b3cf-91516f9b741e - Raw text",
+    "Description": "94774152-8846-4d7a-8d21-6019b62a999b - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "94.47",
+      "ValueInBaseUnits": 9447
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:04.1949343+10:00",
+    "CreatedAt": "2024-06-16T18:51:04.1949343+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "3be3888b-b7f2-4fe3-a4a3-9ac2037efd69",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "5d73349b-418d-47ac-bd16-a344d569c1b9 - Raw text",
+    "Description": "758c7a87-e383-4726-ae87-f6d24f545759 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "22.96",
+        "ValueInBaseUnits": 2296
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "22.96",
+      "ValueInBaseUnits": 2296
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:57.0439357+10:00",
+    "CreatedAt": "2024-06-16T18:50:57.0439357+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Work"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "3b08d0c8-7457-4b4e-b72b-b5ee5f43a063",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "f4872264-bf84-4c2f-a546-754bc78d41e7 - Raw text",
+    "Description": "fac3cfde-fa20-4b88-b68a-c122b1d52e6f - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-73.18",
+        "ValueInBaseUnits": -7318
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-73.18",
+      "ValueInBaseUnits": -7318
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:47.429937+10:00",
+    "CreatedAt": "2024-06-16T18:50:47.429937+10:00",
+    "Category": {
+      "Id": "takeaway",
+      "Name": "Takeaway",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Expense"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "187f315e-40a9-4635-8b31-ded86441f678",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 0,
+    "RawText": "aa7649a6-770a-42fd-bd22-3b094bc6ab33 - Raw text",
+    "Description": "05220b35-44fc-433e-86b4-100385ea43db - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "81.80",
+        "ValueInBaseUnits": 8180
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "81.80",
+      "ValueInBaseUnits": 8180
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:51:02.9279383+10:00",
+    "CreatedAt": "2024-06-16T18:51:02.9279383+10:00",
+    "Category": {
+      "Id": "fuel",
+      "Name": "Fuel",
+      "Type": "categories",
+      "ParentCategoryId": "transport",
+      "Parent": {
+        "Id": "transport",
+        "Name": "Transport",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "transport",
+      "Name": "Transport",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Car"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "11fef247-b34b-472c-b7a2-bf2eb6acbebf",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "8e04fe8a-e543-4a32-a353-c97aad5a6293 - Raw text",
+    "Description": "a83c6839-ac1e-4e74-b44f-a09271055c78 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "9.40",
+      "ValueInBaseUnits": 940
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:55.6879396+10:00",
+    "CreatedAt": "2024-06-16T18:50:55.6879396+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "ab61726f-a99e-4a7b-927a-089a0d30ca73",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "d64c3086-b47c-479e-ad49-e95a116a9c91 - Raw text",
+    "Description": "cbdb5a54-58c0-46cf-b0b1-e19279e283dc - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-27.26",
+      "ValueInBaseUnits": -2726
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:52.0219409+10:00",
+    "CreatedAt": "2024-06-16T18:50:52.0219409+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "03cf14c0-04c0-43a2-a19b-85a109bfaf86",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "8fd8e50f-2597-4633-8bda-ca765765d3a6 - Raw text",
+    "Description": "e54e2509-f7b3-40aa-b6d7-83907225a2bf - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-3.94",
+      "ValueInBaseUnits": -394
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:54.3539463+10:00",
+    "CreatedAt": "2024-06-16T18:50:54.3539463+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "ca27f4c4-127b-4dd9-a114-6ec3735ca6b6",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "bf9d731a-9d61-4525-a55f-c53ba61032f0 - Raw text",
+    "Description": "e490aabe-0103-4eda-9220-55d5942725cb - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "57.51",
+      "ValueInBaseUnits": 5751
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:00.4989477+10:00",
+    "CreatedAt": "2024-06-16T18:51:00.4989477+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "5d859e3f-fede-4447-b9ab-caec89c3019d",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "cfe4e420-b2bc-402e-b9d4-f2d6d7c5c493 - Raw text",
+    "Description": "43bf3427-2270-4f48-8f5f-c6bc3d07f0a0 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "92.41",
+      "ValueInBaseUnits": 9241
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:03.9889489+10:00",
+    "CreatedAt": "2024-06-16T18:51:03.9889489+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "2caa5981-1438-4c27-a5fe-2b4241090de7",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "322c77c2-34c0-458e-811a-64c05407096b - Raw text",
+    "Description": "c386022e-0c02-4086-9fb6-9b9f2fafbdb7 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-90.44",
+      "ValueInBaseUnits": -9044
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:45.7039503+10:00",
+    "CreatedAt": "2024-06-16T18:50:45.7039503+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "71bcba4d-1172-4b07-a5c4-efe494ef479d",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "a762be07-1cfb-4416-9cfc-18e7757cc121 - Raw text",
+    "Description": "3a353947-9cd3-460d-bcce-c1b2c51d3d22 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "99.93",
+        "ValueInBaseUnits": 9993
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "99.93",
+      "ValueInBaseUnits": 9993
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:51:04.7409515+10:00",
+    "CreatedAt": "2024-06-16T18:51:04.7409515+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Work"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "0bf89fa9-f30f-4df6-b379-bec41539661c",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "262b70a1-ee4e-4808-afe7-47cc3c3efbc1 - Raw text",
+    "Description": "61efc596-2356-42ad-8919-b5ed0789f2e5 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-59.10",
+      "ValueInBaseUnits": -5910
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:48.8379527+10:00",
+    "CreatedAt": "2024-06-16T18:50:48.8379527+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "f5c765cf-78d3-4986-80eb-d8832420d48a",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "b6369429-60ef-4f40-a5ea-bb8e3a7c3de3 - Raw text",
+    "Description": "02d1be3b-a124-490a-9a2f-a3eddde31249 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-20.75",
+      "ValueInBaseUnits": -2075
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:52.6729541+10:00",
+    "CreatedAt": "2024-06-16T18:50:52.6729541+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  },
+  {
+    "Id": "2df2439e-07e1-470a-a72a-33833db15c0b",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "e131102c-538e-42db-906d-b6b03fabec23 - Raw text",
+    "Description": "accd328c-cc0f-4724-8fd1-f3a7cec2c382 - Description",
+    "Message": "Rent",
+    "IsCategorizable": true,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "78.23",
+      "ValueInBaseUnits": 7823
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:51:02.5709553+10:00",
+    "CreatedAt": "2024-06-16T18:51:02.5709553+10:00",
+    "Category": {
+      "Id": "rent-and-mortgage",
+      "Name": "Rent & Mortgage",
+      "Type": "categories",
+      "ParentCategoryId": "home",
+      "Parent": {
+        "Id": "home",
+        "Name": "Home",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "home",
+      "Name": "Home",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Bill"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "c45684e6-fe1a-4a31-b8ba-0a062d34d997",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "4d16bfa2-8b4f-4895-be52-65acd6400224 - Raw text",
+    "Description": "ad265d4c-7450-4972-8b63-e3cdfbda9547 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-12.65",
+      "ValueInBaseUnits": -1265
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:53.4829565+10:00",
+    "CreatedAt": "2024-06-16T18:50:53.4829565+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "be5ba1a1-02e2-4a86-a799-9b90ab9a0448",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "969463ae-b751-4351-8a05-68013aadeb9d - Raw text",
+    "Description": "695c5972-8aa1-4940-8f96-bdaf1039c1ee - Description",
+    "Message": "Ipad+pencil",
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-16.39",
+      "ValueInBaseUnits": -1639
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:53.1089578+10:00",
+    "CreatedAt": "2024-06-16T18:50:53.1089578+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d3",
+    "InferredType": 4
+  },
+  {
+    "Id": "d4838f51-f62f-4dff-aa29-528fc9e5802d",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "44310289-c5f7-409f-8c33-2cbf3fe249bc - Raw text",
+    "Description": "67f8c6c8-858d-4b46-a2aa-50e9e9a0582c - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "87.82",
+        "ValueInBaseUnits": 8782
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "87.82",
+      "ValueInBaseUnits": 8782
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:51:03.5299591+10:00",
+    "CreatedAt": "2024-06-16T18:51:03.5299591+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Work"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "cf28884a-d422-4e21-8218-90b669b70ac1",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "d7bc169d-9506-480c-9053-a124a245ea03 - Raw text",
+    "Description": "18b50fe3-6c47-4034-be03-8b928eea3115 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-26.19",
+      "ValueInBaseUnits": -2619
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:52.1289604+10:00",
+    "CreatedAt": "2024-06-16T18:50:52.1289604+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "a2e903ec-0bb0-48a3-8f69-9297b7c6e214",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "86693512-162b-44df-85a9-11dcf8de270f - Raw text",
+    "Description": "e36222d2-0da9-4cf5-89a9-b7247f3af050 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-72.48",
+        "ValueInBaseUnits": -7248
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-72.48",
+      "ValueInBaseUnits": -7248
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:47.4999617+10:00",
+    "CreatedAt": "2024-06-16T18:50:47.4999617+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Work"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "76cc9d2f-0a82-4c97-98d9-701b032ad64b",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "ef7b2ca4-047e-4671-b4a9-65640b51ba23 - Raw text",
+    "Description": "9eefc199-79f1-435b-9733-25d282dd33ea - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-11.70",
+      "ValueInBaseUnits": -1170
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:53.5779629+10:00",
+    "CreatedAt": "2024-06-16T18:50:53.5779629+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "3abc5944-6eae-470e-ba3f-98235f18c0d5",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "9164cc72-6f87-470c-834f-872e7299f15f - Raw text",
+    "Description": "c979d578-83e0-4c0c-88b3-15060c72da2e - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "58.79",
+        "ValueInBaseUnits": 5879
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "58.79",
+      "ValueInBaseUnits": 5879
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:51:00.6269644+10:00",
+    "CreatedAt": "2024-06-16T18:51:00.6269644+10:00",
+    "Category": {
+      "Id": "technology",
+      "Name": "Technology",
+      "Type": "categories",
+      "ParentCategoryId": "personal",
+      "Parent": {
+        "Id": "personal",
+        "Name": "Personal",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "personal",
+      "Name": "Personal",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Expense"
+      },
+      {
+        "Type": "tags",
+        "Id": "Work"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "fb3c2a39-59d7-4d68-8e09-8fbed4bd9f7d",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "e82a1cf4-8e55-4dce-8719-fcaa06a0a58a - Raw text",
+    "Description": "4c87b734-826e-414a-9976-61f0abd59047 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "30.26",
+      "ValueInBaseUnits": 3026
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:57.7739656+10:00",
+    "CreatedAt": "2024-06-16T18:50:57.7739656+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "1eb1d0b0-971b-4e29-afb0-43f0455ac7d0",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "451b263b-8b0c-4d41-8656-0ce402f1e9aa - Raw text",
+    "Description": "fa792361-575a-4d6a-88ff-a0914e40ec87 - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-50.88",
+      "ValueInBaseUnits": -5088
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:49.6599668+10:00",
+    "CreatedAt": "2024-06-16T18:50:49.6599668+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d2",
+    "InferredType": 2
+  },
+  {
+    "Id": "ed14c226-694e-45c8-9cb3-fb1a5dc641bf",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "920d5b0c-aacc-47e5-aada-cce182f8b47f - Raw text",
+    "Description": "fc45e7bf-567e-482f-96f6-d6436bd795a4 - Description",
+    "Message": null,
+    "IsCategorizable": true,
+    "HoldInfo": {
+      "Amount": {
+        "CurrencyCode": "TEST",
+        "Value": "-82.75",
+        "ValueInBaseUnits": -8275
+      },
+      "ForeignAmount": null
+    },
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "-82.75",
+      "ValueInBaseUnits": -8275
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": {
+      "MethodType": 0,
+      "CardNumberSuffix": "1234"
+    },
+    "SettledAt": "2024-06-16T18:50:46.4729682+10:00",
+    "CreatedAt": "2024-06-16T18:50:46.4729682+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Expense"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "e991e075-6167-4f88-afbe-df02feb07d60",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "74310448-2a24-4581-b38c-4b41994d9290 - Raw text",
+    "Description": "0e1be93c-c77e-4380-b579-c6fef99d720b - Description",
+    "Message": "",
+    "IsCategorizable": true,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "13.46",
+      "ValueInBaseUnits": 1346
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:56.0939694+10:00",
+    "CreatedAt": "2024-06-16T18:50:56.0939694+10:00",
+    "Category": {
+      "Id": "restaurants-and-cafes",
+      "Name": "Restaurants & Cafes",
+      "Type": "categories",
+      "ParentCategoryId": "good-life",
+      "Parent": {
+        "Id": "good-life",
+        "Name": "Good Life",
+        "Type": "categories",
+        "ParentCategoryId": null,
+        "Parent": null
+      }
+    },
+    "CategoryParent": {
+      "Id": "good-life",
+      "Name": "Good Life",
+      "Type": "categories",
+      "ParentCategoryId": null,
+      "Parent": null
+    },
+    "Tags": [
+      {
+        "Type": "tags",
+        "Id": "Payment"
+      }
+    ],
+    "TransferAccountId": null,
+    "InferredType": 1
+  },
+  {
+    "Id": "3621f71b-240d-402e-81e4-ce35e94d4d81",
+    "AccountId": "1adaef50-a328-4f94-9400-ab371e6a63e4",
+    "Status": 1,
+    "RawText": "8817715a-9136-47c4-870b-3ecada58c3ba - Raw text",
+    "Description": "262abdca-64ed-49a5-9f31-9673594db89a - Description",
+    "Message": null,
+    "IsCategorizable": false,
+    "HoldInfo": null,
+    "RoundUp": null,
+    "Cashback": null,
+    "Amount": {
+      "CurrencyCode": "TEST",
+      "Value": "36.16",
+      "ValueInBaseUnits": 3616
+    },
+    "ForeignAmount": null,
+    "CardPurchaseMethod": null,
+    "SettledAt": "2024-06-16T18:50:58.3639724+10:00",
+    "CreatedAt": "2024-06-16T18:50:58.3639724+10:00",
+    "Category": null,
+    "CategoryParent": null,
+    "Tags": [],
+    "TransferAccountId": "a3edd55b-9627-44a8-93b9-edf4bab675d1",
+    "InferredType": 2
+  }
+]

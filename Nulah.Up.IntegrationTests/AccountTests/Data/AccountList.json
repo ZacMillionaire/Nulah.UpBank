@@ -1,0 +1,33 @@
+﻿{
+  "data": [
+    {
+      "type": "accounts",
+      "id": "00000000-0000-0000-0000-000000000000",
+      "attributes": {
+        "displayName": "Spending",
+        "accountType": "TRANSACTIONAL",
+        "ownershipType": "INDIVIDUAL",
+        "balance": {
+          "currencyCode": "AUD",
+          "value": "1234.56",
+          "valueInBaseUnits": 123456
+        },
+        "createdAt": "2000-01-01T00:00:00+10:00"
+      },
+      "relationships": {
+        "transactions": {
+          "links": {
+            "related": "https://localhost.up.fake/api/v1/accounts/00000000-0000-0000-0000-000000000000/transactions"
+          }
+        }
+      },
+      "links": {
+        "self": "https://localhost.up.fake/api/v1/accounts/00000000-0000-0000-0000-000000000000"
+      }
+    }
+  ],
+  "links": {
+    "prev": null,
+    "next": null
+  }
+}
