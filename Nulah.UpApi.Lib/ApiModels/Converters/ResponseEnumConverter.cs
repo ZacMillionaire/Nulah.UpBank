@@ -7,8 +7,21 @@ internal class ResponseEnumConverter<T> : JsonConverter<T> where T : Enum
 {
 	public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 	{
-		var a = (T)Enum.Parse(typeof(T), reader.GetString()!);
-		return a;
+		switch (reader.TokenType)
+		{
+			case JsonTokenType.String:
+			{
+				var enumFromString = (T)Enum.Parse(typeof(T), reader.GetString()!);
+				return enumFromString;
+			}
+			case JsonTokenType.Number:
+			{
+				var enumFromNumber = (T)Enum.ToObject(typeof(T), reader.GetInt32()!);
+				return enumFromNumber;
+			}
+			default:
+				return default!;
+		}
 	}
 
 	public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)

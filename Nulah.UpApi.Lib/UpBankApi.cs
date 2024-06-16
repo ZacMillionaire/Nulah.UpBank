@@ -1,12 +1,14 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using Newtonsoft.Json;
 using Nulah.UpApi.Lib.ApiModels.Accounts;
 using Nulah.UpApi.Lib.ApiModels;
 using Nulah.UpApi.Lib.ApiModels.Categories;
 using Nulah.UpApi.Lib.ApiModels.Converters;
 using Nulah.UpApi.Lib.ApiModels.Enums;
 using Nulah.UpApi.Lib.ApiModels.Transactions;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Nulah.UpApi.Lib;
 
@@ -14,7 +16,7 @@ public class UpBankApi : IUpBankApi
 {
 	private readonly UpConfiguration _configuration;
 	private readonly HttpClient _httpClient;
-	private readonly JsonSerializerOptions _jsonSerialiserOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+	private readonly JsonSerializerOptions _jsonSerialiserOptions = new() { PropertyNameCaseInsensitive = true };
 
 	/// <summary>
 	/// Will be set to true on the first call that calls <see cref="IsAuthorised"/> and succeeds in a successful response
@@ -27,7 +29,17 @@ public class UpBankApi : IUpBankApi
 		_httpClient = httpClient;
 		_configuration = configuration;
 
-		// TODO: eventually move these back to attributes on their respective locations - this is just a temp fix to enable Marten to deserialise
+		ConfigureJsonConverters();
+	}
+
+	/// <summary>
+	/// Adds any customer de/serialisers required for System.Text.Json
+	/// </summary>
+	private void ConfigureJsonConverters()
+	{
+		// Newtonsoft could handle these implicitly, but System.Text is explicit, and as these enums can either be
+		// strings _or_ numbers (from the API will be strings, from the database will be numbers), we need
+		// some custom handling.
 		_jsonSerialiserOptions.Converters.Add(new ResponseEnumConverter<AccountOwnershipType>());
 		_jsonSerialiserOptions.Converters.Add(new ResponseEnumConverter<AccountType>());
 		_jsonSerialiserOptions.Converters.Add(new ResponseEnumConverter<CardPurchaseMethodType>());
