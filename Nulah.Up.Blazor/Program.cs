@@ -1,6 +1,6 @@
 using Marten;
-using Nulah.Up.Blazor.Components;
 using MudBlazor.Services;
+using Nulah.Up.Blazor.Pages;
 using Nulah.Up.Blazor.Services;
 using Nulah.UpApi.Lib;
 using Nulah.UpApi.Lib.Controllers;
@@ -37,7 +37,7 @@ public class Program
 		builder.Services.AddScoped<TransactionController>();
 		builder.Services.AddScoped<CategoryController>();
 
-		builder.Services.AddScoped<UpApiService>();
+		AddPageServices(builder);
 
 		builder.Services.AddMarten(options =>
 			{
@@ -95,5 +95,15 @@ public class Program
 			.AddInteractiveServerRenderMode();
 
 		app.Run();
+	}
+
+	/// <summary>
+	/// Add any required services for UI events. 
+	/// </summary>
+	/// <param name="builder"></param>
+	private static void AddPageServices(WebApplicationBuilder builder)
+	{
+		builder.Services.AddScoped<UpApiService>();
+		builder.Services.AddScoped<FrontPageService>();
 	}
 }

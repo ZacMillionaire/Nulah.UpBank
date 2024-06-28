@@ -23,4 +23,50 @@
       <Folder Include="Models\" />
     </ItemGroup>
 
+
+    <ItemGroup>
+      <Content Remove="Components\Pages\Home.razor" />
+      <Content Remove="Components\Pages\Accounts\_Imports.razor" />
+      <Content Remove="Components\Layout\MainLayout.razor" />
+      <Content Remove="Components\Pages\Error.razor" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Compile Remove="Components\Pages\Accounts\Accounts.razor.cs" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <AdditionalFiles Include="Pages\Accounts\Accounts.razor" />
+      <AdditionalFiles Include="Pages\Accounts\AccountTransactions.razor" />
+      <AdditionalFiles Include="Pages\Accounts\Components\AccountCard.razor" />
+      <AdditionalFiles Include="Pages\Accounts\Dialogs\DebugDialog.razor" />
+      <AdditionalFiles Include="Pages\Accounts\_Imports.razor" />
+      <AdditionalFiles Include="Pages\App.razor" />
+      <AdditionalFiles Include="Pages\Caches\Accounts\AccountCache.razor" />
+      <AdditionalFiles Include="Pages\Caches\Categories\CategoryCache.razor" />
+      <AdditionalFiles Include="Pages\Caches\Tags\TagCache.razor" />
+      <AdditionalFiles Include="Pages\Caches\Transactions\Dialogs\CacheDialog.razor" />
+      <AdditionalFiles Include="Pages\Caches\Transactions\TransactionCache.razor" />
+      <AdditionalFiles Include="Pages\Caches\_Imports.razor" />
+      <AdditionalFiles Include="Pages\Error.razor" />
+      <AdditionalFiles Include="Pages\Errors\NotFound.razor" />
+      <AdditionalFiles Include="Pages\Home\Home.razor" />
+      <AdditionalFiles Include="Pages\Layout\MainLayout.razor" />
+      <AdditionalFiles Include="Pages\Layout\NavMenu.razor" />
+      <AdditionalFiles Include="Pages\Routes.razor" />
+      <AdditionalFiles Include="Pages\Transactions\Components\TransactionTable.razor" />
+      <AdditionalFiles Include="Pages\Transactions\Transactions.razor" />
+      <AdditionalFiles Include="Pages\Transactions\_Imports.razor" />
+      <AdditionalFiles Include="Pages\_Imports.razor" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Components\Layout\MainLayout.razor" />
+      <_ContentIncludedByDefault Remove="Components\Layout\NavMenu.razor" />
+      <_ContentIncludedByDefault Remove="Components\Layout\_Imports.razor" />
+    </ItemGroup>
+
 </Project>

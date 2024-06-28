@@ -1,10 +1,15 @@
-﻿using Marten;
-using Nulah.UpApi.Lib;
-using Nulah.UpApi.Lib.Controllers;
+﻿using Nulah.UpApi.Lib.Controllers;
 using Nulah.UpApi.Lib.Models;
 
 namespace Nulah.Up.Blazor.Services;
 
+/// <summary>
+/// Used as a single point for retrieving account, transaction, category or other related information.
+/// <para>
+///	Events can be used to respond to any changes as appropriate, and can be assumed to be raised correctly and return
+/// any new state of data. Whether the result is used is entirely up to the caller and subscriber
+/// </para>
+/// </summary>
 public class UpApiService
 {
 	internal readonly AccountController Accounts;

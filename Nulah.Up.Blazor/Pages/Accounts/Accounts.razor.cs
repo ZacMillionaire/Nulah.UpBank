@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Nulah.Up.Blazor.Components.Dialogs;
-using Nulah.Up.Blazor.Components.Pages.Accounts.Dialogs;
+using Nulah.Up.Blazor.Pages.Accounts.Dialogs;
 using Nulah.Up.Blazor.Services;
 using Nulah.UpApi.Lib.Models;
 
-namespace Nulah.Up.Blazor.Components.Pages.Accounts;
+namespace Nulah.Up.Blazor.Pages.Accounts;
 
 public partial class Accounts : IDisposable
 {
