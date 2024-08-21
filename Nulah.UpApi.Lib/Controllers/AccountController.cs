@@ -158,6 +158,7 @@ public class AccountController
 	{
 		return documentSession.Query<UpAccount>()
 			.OrderByDescending(x => x.AccountType)
+			.ThenBy(x => x.Id)
 			.ToListAsync();
 	}
 }
