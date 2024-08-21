@@ -5,8 +5,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Nulah.Up.IntegrationTests.Helpers;
 using Nulah.Up.IntegrationTests.Mocks;
+using Nulah.UpApi.Domain.Models;
 using Nulah.UpApi.Lib.Controllers;
-using Nulah.UpApi.Lib.Models;
 using Weasel.Core;
 using Xunit.Abstractions;
 

@@ -1,5 +1,5 @@
-﻿using Nulah.UpApi.Lib.Controllers;
-using Nulah.UpApi.Lib.Models;
+﻿using Nulah.UpApi.Domain.Models;
+using Nulah.UpApi.Lib.Controllers;
 
 namespace Nulah.Up.Blazor.Services;
 

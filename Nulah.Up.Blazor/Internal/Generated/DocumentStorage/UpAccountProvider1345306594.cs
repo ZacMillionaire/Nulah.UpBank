@@ -5,23 +5,23 @@ using Marten.Internal.Storage;
 using Marten.Schema;
 using Marten.Schema.Arguments;
 using Npgsql;
-using Nulah.UpApi.Lib.Models;
 using System;
 using System.Collections.Generic;
+using Nulah.UpApi.Domain.Models;
 using Weasel.Core;
 using Weasel.Postgresql;
 
 namespace Marten.Generated.DocumentStorage
 {
     // START: UpsertUpAccountOperation1345306594
-    public class UpsertUpAccountOperation1345306594 : Marten.Internal.Operations.StorageOperation<Nulah.UpApi.Lib.Models.UpAccount, string>
+    public class UpsertUpAccountOperation1345306594 : Marten.Internal.Operations.StorageOperation<UpAccount, string>
     {
-        private readonly Nulah.UpApi.Lib.Models.UpAccount _document;
+        private readonly UpAccount _document;
         private readonly string _id;
         private readonly System.Collections.Generic.Dictionary<string, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public UpsertUpAccountOperation1345306594(Nulah.UpApi.Lib.Models.UpAccount document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public UpsertUpAccountOperation1345306594(UpAccount document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -65,7 +65,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Npgsql.NpgsqlParameter[] parameters, Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Npgsql.NpgsqlParameter[] parameters, UpAccount document, Marten.Internal.IMartenSession session)
         {
             parameters[0].NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Jsonb;
             parameters[0].Value = session.Serializer.ToJson(_document);
@@ -93,14 +93,14 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: InsertUpAccountOperation1345306594
-    public class InsertUpAccountOperation1345306594 : Marten.Internal.Operations.StorageOperation<Nulah.UpApi.Lib.Models.UpAccount, string>
+    public class InsertUpAccountOperation1345306594 : Marten.Internal.Operations.StorageOperation<UpAccount, string>
     {
-        private readonly Nulah.UpApi.Lib.Models.UpAccount _document;
+        private readonly UpAccount _document;
         private readonly string _id;
         private readonly System.Collections.Generic.Dictionary<string, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public InsertUpAccountOperation1345306594(Nulah.UpApi.Lib.Models.UpAccount document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public InsertUpAccountOperation1345306594(UpAccount document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -144,7 +144,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Npgsql.NpgsqlParameter[] parameters, Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Npgsql.NpgsqlParameter[] parameters, UpAccount document, Marten.Internal.IMartenSession session)
         {
             parameters[0].NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Jsonb;
             parameters[0].Value = session.Serializer.ToJson(_document);
@@ -172,14 +172,14 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: UpdateUpAccountOperation1345306594
-    public class UpdateUpAccountOperation1345306594 : Marten.Internal.Operations.StorageOperation<Nulah.UpApi.Lib.Models.UpAccount, string>
+    public class UpdateUpAccountOperation1345306594 : Marten.Internal.Operations.StorageOperation<UpAccount, string>
     {
-        private readonly Nulah.UpApi.Lib.Models.UpAccount _document;
+        private readonly UpAccount _document;
         private readonly string _id;
         private readonly System.Collections.Generic.Dictionary<string, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public UpdateUpAccountOperation1345306594(Nulah.UpApi.Lib.Models.UpAccount document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public UpdateUpAccountOperation1345306594(UpAccount document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -223,7 +223,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Npgsql.NpgsqlParameter[] parameters, Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Npgsql.NpgsqlParameter[] parameters, UpAccount document, Marten.Internal.IMartenSession session)
         {
             parameters[0].NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Jsonb;
             parameters[0].Value = session.Serializer.ToJson(_document);
@@ -251,7 +251,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: QueryOnlyUpAccountSelector1345306594
-    public class QueryOnlyUpAccountSelector1345306594 : Marten.Internal.CodeGeneration.DocumentSelectorWithOnlySerializer, Marten.Linq.Selectors.ISelector<Nulah.UpApi.Lib.Models.UpAccount>
+    public class QueryOnlyUpAccountSelector1345306594 : Marten.Internal.CodeGeneration.DocumentSelectorWithOnlySerializer, Marten.Linq.Selectors.ISelector<UpAccount>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -264,22 +264,22 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public Nulah.UpApi.Lib.Models.UpAccount Resolve(System.Data.Common.DbDataReader reader)
+        public UpAccount Resolve(System.Data.Common.DbDataReader reader)
         {
 
-            Nulah.UpApi.Lib.Models.UpAccount document;
-            document = _serializer.FromJson<Nulah.UpApi.Lib.Models.UpAccount>(reader, 0);
+            UpAccount document;
+            document = _serializer.FromJson<UpAccount>(reader, 0);
             var lastModified = reader.GetFieldValue<System.DateTimeOffset>(1);
             document.ModifiedAt = lastModified;
             return document;
         }
 
 
-        public async System.Threading.Tasks.Task<Nulah.UpApi.Lib.Models.UpAccount> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<UpAccount> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
 
-            Nulah.UpApi.Lib.Models.UpAccount document;
-            document = await _serializer.FromJsonAsync<Nulah.UpApi.Lib.Models.UpAccount>(reader, 0, token).ConfigureAwait(false);
+            UpAccount document;
+            document = await _serializer.FromJsonAsync<UpAccount>(reader, 0, token).ConfigureAwait(false);
             var lastModified = await reader.GetFieldValueAsync<System.DateTimeOffset>(1, token);
             document.ModifiedAt = lastModified;
             return document;
@@ -291,7 +291,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: LightweightUpAccountSelector1345306594
-    public class LightweightUpAccountSelector1345306594 : Marten.Internal.CodeGeneration.DocumentSelectorWithVersions<Nulah.UpApi.Lib.Models.UpAccount, string>, Marten.Linq.Selectors.ISelector<Nulah.UpApi.Lib.Models.UpAccount>
+    public class LightweightUpAccountSelector1345306594 : Marten.Internal.CodeGeneration.DocumentSelectorWithVersions<UpAccount, string>, Marten.Linq.Selectors.ISelector<UpAccount>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -304,12 +304,12 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public Nulah.UpApi.Lib.Models.UpAccount Resolve(System.Data.Common.DbDataReader reader)
+        public UpAccount Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<string>(0);
 
-            Nulah.UpApi.Lib.Models.UpAccount document;
-            document = _serializer.FromJson<Nulah.UpApi.Lib.Models.UpAccount>(reader, 1);
+            UpAccount document;
+            document = _serializer.FromJson<UpAccount>(reader, 1);
             var lastModified = reader.GetFieldValue<System.DateTimeOffset>(2);
             document.ModifiedAt = lastModified;
             _session.MarkAsDocumentLoaded(id, document);
@@ -317,12 +317,12 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public async System.Threading.Tasks.Task<Nulah.UpApi.Lib.Models.UpAccount> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<UpAccount> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<string>(0, token);
 
-            Nulah.UpApi.Lib.Models.UpAccount document;
-            document = await _serializer.FromJsonAsync<Nulah.UpApi.Lib.Models.UpAccount>(reader, 1, token).ConfigureAwait(false);
+            UpAccount document;
+            document = await _serializer.FromJsonAsync<UpAccount>(reader, 1, token).ConfigureAwait(false);
             var lastModified = await reader.GetFieldValueAsync<System.DateTimeOffset>(2, token);
             document.ModifiedAt = lastModified;
             _session.MarkAsDocumentLoaded(id, document);
@@ -335,7 +335,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: IdentityMapUpAccountSelector1345306594
-    public class IdentityMapUpAccountSelector1345306594 : Marten.Internal.CodeGeneration.DocumentSelectorWithIdentityMap<Nulah.UpApi.Lib.Models.UpAccount, string>, Marten.Linq.Selectors.ISelector<Nulah.UpApi.Lib.Models.UpAccount>
+    public class IdentityMapUpAccountSelector1345306594 : Marten.Internal.CodeGeneration.DocumentSelectorWithIdentityMap<UpAccount, string>, Marten.Linq.Selectors.ISelector<UpAccount>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -348,13 +348,13 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public Nulah.UpApi.Lib.Models.UpAccount Resolve(System.Data.Common.DbDataReader reader)
+        public UpAccount Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<string>(0);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            Nulah.UpApi.Lib.Models.UpAccount document;
-            document = _serializer.FromJson<Nulah.UpApi.Lib.Models.UpAccount>(reader, 1);
+            UpAccount document;
+            document = _serializer.FromJson<UpAccount>(reader, 1);
             var lastModified = reader.GetFieldValue<System.DateTimeOffset>(2);
             document.ModifiedAt = lastModified;
             _session.MarkAsDocumentLoaded(id, document);
@@ -363,13 +363,13 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public async System.Threading.Tasks.Task<Nulah.UpApi.Lib.Models.UpAccount> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<UpAccount> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<string>(0, token);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            Nulah.UpApi.Lib.Models.UpAccount document;
-            document = await _serializer.FromJsonAsync<Nulah.UpApi.Lib.Models.UpAccount>(reader, 1, token).ConfigureAwait(false);
+            UpAccount document;
+            document = await _serializer.FromJsonAsync<UpAccount>(reader, 1, token).ConfigureAwait(false);
             var lastModified = await reader.GetFieldValueAsync<System.DateTimeOffset>(2, token);
             document.ModifiedAt = lastModified;
             _session.MarkAsDocumentLoaded(id, document);
@@ -383,7 +383,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: DirtyTrackingUpAccountSelector1345306594
-    public class DirtyTrackingUpAccountSelector1345306594 : Marten.Internal.CodeGeneration.DocumentSelectorWithDirtyChecking<Nulah.UpApi.Lib.Models.UpAccount, string>, Marten.Linq.Selectors.ISelector<Nulah.UpApi.Lib.Models.UpAccount>
+    public class DirtyTrackingUpAccountSelector1345306594 : Marten.Internal.CodeGeneration.DocumentSelectorWithDirtyChecking<UpAccount, string>, Marten.Linq.Selectors.ISelector<UpAccount>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -396,13 +396,13 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public Nulah.UpApi.Lib.Models.UpAccount Resolve(System.Data.Common.DbDataReader reader)
+        public UpAccount Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<string>(0);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            Nulah.UpApi.Lib.Models.UpAccount document;
-            document = _serializer.FromJson<Nulah.UpApi.Lib.Models.UpAccount>(reader, 1);
+            UpAccount document;
+            document = _serializer.FromJson<UpAccount>(reader, 1);
             var lastModified = reader.GetFieldValue<System.DateTimeOffset>(2);
             document.ModifiedAt = lastModified;
             _session.MarkAsDocumentLoaded(id, document);
@@ -412,13 +412,13 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public async System.Threading.Tasks.Task<Nulah.UpApi.Lib.Models.UpAccount> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<UpAccount> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<string>(0, token);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            Nulah.UpApi.Lib.Models.UpAccount document;
-            document = await _serializer.FromJsonAsync<Nulah.UpApi.Lib.Models.UpAccount>(reader, 1, token).ConfigureAwait(false);
+            UpAccount document;
+            document = await _serializer.FromJsonAsync<UpAccount>(reader, 1, token).ConfigureAwait(false);
             var lastModified = await reader.GetFieldValueAsync<System.DateTimeOffset>(2, token);
             document.ModifiedAt = lastModified;
             _session.MarkAsDocumentLoaded(id, document);
@@ -433,7 +433,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: QueryOnlyUpAccountDocumentStorage1345306594
-    public class QueryOnlyUpAccountDocumentStorage1345306594 : Marten.Internal.Storage.QueryOnlyDocumentStorage<Nulah.UpApi.Lib.Models.UpAccount, string>
+    public class QueryOnlyUpAccountDocumentStorage1345306594 : Marten.Internal.Storage.QueryOnlyDocumentStorage<UpAccount, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -444,59 +444,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(Nulah.UpApi.Lib.Models.UpAccount document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(UpAccount document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateUpAccountOperation1345306594
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpAccount, string>(),
+                session.Versions.ForType<UpAccount, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertUpAccountOperation1345306594
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpAccount, string>(),
+                session.Versions.ForType<UpAccount, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertUpAccountOperation1345306594
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpAccount, string>(),
+                session.Versions.ForType<UpAccount, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(Nulah.UpApi.Lib.Models.UpAccount document)
+        public override string Identity(UpAccount document)
         {
             return document.Id;
         }
@@ -513,7 +513,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: LightweightUpAccountDocumentStorage1345306594
-    public class LightweightUpAccountDocumentStorage1345306594 : Marten.Internal.Storage.LightweightDocumentStorage<Nulah.UpApi.Lib.Models.UpAccount, string>
+    public class LightweightUpAccountDocumentStorage1345306594 : Marten.Internal.Storage.LightweightDocumentStorage<UpAccount, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -524,59 +524,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(Nulah.UpApi.Lib.Models.UpAccount document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(UpAccount document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateUpAccountOperation1345306594
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpAccount, string>(),
+                session.Versions.ForType<UpAccount, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertUpAccountOperation1345306594
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpAccount, string>(),
+                session.Versions.ForType<UpAccount, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertUpAccountOperation1345306594
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpAccount, string>(),
+                session.Versions.ForType<UpAccount, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(Nulah.UpApi.Lib.Models.UpAccount document)
+        public override string Identity(UpAccount document)
         {
             return document.Id;
         }
@@ -593,7 +593,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: IdentityMapUpAccountDocumentStorage1345306594
-    public class IdentityMapUpAccountDocumentStorage1345306594 : Marten.Internal.Storage.IdentityMapDocumentStorage<Nulah.UpApi.Lib.Models.UpAccount, string>
+    public class IdentityMapUpAccountDocumentStorage1345306594 : Marten.Internal.Storage.IdentityMapDocumentStorage<UpAccount, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -604,59 +604,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(Nulah.UpApi.Lib.Models.UpAccount document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(UpAccount document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateUpAccountOperation1345306594
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpAccount, string>(),
+                session.Versions.ForType<UpAccount, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertUpAccountOperation1345306594
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpAccount, string>(),
+                session.Versions.ForType<UpAccount, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertUpAccountOperation1345306594
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpAccount, string>(),
+                session.Versions.ForType<UpAccount, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(Nulah.UpApi.Lib.Models.UpAccount document)
+        public override string Identity(UpAccount document)
         {
             return document.Id;
         }
@@ -673,7 +673,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: DirtyTrackingUpAccountDocumentStorage1345306594
-    public class DirtyTrackingUpAccountDocumentStorage1345306594 : Marten.Internal.Storage.DirtyCheckedDocumentStorage<Nulah.UpApi.Lib.Models.UpAccount, string>
+    public class DirtyTrackingUpAccountDocumentStorage1345306594 : Marten.Internal.Storage.DirtyCheckedDocumentStorage<UpAccount, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -684,59 +684,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(Nulah.UpApi.Lib.Models.UpAccount document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(UpAccount document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateUpAccountOperation1345306594
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpAccount, string>(),
+                session.Versions.ForType<UpAccount, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertUpAccountOperation1345306594
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpAccount, string>(),
+                session.Versions.ForType<UpAccount, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertUpAccountOperation1345306594
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpAccount, string>(),
+                session.Versions.ForType<UpAccount, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(Nulah.UpApi.Lib.Models.UpAccount document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(UpAccount document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(Nulah.UpApi.Lib.Models.UpAccount document)
+        public override string Identity(UpAccount document)
         {
             return document.Id;
         }
@@ -753,11 +753,11 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: UpAccountBulkLoader1345306594
-    public class UpAccountBulkLoader1345306594 : Marten.Internal.CodeGeneration.BulkLoader<Nulah.UpApi.Lib.Models.UpAccount, string>
+    public class UpAccountBulkLoader1345306594 : Marten.Internal.CodeGeneration.BulkLoader<UpAccount, string>
     {
-        private readonly Marten.Internal.Storage.IDocumentStorage<Nulah.UpApi.Lib.Models.UpAccount, string> _storage;
+        private readonly Marten.Internal.Storage.IDocumentStorage<UpAccount, string> _storage;
 
-        public UpAccountBulkLoader1345306594(Marten.Internal.Storage.IDocumentStorage<Nulah.UpApi.Lib.Models.UpAccount, string> storage) : base(storage)
+        public UpAccountBulkLoader1345306594(Marten.Internal.Storage.IDocumentStorage<UpAccount, string> storage) : base(storage)
         {
             _storage = storage;
         }
@@ -792,7 +792,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void LoadRow(Npgsql.NpgsqlBinaryImporter writer, Nulah.UpApi.Lib.Models.UpAccount document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer)
+        public override void LoadRow(Npgsql.NpgsqlBinaryImporter writer, UpAccount document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer)
         {
             writer.Write(document.GetType().FullName, NpgsqlTypes.NpgsqlDbType.Varchar);
             writer.Write(document.Id, NpgsqlTypes.NpgsqlDbType.Text);
@@ -801,7 +801,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override async System.Threading.Tasks.Task LoadRowAsync(Npgsql.NpgsqlBinaryImporter writer, Nulah.UpApi.Lib.Models.UpAccount document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer, System.Threading.CancellationToken cancellation)
+        public override async System.Threading.Tasks.Task LoadRowAsync(Npgsql.NpgsqlBinaryImporter writer, UpAccount document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer, System.Threading.CancellationToken cancellation)
         {
             await writer.WriteAsync(document.GetType().FullName, NpgsqlTypes.NpgsqlDbType.Varchar, cancellation);
             await writer.WriteAsync(document.Id, NpgsqlTypes.NpgsqlDbType.Text, cancellation);
@@ -827,7 +827,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: UpAccountProvider1345306594
-    public class UpAccountProvider1345306594 : Marten.Internal.Storage.DocumentProvider<Nulah.UpApi.Lib.Models.UpAccount>
+    public class UpAccountProvider1345306594 : Marten.Internal.Storage.DocumentProvider<UpAccount>
     {
         private readonly Marten.Schema.DocumentMapping _mapping;
 

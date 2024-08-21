@@ -1,12 +1,14 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using Nulah.UpApi.Domain.Api;
+using Nulah.UpApi.Domain.Api.Accounts;
+using Nulah.UpApi.Domain.Api.Categories;
+using Nulah.UpApi.Domain.Api.Converters;
+using Nulah.UpApi.Domain.Api.Enums;
+using Nulah.UpApi.Domain.Api.Transactions;
 using Nulah.UpApi.Lib.ApiModels.Accounts;
 using Nulah.UpApi.Lib.ApiModels;
-using Nulah.UpApi.Lib.ApiModels.Categories;
-using Nulah.UpApi.Lib.ApiModels.Converters;
-using Nulah.UpApi.Lib.ApiModels.Enums;
-using Nulah.UpApi.Lib.ApiModels.Transactions;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Nulah.UpApi.Lib;

@@ -1,7 +1,7 @@
 ﻿using Marten;
 using Microsoft.Extensions.Logging;
-using Nulah.UpApi.Lib.ApiModels.Categories;
-using Nulah.UpApi.Lib.Models;
+using Nulah.UpApi.Domain.Api.Categories;
+using Nulah.UpApi.Domain.Models;
 
 namespace Nulah.UpApi.Lib.Controllers;
 
@@ -92,7 +92,7 @@ public class CategoryController
 	/// <param name="rawCategory"></param>
 	/// <param name="categoryLookup"></param>
 	/// <returns></returns>
-	public UpCategory? LookupCategory(Category? rawCategory = null, Dictionary<string, UpCategory>? categoryLookup = null)
+	internal UpCategory? LookupCategory(Category? rawCategory = null, Dictionary<string, UpCategory>? categoryLookup = null)
 	{
 		// If we have no category return no category
 		if (rawCategory == null)

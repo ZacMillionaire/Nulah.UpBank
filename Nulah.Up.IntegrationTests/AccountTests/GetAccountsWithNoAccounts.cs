@@ -1,5 +1,7 @@
 ﻿using Nulah.Up.IntegrationTests.Helpers;
 using Nulah.Up.IntegrationTests.Mocks;
+using Nulah.UpApi.Domain.Api;
+using Nulah.UpApi.Domain.Api.Accounts;
 using Nulah.UpApi.Lib.ApiModels;
 using Nulah.UpApi.Lib.ApiModels.Accounts;
 using Xunit.Abstractions;

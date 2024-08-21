@@ -2,9 +2,9 @@ using Marten;
 using MudBlazor.Services;
 using Nulah.Up.Blazor.Pages;
 using Nulah.Up.Blazor.Services;
+using Nulah.UpApi.Domain.Models;
 using Nulah.UpApi.Lib;
 using Nulah.UpApi.Lib.Controllers;
-using Nulah.UpApi.Lib.Models;
 using Weasel.Core;
 
 namespace Nulah.Up.Blazor;

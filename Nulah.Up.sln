@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nulah.UpApi.Lib", "UpApi\Nu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UpApi", "UpApi", "{F3B4B6CF-076F-4CAE-B024-C13268FDFBCF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nulah.UpApi.Domain", "UpApi\Nulah.UpApi.Domain\Nulah.UpApi.Domain.csproj", "{30ED504D-A764-41C4-AC9C-1AA89EDCB420}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,18 @@ Global
 		{4B68406E-43E9-487B-8AB6-D7C8F0D81270}.Release|x64.Build.0 = Release|Any CPU
 		{4B68406E-43E9-487B-8AB6-D7C8F0D81270}.Release|x86.ActiveCfg = Release|Any CPU
 		{4B68406E-43E9-487B-8AB6-D7C8F0D81270}.Release|x86.Build.0 = Release|Any CPU
+		{30ED504D-A764-41C4-AC9C-1AA89EDCB420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30ED504D-A764-41C4-AC9C-1AA89EDCB420}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30ED504D-A764-41C4-AC9C-1AA89EDCB420}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{30ED504D-A764-41C4-AC9C-1AA89EDCB420}.Debug|x64.Build.0 = Debug|Any CPU
+		{30ED504D-A764-41C4-AC9C-1AA89EDCB420}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{30ED504D-A764-41C4-AC9C-1AA89EDCB420}.Debug|x86.Build.0 = Debug|Any CPU
+		{30ED504D-A764-41C4-AC9C-1AA89EDCB420}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30ED504D-A764-41C4-AC9C-1AA89EDCB420}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30ED504D-A764-41C4-AC9C-1AA89EDCB420}.Release|x64.ActiveCfg = Release|Any CPU
+		{30ED504D-A764-41C4-AC9C-1AA89EDCB420}.Release|x64.Build.0 = Release|Any CPU
+		{30ED504D-A764-41C4-AC9C-1AA89EDCB420}.Release|x86.ActiveCfg = Release|Any CPU
+		{30ED504D-A764-41C4-AC9C-1AA89EDCB420}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,5 +96,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{7F9D1432-3CB9-4439-BC00-5556B4E543F0} = {0170FF4D-656B-4889-85F6-6290AE3E42CB}
 		{4B68406E-43E9-487B-8AB6-D7C8F0D81270} = {F3B4B6CF-076F-4CAE-B024-C13268FDFBCF}
+		{30ED504D-A764-41C4-AC9C-1AA89EDCB420} = {F3B4B6CF-076F-4CAE-B024-C13268FDFBCF}
 	EndGlobalSection
 EndGlobal

@@ -2,10 +2,10 @@
 using Marten;
 using Marten.Pagination;
 using Microsoft.Extensions.Logging;
-using Nulah.UpApi.Lib.ApiModels.Transactions;
-using Nulah.UpApi.Lib.Models;
-using Nulah.UpApi.Lib.Models.Transactions;
-using Nulah.UpApi.Lib.Models.Transactions.Criteria;
+using Nulah.UpApi.Domain.Api.Transactions;
+using Nulah.UpApi.Domain.Models;
+using Nulah.UpApi.Domain.Models.Transactions;
+using Nulah.UpApi.Domain.Models.Transactions.Criteria;
 
 namespace Nulah.UpApi.Lib.Controllers;
 

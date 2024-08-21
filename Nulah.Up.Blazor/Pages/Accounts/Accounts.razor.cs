@@ -4,7 +4,7 @@ using MudBlazor;
 using Nulah.Up.Blazor.Components.Dialogs;
 using Nulah.Up.Blazor.Pages.Accounts.Dialogs;
 using Nulah.Up.Blazor.Services;
-using Nulah.UpApi.Lib.Models;
+using Nulah.UpApi.Domain.Models;
 
 namespace Nulah.Up.Blazor.Pages.Accounts;
 
