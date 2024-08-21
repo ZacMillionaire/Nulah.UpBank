@@ -27,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Nulah.UpApi.Lib\Nulah.UpApi.Lib.csproj" />
+      <ProjectReference Include="..\UpApi\Nulah.UpApi.Lib\Nulah.UpApi.Lib.csproj" />
     </ItemGroup>
 
     <ItemGroup>
