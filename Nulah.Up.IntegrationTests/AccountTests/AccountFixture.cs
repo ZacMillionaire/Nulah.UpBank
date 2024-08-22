@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Nulah.Up.IntegrationTests.Helpers;
 using Nulah.Up.IntegrationTests.Mocks;
+using Nulah.UpApi.Domain.Interfaces;
 using Nulah.UpApi.Domain.Models;
 using Nulah.UpApi.Lib.Controllers;
 using Weasel.Core;
@@ -106,7 +107,7 @@ public class AccountFixture : Fixture
 {
 	public AccountController CreateController(TestUpBankApi testUpBankApi) => new AccountController(
 		testUpBankApi,
-		Host.Services.GetRequiredService<IDocumentStore>(),
+		Host.Services.GetRequiredService<IUpStorage>(),
 		CreateLogger<AccountController>()
 	);
 

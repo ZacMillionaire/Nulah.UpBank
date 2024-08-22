@@ -1,6 +1,4 @@
-﻿using Marten;
-using Marten.Linq.LastModified;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Nulah.UpApi.Domain.Interfaces;
 using Nulah.UpApi.Domain.Models;
 
@@ -9,16 +7,16 @@ namespace Nulah.UpApi.Lib.Controllers;
 public class AccountController
 {
 	private readonly IUpBankApi _upBankApi;
-	private readonly IDocumentStore _documentStore;
+	private readonly IUpStorage _upStorage;
 	private readonly ILogger<AccountController> _logger;
 
 	public Action<AccountController, EventArgs>? AccountsUpdating;
 	public Action<AccountController, IReadOnlyList<UpAccount>>? AccountsUpdated;
 
-	public AccountController(IUpBankApi upBankApi, IDocumentStore documentStore, ILogger<AccountController> logger)
+	public AccountController(IUpBankApi upBankApi, IUpStorage upStorage, ILogger<AccountController> logger)
 	{
 		_upBankApi = upBankApi;
-		_documentStore = documentStore;
+		_upStorage = upStorage;
 		_logger = logger;
 	}
 
@@ -36,12 +34,11 @@ public class AccountController
 		_logger.LogInformation("Getting Accounts");
 		AccountsUpdating?.Invoke(this, EventArgs.Empty);
 
-		await using var session = _documentStore.LightweightSession();
 
 		if (!bypassCache)
 		{
 			_logger.LogInformation("Attempting to load from cache");
-			var existingAccounts = await LoadAccountsFromCacheAsync(session);
+			var existingAccounts = await _upStorage.LoadAccountsFromCacheAsync();
 
 			// We duplicate code slightly here to retrieve accounts from the Api if _no_ accounts
 			// exist in the database.
@@ -60,8 +57,7 @@ public class AccountController
 		var accounts = await GetAccountsFromApi();
 
 		_logger.LogInformation("Saving {accounts} accounts to cache", accounts.Count);
-		session.Store((IEnumerable<UpAccount>)accounts);
-		await session.SaveChangesAsync();
+		await _upStorage.SaveAccountsToCacheAsync(accounts);
 
 		AccountsUpdated?.Invoke(this, accounts);
 		return accounts;
@@ -107,24 +103,17 @@ public class AccountController
 	/// </summary>
 	/// <param name="accountId"></param>
 	/// <returns></returns>
-	public async Task<UpAccount> GetAccount(string accountId)
+	public async Task<UpAccount?> GetAccount(string accountId)
 	{
 		try
 		{
-			await using var session = _documentStore.LightweightSession();
-			var account = await session.Query<UpAccount>()
-				.FirstOrDefaultAsync(x =>
-					x.Id == accountId
-					// only return an account if it's "fresh" which is a modified date less than a day old (currently)
-					// TODO: configure this
-					&& x.ModifiedBefore(DateTime.UtcNow.AddDays(1))
-				);
+			var account = await _upStorage.GetAccountFromCacheAsync(accountId);
 
 			if (account == null)
 			{
 				var accounts = await _upBankApi.GetAccount(accountId);
 
-				if (accounts is { Success: true, Response: not null })
+				if (accounts is { Success: true, Response: not null, Response.Data: not null })
 				{
 					account = new UpAccount()
 					{
@@ -137,8 +126,7 @@ public class AccountController
 						OwnershipType = accounts.Response.Data.Attributes.OwnershipType
 					};
 
-					session.Store(account);
-					await session.SaveChangesAsync();
+					await _upStorage.SaveAccountToCacheAsync(account);
 				}
 			}
 
@@ -148,18 +136,5 @@ public class AccountController
 		{
 			throw;
 		}
-	}
-
-	/// <summary>
-	/// Returns all accounts from the cache.
-	/// </summary>
-	/// <param name="documentSession"></param>
-	/// <returns></returns>
-	private Task<IReadOnlyList<UpAccount>> LoadAccountsFromCacheAsync(IDocumentSession documentSession)
-	{
-		return documentSession.Query<UpAccount>()
-			.OrderByDescending(x => x.AccountType)
-			.ThenBy(x => x.Id)
-			.ToListAsync();
 	}
 }

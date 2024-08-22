@@ -33,6 +33,7 @@ public class Program
 			AccessToken = builder.Configuration["Api:UpBank"]
 		});
 		builder.Services.AddScoped<IUpBankApi, UpBankApi>();
+		builder.Services.AddScoped<IUpStorage, UpStorage>();
 
 		builder.Services.AddScoped<AccountController>();
 		builder.Services.AddScoped<TransactionController>();
