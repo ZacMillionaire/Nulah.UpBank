@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
-using Nulah.UpApi.Lib;
-using Nulah.UpApi.Lib.ApiModels;
-using Nulah.UpApi.Lib.ApiModels.Accounts;
-using Nulah.UpApi.Lib.ApiModels.Categories;
-using Nulah.UpApi.Lib.ApiModels.Transactions;
+using Nulah.UpApi.Domain.Api;
+using Nulah.UpApi.Domain.Api.Accounts;
+using Nulah.UpApi.Domain.Api.Categories;
+using Nulah.UpApi.Domain.Api.Transactions;
+using Nulah.UpApi.Domain.Interfaces;
 
 namespace Nulah.Up.IntegrationTests.Mocks;
 

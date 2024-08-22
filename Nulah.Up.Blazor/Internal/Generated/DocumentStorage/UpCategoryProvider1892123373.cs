@@ -5,23 +5,23 @@ using Marten.Internal.Storage;
 using Marten.Schema;
 using Marten.Schema.Arguments;
 using Npgsql;
-using Nulah.UpApi.Lib.Models;
 using System;
 using System.Collections.Generic;
+using Nulah.UpApi.Domain.Models;
 using Weasel.Core;
 using Weasel.Postgresql;
 
 namespace Marten.Generated.DocumentStorage
 {
     // START: UpsertUpCategoryOperation1892123373
-    public class UpsertUpCategoryOperation1892123373 : Marten.Internal.Operations.StorageOperation<Nulah.UpApi.Lib.Models.UpCategory, string>
+    public class UpsertUpCategoryOperation1892123373 : Marten.Internal.Operations.StorageOperation<UpCategory, string>
     {
-        private readonly Nulah.UpApi.Lib.Models.UpCategory _document;
+        private readonly UpCategory _document;
         private readonly string _id;
         private readonly System.Collections.Generic.Dictionary<string, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public UpsertUpCategoryOperation1892123373(Nulah.UpApi.Lib.Models.UpCategory document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public UpsertUpCategoryOperation1892123373(UpCategory document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -65,7 +65,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Npgsql.NpgsqlParameter[] parameters, Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Npgsql.NpgsqlParameter[] parameters, UpCategory document, Marten.Internal.IMartenSession session)
         {
             parameters[0].NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Jsonb;
             parameters[0].Value = session.Serializer.ToJson(_document);
@@ -93,14 +93,14 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: InsertUpCategoryOperation1892123373
-    public class InsertUpCategoryOperation1892123373 : Marten.Internal.Operations.StorageOperation<Nulah.UpApi.Lib.Models.UpCategory, string>
+    public class InsertUpCategoryOperation1892123373 : Marten.Internal.Operations.StorageOperation<UpCategory, string>
     {
-        private readonly Nulah.UpApi.Lib.Models.UpCategory _document;
+        private readonly UpCategory _document;
         private readonly string _id;
         private readonly System.Collections.Generic.Dictionary<string, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public InsertUpCategoryOperation1892123373(Nulah.UpApi.Lib.Models.UpCategory document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public InsertUpCategoryOperation1892123373(UpCategory document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -144,7 +144,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Npgsql.NpgsqlParameter[] parameters, Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Npgsql.NpgsqlParameter[] parameters, UpCategory document, Marten.Internal.IMartenSession session)
         {
             parameters[0].NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Jsonb;
             parameters[0].Value = session.Serializer.ToJson(_document);
@@ -172,14 +172,14 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: UpdateUpCategoryOperation1892123373
-    public class UpdateUpCategoryOperation1892123373 : Marten.Internal.Operations.StorageOperation<Nulah.UpApi.Lib.Models.UpCategory, string>
+    public class UpdateUpCategoryOperation1892123373 : Marten.Internal.Operations.StorageOperation<UpCategory, string>
     {
-        private readonly Nulah.UpApi.Lib.Models.UpCategory _document;
+        private readonly UpCategory _document;
         private readonly string _id;
         private readonly System.Collections.Generic.Dictionary<string, System.Guid> _versions;
         private readonly Marten.Schema.DocumentMapping _mapping;
 
-        public UpdateUpCategoryOperation1892123373(Nulah.UpApi.Lib.Models.UpCategory document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
+        public UpdateUpCategoryOperation1892123373(UpCategory document, string id, System.Collections.Generic.Dictionary<string, System.Guid> versions, Marten.Schema.DocumentMapping mapping) : base(document, id, versions, mapping)
         {
             _document = document;
             _id = id;
@@ -223,7 +223,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void ConfigureParameters(Npgsql.NpgsqlParameter[] parameters, Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session)
+        public override void ConfigureParameters(Npgsql.NpgsqlParameter[] parameters, UpCategory document, Marten.Internal.IMartenSession session)
         {
             parameters[0].NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Jsonb;
             parameters[0].Value = session.Serializer.ToJson(_document);
@@ -251,7 +251,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: QueryOnlyUpCategorySelector1892123373
-    public class QueryOnlyUpCategorySelector1892123373 : Marten.Internal.CodeGeneration.DocumentSelectorWithOnlySerializer, Marten.Linq.Selectors.ISelector<Nulah.UpApi.Lib.Models.UpCategory>
+    public class QueryOnlyUpCategorySelector1892123373 : Marten.Internal.CodeGeneration.DocumentSelectorWithOnlySerializer, Marten.Linq.Selectors.ISelector<UpCategory>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -264,20 +264,20 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public Nulah.UpApi.Lib.Models.UpCategory Resolve(System.Data.Common.DbDataReader reader)
+        public UpCategory Resolve(System.Data.Common.DbDataReader reader)
         {
 
-            Nulah.UpApi.Lib.Models.UpCategory document;
-            document = _serializer.FromJson<Nulah.UpApi.Lib.Models.UpCategory>(reader, 0);
+            UpCategory document;
+            document = _serializer.FromJson<UpCategory>(reader, 0);
             return document;
         }
 
 
-        public async System.Threading.Tasks.Task<Nulah.UpApi.Lib.Models.UpCategory> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<UpCategory> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
 
-            Nulah.UpApi.Lib.Models.UpCategory document;
-            document = await _serializer.FromJsonAsync<Nulah.UpApi.Lib.Models.UpCategory>(reader, 0, token).ConfigureAwait(false);
+            UpCategory document;
+            document = await _serializer.FromJsonAsync<UpCategory>(reader, 0, token).ConfigureAwait(false);
             return document;
         }
 
@@ -287,7 +287,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: LightweightUpCategorySelector1892123373
-    public class LightweightUpCategorySelector1892123373 : Marten.Internal.CodeGeneration.DocumentSelectorWithVersions<Nulah.UpApi.Lib.Models.UpCategory, string>, Marten.Linq.Selectors.ISelector<Nulah.UpApi.Lib.Models.UpCategory>
+    public class LightweightUpCategorySelector1892123373 : Marten.Internal.CodeGeneration.DocumentSelectorWithVersions<UpCategory, string>, Marten.Linq.Selectors.ISelector<UpCategory>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -300,23 +300,23 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public Nulah.UpApi.Lib.Models.UpCategory Resolve(System.Data.Common.DbDataReader reader)
+        public UpCategory Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<string>(0);
 
-            Nulah.UpApi.Lib.Models.UpCategory document;
-            document = _serializer.FromJson<Nulah.UpApi.Lib.Models.UpCategory>(reader, 1);
+            UpCategory document;
+            document = _serializer.FromJson<UpCategory>(reader, 1);
             _session.MarkAsDocumentLoaded(id, document);
             return document;
         }
 
 
-        public async System.Threading.Tasks.Task<Nulah.UpApi.Lib.Models.UpCategory> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<UpCategory> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<string>(0, token);
 
-            Nulah.UpApi.Lib.Models.UpCategory document;
-            document = await _serializer.FromJsonAsync<Nulah.UpApi.Lib.Models.UpCategory>(reader, 1, token).ConfigureAwait(false);
+            UpCategory document;
+            document = await _serializer.FromJsonAsync<UpCategory>(reader, 1, token).ConfigureAwait(false);
             _session.MarkAsDocumentLoaded(id, document);
             return document;
         }
@@ -327,7 +327,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: IdentityMapUpCategorySelector1892123373
-    public class IdentityMapUpCategorySelector1892123373 : Marten.Internal.CodeGeneration.DocumentSelectorWithIdentityMap<Nulah.UpApi.Lib.Models.UpCategory, string>, Marten.Linq.Selectors.ISelector<Nulah.UpApi.Lib.Models.UpCategory>
+    public class IdentityMapUpCategorySelector1892123373 : Marten.Internal.CodeGeneration.DocumentSelectorWithIdentityMap<UpCategory, string>, Marten.Linq.Selectors.ISelector<UpCategory>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -340,26 +340,26 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public Nulah.UpApi.Lib.Models.UpCategory Resolve(System.Data.Common.DbDataReader reader)
+        public UpCategory Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<string>(0);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            Nulah.UpApi.Lib.Models.UpCategory document;
-            document = _serializer.FromJson<Nulah.UpApi.Lib.Models.UpCategory>(reader, 1);
+            UpCategory document;
+            document = _serializer.FromJson<UpCategory>(reader, 1);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             return document;
         }
 
 
-        public async System.Threading.Tasks.Task<Nulah.UpApi.Lib.Models.UpCategory> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<UpCategory> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<string>(0, token);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            Nulah.UpApi.Lib.Models.UpCategory document;
-            document = await _serializer.FromJsonAsync<Nulah.UpApi.Lib.Models.UpCategory>(reader, 1, token).ConfigureAwait(false);
+            UpCategory document;
+            document = await _serializer.FromJsonAsync<UpCategory>(reader, 1, token).ConfigureAwait(false);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             return document;
@@ -371,7 +371,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: DirtyTrackingUpCategorySelector1892123373
-    public class DirtyTrackingUpCategorySelector1892123373 : Marten.Internal.CodeGeneration.DocumentSelectorWithDirtyChecking<Nulah.UpApi.Lib.Models.UpCategory, string>, Marten.Linq.Selectors.ISelector<Nulah.UpApi.Lib.Models.UpCategory>
+    public class DirtyTrackingUpCategorySelector1892123373 : Marten.Internal.CodeGeneration.DocumentSelectorWithDirtyChecking<UpCategory, string>, Marten.Linq.Selectors.ISelector<UpCategory>
     {
         private readonly Marten.Internal.IMartenSession _session;
         private readonly Marten.Schema.DocumentMapping _mapping;
@@ -384,13 +384,13 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public Nulah.UpApi.Lib.Models.UpCategory Resolve(System.Data.Common.DbDataReader reader)
+        public UpCategory Resolve(System.Data.Common.DbDataReader reader)
         {
             var id = reader.GetFieldValue<string>(0);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            Nulah.UpApi.Lib.Models.UpCategory document;
-            document = _serializer.FromJson<Nulah.UpApi.Lib.Models.UpCategory>(reader, 1);
+            UpCategory document;
+            document = _serializer.FromJson<UpCategory>(reader, 1);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             StoreTracker(_session, document);
@@ -398,13 +398,13 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public async System.Threading.Tasks.Task<Nulah.UpApi.Lib.Models.UpCategory> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
+        public async System.Threading.Tasks.Task<UpCategory> ResolveAsync(System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var id = await reader.GetFieldValueAsync<string>(0, token);
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
-            Nulah.UpApi.Lib.Models.UpCategory document;
-            document = await _serializer.FromJsonAsync<Nulah.UpApi.Lib.Models.UpCategory>(reader, 1, token).ConfigureAwait(false);
+            UpCategory document;
+            document = await _serializer.FromJsonAsync<UpCategory>(reader, 1, token).ConfigureAwait(false);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             StoreTracker(_session, document);
@@ -417,7 +417,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: QueryOnlyUpCategoryDocumentStorage1892123373
-    public class QueryOnlyUpCategoryDocumentStorage1892123373 : Marten.Internal.Storage.QueryOnlyDocumentStorage<Nulah.UpApi.Lib.Models.UpCategory, string>
+    public class QueryOnlyUpCategoryDocumentStorage1892123373 : Marten.Internal.Storage.QueryOnlyDocumentStorage<UpCategory, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -428,59 +428,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(Nulah.UpApi.Lib.Models.UpCategory document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(UpCategory document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateUpCategoryOperation1892123373
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpCategory, string>(),
+                session.Versions.ForType<UpCategory, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertUpCategoryOperation1892123373
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpCategory, string>(),
+                session.Versions.ForType<UpCategory, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertUpCategoryOperation1892123373
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpCategory, string>(),
+                session.Versions.ForType<UpCategory, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(Nulah.UpApi.Lib.Models.UpCategory document)
+        public override string Identity(UpCategory document)
         {
             return document.Id;
         }
@@ -497,7 +497,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: LightweightUpCategoryDocumentStorage1892123373
-    public class LightweightUpCategoryDocumentStorage1892123373 : Marten.Internal.Storage.LightweightDocumentStorage<Nulah.UpApi.Lib.Models.UpCategory, string>
+    public class LightweightUpCategoryDocumentStorage1892123373 : Marten.Internal.Storage.LightweightDocumentStorage<UpCategory, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -508,59 +508,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(Nulah.UpApi.Lib.Models.UpCategory document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(UpCategory document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateUpCategoryOperation1892123373
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpCategory, string>(),
+                session.Versions.ForType<UpCategory, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertUpCategoryOperation1892123373
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpCategory, string>(),
+                session.Versions.ForType<UpCategory, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertUpCategoryOperation1892123373
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpCategory, string>(),
+                session.Versions.ForType<UpCategory, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(Nulah.UpApi.Lib.Models.UpCategory document)
+        public override string Identity(UpCategory document)
         {
             return document.Id;
         }
@@ -577,7 +577,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: IdentityMapUpCategoryDocumentStorage1892123373
-    public class IdentityMapUpCategoryDocumentStorage1892123373 : Marten.Internal.Storage.IdentityMapDocumentStorage<Nulah.UpApi.Lib.Models.UpCategory, string>
+    public class IdentityMapUpCategoryDocumentStorage1892123373 : Marten.Internal.Storage.IdentityMapDocumentStorage<UpCategory, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -588,59 +588,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(Nulah.UpApi.Lib.Models.UpCategory document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(UpCategory document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateUpCategoryOperation1892123373
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpCategory, string>(),
+                session.Versions.ForType<UpCategory, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertUpCategoryOperation1892123373
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpCategory, string>(),
+                session.Versions.ForType<UpCategory, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertUpCategoryOperation1892123373
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpCategory, string>(),
+                session.Versions.ForType<UpCategory, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(Nulah.UpApi.Lib.Models.UpCategory document)
+        public override string Identity(UpCategory document)
         {
             return document.Id;
         }
@@ -657,7 +657,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: DirtyTrackingUpCategoryDocumentStorage1892123373
-    public class DirtyTrackingUpCategoryDocumentStorage1892123373 : Marten.Internal.Storage.DirtyCheckedDocumentStorage<Nulah.UpApi.Lib.Models.UpCategory, string>
+    public class DirtyTrackingUpCategoryDocumentStorage1892123373 : Marten.Internal.Storage.DirtyCheckedDocumentStorage<UpCategory, string>
     {
         private readonly Marten.Schema.DocumentMapping _document;
 
@@ -668,59 +668,59 @@ namespace Marten.Generated.DocumentStorage
 
 
 
-        public override string AssignIdentity(Nulah.UpApi.Lib.Models.UpCategory document, string tenantId, Marten.Storage.IMartenDatabase database)
+        public override string AssignIdentity(UpCategory document, string tenantId, Marten.Storage.IMartenDatabase database)
         {
             if (string.IsNullOrEmpty(document.Id)) throw new InvalidOperationException("Id/id values cannot be null or empty");
             return document.Id;
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Update(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Update(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpdateUpCategoryOperation1892123373
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpCategory, string>(),
+                session.Versions.ForType<UpCategory, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Insert(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Insert(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.InsertUpCategoryOperation1892123373
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpCategory, string>(),
+                session.Versions.ForType<UpCategory, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Upsert(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Upsert(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
 
             return new Marten.Generated.DocumentStorage.UpsertUpCategoryOperation1892123373
             (
                 document, Identity(document),
-                session.Versions.ForType<Nulah.UpApi.Lib.Models.UpCategory, string>(),
+                session.Versions.ForType<UpCategory, string>(),
                 _document
                 
             );
         }
 
 
-        public override Marten.Internal.Operations.IStorageOperation Overwrite(Nulah.UpApi.Lib.Models.UpCategory document, Marten.Internal.IMartenSession session, string tenant)
+        public override Marten.Internal.Operations.IStorageOperation Overwrite(UpCategory document, Marten.Internal.IMartenSession session, string tenant)
         {
             throw new System.NotSupportedException();
         }
 
 
-        public override string Identity(Nulah.UpApi.Lib.Models.UpCategory document)
+        public override string Identity(UpCategory document)
         {
             return document.Id;
         }
@@ -737,11 +737,11 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: UpCategoryBulkLoader1892123373
-    public class UpCategoryBulkLoader1892123373 : Marten.Internal.CodeGeneration.BulkLoader<Nulah.UpApi.Lib.Models.UpCategory, string>
+    public class UpCategoryBulkLoader1892123373 : Marten.Internal.CodeGeneration.BulkLoader<UpCategory, string>
     {
-        private readonly Marten.Internal.Storage.IDocumentStorage<Nulah.UpApi.Lib.Models.UpCategory, string> _storage;
+        private readonly Marten.Internal.Storage.IDocumentStorage<UpCategory, string> _storage;
 
-        public UpCategoryBulkLoader1892123373(Marten.Internal.Storage.IDocumentStorage<Nulah.UpApi.Lib.Models.UpCategory, string> storage) : base(storage)
+        public UpCategoryBulkLoader1892123373(Marten.Internal.Storage.IDocumentStorage<UpCategory, string> storage) : base(storage)
         {
             _storage = storage;
         }
@@ -776,7 +776,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override void LoadRow(Npgsql.NpgsqlBinaryImporter writer, Nulah.UpApi.Lib.Models.UpCategory document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer)
+        public override void LoadRow(Npgsql.NpgsqlBinaryImporter writer, UpCategory document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer)
         {
             writer.Write(document.GetType().FullName, NpgsqlTypes.NpgsqlDbType.Varchar);
             writer.Write(document.Id, NpgsqlTypes.NpgsqlDbType.Text);
@@ -785,7 +785,7 @@ namespace Marten.Generated.DocumentStorage
         }
 
 
-        public override async System.Threading.Tasks.Task LoadRowAsync(Npgsql.NpgsqlBinaryImporter writer, Nulah.UpApi.Lib.Models.UpCategory document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer, System.Threading.CancellationToken cancellation)
+        public override async System.Threading.Tasks.Task LoadRowAsync(Npgsql.NpgsqlBinaryImporter writer, UpCategory document, Marten.Storage.Tenant tenant, Marten.ISerializer serializer, System.Threading.CancellationToken cancellation)
         {
             await writer.WriteAsync(document.GetType().FullName, NpgsqlTypes.NpgsqlDbType.Varchar, cancellation);
             await writer.WriteAsync(document.Id, NpgsqlTypes.NpgsqlDbType.Text, cancellation);
@@ -811,7 +811,7 @@ namespace Marten.Generated.DocumentStorage
     
     
     // START: UpCategoryProvider1892123373
-    public class UpCategoryProvider1892123373 : Marten.Internal.Storage.DocumentProvider<Nulah.UpApi.Lib.Models.UpCategory>
+    public class UpCategoryProvider1892123373 : Marten.Internal.Storage.DocumentProvider<UpCategory>
     {
         private readonly Marten.Schema.DocumentMapping _mapping;
 

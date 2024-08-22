@@ -2,9 +2,10 @@ using Marten;
 using MudBlazor.Services;
 using Nulah.Up.Blazor.Pages;
 using Nulah.Up.Blazor.Services;
+using Nulah.UpApi.Domain.Interfaces;
+using Nulah.UpApi.Domain.Models;
 using Nulah.UpApi.Lib;
 using Nulah.UpApi.Lib.Controllers;
-using Nulah.UpApi.Lib.Models;
 using Weasel.Core;
 
 namespace Nulah.Up.Blazor;
@@ -32,6 +33,7 @@ public class Program
 			AccessToken = builder.Configuration["Api:UpBank"]
 		});
 		builder.Services.AddScoped<IUpBankApi, UpBankApi>();
+		builder.Services.AddScoped<IUpStorage, UpStorage>();
 
 		builder.Services.AddScoped<AccountController>();
 		builder.Services.AddScoped<TransactionController>();
