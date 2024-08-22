@@ -250,13 +250,60 @@ public class UpStorage : IUpStorage
 		{
 			_logger.LogDebug("Starting lightweight session");
 			await using var session = _documentStore.LightweightSession();
-			
+
 			session.Store(transactions);
 			await session.SaveChangesAsync();
 		}
 		catch (Exception ex)
 		{
 			_logger.LogError(ex, "Failed to save transactions: {exceptionMessage}", ex.Message);
+			throw;
+		}
+	}
+
+	#endregion
+
+	#region Categories
+
+	/// <summary>
+	/// Returns all categories from the cache - does not populate parent categories.
+	/// </summary>
+	/// <returns></returns>
+	public async Task<IReadOnlyList<UpCategory>> LoadCategoriesFromCacheAsync()
+	{
+		try
+		{
+			_logger.LogDebug("Starting lightweight session");
+			await using var session = _documentStore.LightweightSession();
+
+			return await session.Query<UpCategory>()
+				.OrderBy(x => x.Name)
+				.ToListAsync();
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "Failed to retrieve categories: {exceptionMessage}", ex.Message);
+			throw;
+		}
+	}
+
+	/// <summary>
+	/// Saves the given categories to storage
+	/// </summary>
+	/// <param name="categories"></param>
+	public async Task SaveCategoriesToCacheAsync(IEnumerable<UpCategory> categories)
+	{
+		try
+		{
+			_logger.LogDebug("Starting lightweight session");
+			await using var session = _documentStore.LightweightSession();
+
+			session.Store(categories);
+			await session.SaveChangesAsync();
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "Failed to save categories: {exceptionMessage}", ex.Message);
 			throw;
 		}
 	}

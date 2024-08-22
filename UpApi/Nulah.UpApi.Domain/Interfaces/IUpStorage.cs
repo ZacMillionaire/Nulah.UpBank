@@ -56,4 +56,16 @@ public interface IUpStorage
 	/// </summary>
 	/// <param name="transactions"></param>
 	Task SaveTransactionsToCacheAsync(IEnumerable<UpTransaction> transactions);
+
+	/// <summary>
+	/// Returns all categories from the cache - does not populate parent categories.
+	/// </summary>
+	/// <returns></returns>
+	Task<IReadOnlyList<UpCategory>> LoadCategoriesFromCacheAsync();
+
+	/// <summary>
+	/// Saves the given categories to storage
+	/// </summary>
+	/// <param name="categories"></param>
+	Task SaveCategoriesToCacheAsync(IEnumerable<UpCategory> categories);
 }

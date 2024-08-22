@@ -9,17 +9,18 @@ namespace Nulah.UpApi.Lib.Controllers;
 public class CategoryController
 {
 	private readonly IUpBankApi _upBankApi;
-	private readonly IDocumentStore _documentStore;
+	private readonly IUpStorage _upStorage;
 	private readonly ILogger<CategoryController> _logger;
 
 
 	public Action<CategoryController, EventArgs>? CategoriesUpdating;
 	public Action<CategoryController, IReadOnlyList<UpCategory>>? CategoriesUpdated;
 
-	public CategoryController(IUpBankApi upBankApi, IDocumentStore documentStore, ILogger<CategoryController> logger)
+	public CategoryController(IUpBankApi upBankApi, IUpStorage upStorage, ILogger<CategoryController> logger)
 	{
 		_upBankApi = upBankApi;
-		_documentStore = documentStore;
+		_upStorage = upStorage;
+		// TODO: implement logging when I get around to updating and setting categories
 		_logger = logger;
 	}
 
@@ -27,11 +28,10 @@ public class CategoryController
 	{
 		CategoriesUpdating?.Invoke(this, EventArgs.Empty);
 
-		await using var session = _documentStore.LightweightSession();
 
 		if (!bypassCache)
 		{
-			var existingCategories = await LoadCategoriesFromCacheAsync(session);
+			var existingCategories = await _upStorage.LoadCategoriesFromCacheAsync();
 
 			// We duplicate code slightly here to retrieve categories from the Api if _no_ categories
 			// exist in the database.
@@ -49,8 +49,7 @@ public class CategoryController
 			category.Parent = categories.FirstOrDefault(x => x.Id == category.ParentCategoryId);
 		}
 
-		session.Store((IEnumerable<UpCategory>)categories);
-		await session.SaveChangesAsync();
+		await _upStorage.SaveCategoriesToCacheAsync(categories);
 
 		CategoriesUpdated?.Invoke(this, categories);
 		return categories;
@@ -125,18 +124,5 @@ public class CategoryController
 			Id = rawCategory.Id,
 			Type = rawCategory.Type
 		};
-	}
-
-
-	/// <summary>
-	/// Returns all categories from the cache - does not populate parent categories.
-	/// </summary>
-	/// <param name="documentSession"></param>
-	/// <returns></returns>
-	private Task<IReadOnlyList<UpCategory>> LoadCategoriesFromCacheAsync(IDocumentSession documentSession)
-	{
-		return documentSession.Query<UpCategory>()
-			.OrderBy(x => x.Name)
-			.ToListAsync();
 	}
 }
