@@ -14,7 +14,7 @@ public class RuleSystemFixture : Fixture
 		Host.Services.GetRequiredService<UpStorage>(),
 		new CategoryController(
 			testUpBankApi,
-			Host.Services.GetRequiredService<IDocumentStore>(),
+			Host.Services.GetRequiredService<UpStorage>(),
 			CreateLogger<CategoryController>()
 		),
 		CreateLogger<TransactionController>()
