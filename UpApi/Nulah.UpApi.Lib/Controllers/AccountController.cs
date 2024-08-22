@@ -1,6 +1,7 @@
 ﻿using Marten;
 using Marten.Linq.LastModified;
 using Microsoft.Extensions.Logging;
+using Nulah.UpApi.Domain.Interfaces;
 using Nulah.UpApi.Domain.Models;
 
 namespace Nulah.UpApi.Lib.Controllers;

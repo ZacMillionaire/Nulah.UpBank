@@ -2,6 +2,7 @@ using Marten;
 using MudBlazor.Services;
 using Nulah.Up.Blazor.Pages;
 using Nulah.Up.Blazor.Services;
+using Nulah.UpApi.Domain.Interfaces;
 using Nulah.UpApi.Domain.Models;
 using Nulah.UpApi.Lib;
 using Nulah.UpApi.Lib.Controllers;

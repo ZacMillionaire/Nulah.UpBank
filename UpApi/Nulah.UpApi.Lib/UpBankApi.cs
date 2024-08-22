@@ -7,9 +7,8 @@ using Nulah.UpApi.Domain.Api.Categories;
 using Nulah.UpApi.Domain.Api.Converters;
 using Nulah.UpApi.Domain.Api.Enums;
 using Nulah.UpApi.Domain.Api.Transactions;
-using Nulah.UpApi.Lib.ApiModels.Accounts;
-using Nulah.UpApi.Lib.ApiModels;
-using JsonSerializer = System.Text.Json.JsonSerializer;
+using Nulah.UpApi.Domain.Interfaces;
+using Nulah.UpApi.Domain.Models;
 
 namespace Nulah.UpApi.Lib;
 
@@ -288,10 +287,4 @@ public class UpBankApi : IUpBankApi
 
 		return uri;
 	}
-}
-
-public class UpConfiguration
-{
-	public string? AccessToken { get; set; }
-	public string ApiBaseAddress { get; set; } = "https://api.up.com.au/api/v1";
 }

@@ -2,10 +2,8 @@
 using Nulah.UpApi.Domain.Api.Accounts;
 using Nulah.UpApi.Domain.Api.Categories;
 using Nulah.UpApi.Domain.Api.Transactions;
-using Nulah.UpApi.Lib.ApiModels;
-using Nulah.UpApi.Lib.ApiModels.Accounts;
 
-namespace Nulah.UpApi.Lib;
+namespace Nulah.UpApi.Domain.Interfaces;
 
 public interface IUpBankApi
 {

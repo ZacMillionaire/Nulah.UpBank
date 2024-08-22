@@ -3,6 +3,7 @@ using Marten;
 using Marten.Pagination;
 using Microsoft.Extensions.Logging;
 using Nulah.UpApi.Domain.Api.Transactions;
+using Nulah.UpApi.Domain.Interfaces;
 using Nulah.UpApi.Domain.Models;
 using Nulah.UpApi.Domain.Models.Transactions;
 using Nulah.UpApi.Domain.Models.Transactions.Criteria;
