@@ -14,7 +14,7 @@ public class TransactionController
 {
 	private const int DefaultPageSize = 25;
 	private readonly IUpBankApi _upBankApi;
-	private readonly IDocumentStore _documentStore;
+	private readonly IUpStorage _upStorage;
 	private readonly CategoryController _categoryController;
 	private readonly ILogger<TransactionController> _logger;
 
@@ -24,13 +24,13 @@ public class TransactionController
 	public Action<TransactionController, string>? TransactionCacheMessage;
 
 	public TransactionController(IUpBankApi upBankApi,
-		IDocumentStore documentStore,
+		IUpStorage upStorage,
 		CategoryController categoryController,
 		ILogger<TransactionController> logger
 	)
 	{
 		_upBankApi = upBankApi;
-		_documentStore = documentStore;
+		_upStorage = upStorage;
 		_categoryController = categoryController;
 		_logger = logger;
 	}
@@ -46,15 +46,11 @@ public class TransactionController
 		int pageSize = DefaultPageSize,
 		int pageNumber = 1)
 	{
-		await using var session = _documentStore.LightweightSession();
-		// TODO: investigate moving to EF for storage of transaction information so we can reduce zero sum transaction pairs
-		// eg: a cover will generate a pair that can be matched by CreatedBy that count as no difference and can potentially be excluded.
-		// For now a criteria will be used to simply exclude uncategorisable transactions, as a future API update (if one ever happens...),
-		// could expose where a transaction was covered and these uncategorisable transactions may not come through, or may have additional
-		// metadata that can allow me to better display them.
-		var existingAccounts = await LoadTransactionsFromCacheAsync(session, pageSize, pageNumber, BuildTransactionQuery(criteria));
+		var existingAccounts = await _upStorage.LoadTransactionsFromCacheAsync(pageSize, pageNumber, BuildTransactionQuery(criteria));
 
-		return existingAccounts;
+		// TODO: create a wrapper for IPagedList that we control to reduce the dependency on MartenDB while still
+		// having a valuable pagination
+		return existingAccounts as IPagedList<UpTransaction>;
 	}
 
 	/// <summary>
@@ -63,63 +59,7 @@ public class TransactionController
 	/// <returns></returns>
 	public async Task<TransactionCacheStats> GetTransactionCacheStats()
 	{
-		await using var session = _documentStore.LightweightSession();
-
-		var statQueryBatch = session.CreateBatchQuery();
-		var transactionsCached = statQueryBatch.Query<UpTransaction>().Count();
-		var firstTransaction = statQueryBatch.Query<UpTransaction>().Min(x => x.CreatedAt);
-		var latestTransaction = statQueryBatch.Query<UpTransaction>().Max(x => x.CreatedAt);
-
-		// Wow this looks like a disgusting mess!
-		// The answer is yes, this is me doing things with Marten that would be better off handled with EF.
-		// No I refuse to learn my lesson and I'll mark my tombstone with a TODO shortly.
-		// What this query basically does is collect all counts by category, but first lumps transactions that can't be
-		// categorised (these are generally bonus, interest, or transfers or covers between accounts) as 'uncategorisable',
-		// those that can be categorised but aren't categorised (because a user simply forgot or somehow caching failed to populate an id),
-		// and then finally the CategoryId.
-		// I've used double quotes for the column aliases to ensure the column names are the correct case to match with the type properties,
-		// turning every row into json, and then letting Marten take the wheel to turn it into what we actually want
-		// If god isn't dead this query is a testament to why he is.
-		// TODO: Update this to something sane when I eventually separate things to EF
-		var categoryStats = statQueryBatch.Query<CategoryStat>("""
-		                                                       SELECT row_to_json(result)
-		                                                       FROM (SELECT CASE
-		                                                                        WHEN (d.data -> 'Category' -> 'Id') IS NULL AND d.data -> 'IsCategorizable' = 'false'
-		                                                                            THEN 'uncategorisable'
-		                                                                        WHEN (d.data -> 'Category' -> 'Id') IS NULL AND d.data -> 'IsCategorizable' = 'true'
-		                                                                            THEN 'uncategorised'
-		                                                                        ELSE (d.data -> 'Category' ->> 'Id')
-		                                                           END               AS "CategoryId"
-		                                                                  , CASE
-		                                                                        WHEN (c.data -> 'Name') IS NULL AND d.data -> 'IsCategorizable' = 'false'
-		                                                                            THEN 'Uncategorisable'
-		                                                                        WHEN (c.data -> 'Name') IS NULL AND d.data -> 'IsCategorizable' = 'true'
-		                                                                            THEN 'Uncategorised'
-		                                                                        ELSE (c.data ->> 'Name')
-		                                                               END           AS "Name"
-		                                                                  , count(*) AS "Count"
-		                                                             FROM mt_doc_uptransaction AS d
-		                                                                      -- the id column for the category table/document is the category id from Up (ie - it's not a guid)
-		                                                                      LEFT JOIN mt_doc_upcategory as c ON (d.data -> 'Category' ->> 'Id') = c.id
-		                                                             GROUP BY "CategoryId", "Name") AS result
-		                                                       """);
-		await statQueryBatch.Execute();
-
-		return new TransactionCacheStats()
-		{
-			Count = await transactionsCached,
-			// If we have no transaction dates (due to nothing being cached), we'll need to return null, and we can't default the
-			// above to null as marten cannot return null for scalar DateTime.
-			// These queries are a bit gross as they're a batch query and we await on the result of each.
-			// We also check if the date back is a min value and also return null in those cases.
-			MostRecentTransactionDate = await latestTransaction is var lastDate && lastDate == DateTime.MinValue
-				? null
-				: lastDate,
-			FirstTransactionDate = await firstTransaction is var firstDate && firstDate == DateTime.MinValue
-				? null
-				: firstDate,
-			CategoryStats = await categoryStats
-		};
+		return await _upStorage.GetTransactionStats();
 	}
 
 	/// <summary>
@@ -153,17 +93,18 @@ public class TransactionController
 	/// <summary>
 	/// Caches all transactions given appropriate parameters.
 	/// <para>
-	/// Caching transactions by <paramref name="accountId"/> is not currently implemented
+	/// Caching transactions by <paramref name="accountId"/> is not currently implemented and will be implemented in future
 	/// </para>
 	/// </summary>
-	/// <param name="accountId"></param>
+	/// <param name="accountId">Currently unimplemented</param>
 	/// <param name="since"></param>
 	/// <param name="until"></param>
 	/// <param name="pageSize"></param>
-	/// <param name="pageNumber">Minimum value is 1</param>
 	/// <returns></returns>
-	public async Task<IPagedList<UpTransaction>> CacheTransactions(string? accountId = null, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = DefaultPageSize)
+	public async Task<IEnumerable<UpTransaction>?> CacheTransactions(string? accountId = null, DateTimeOffset? since = null, DateTimeOffset? until = null, int pageSize = DefaultPageSize)
 	{
+		// TODO: implement saving transactions by accountId
+		// TODO: remember how I was going to do that 
 		try
 		{
 			TransactionCacheStarted?.Invoke(this, EventArgs.Empty);
@@ -184,13 +125,11 @@ public class TransactionController
 
 			TransactionCacheMessage?.Invoke(this, $"Caching loaded transactions...");
 
-			await using var session = _documentStore.LightweightSession();
-			session.Store((IEnumerable<UpTransaction>)transactions);
-			await session.SaveChangesAsync();
+			await _upStorage.SaveTransactionsToCacheAsync(transactions);
 
 			TransactionCacheMessage?.Invoke(this, $"Cache complete! Cached {transactions.Count} transactions");
 
-			var firstPageOfTransactions = await LoadTransactionsFromCacheAsync(session, pageSize);
+			var firstPageOfTransactions = await _upStorage.LoadTransactionsFromCacheAsync(pageSize);
 
 			return firstPageOfTransactions;
 		}
@@ -278,6 +217,7 @@ public class TransactionController
 	/// <returns></returns>
 	private Expression<Func<UpTransaction, bool>> BuildTransactionQuery(TransactionQueryCriteria? transactionQueryCriteria)
 	{
+		// TODO: move this to its own criteria class maybe?
 		// Set criteria to a new instance if null is given
 		transactionQueryCriteria ??= new TransactionQueryCriteria();
 
@@ -345,6 +285,8 @@ public class TransactionController
 	/// <returns></returns>
 	private TransactionType CategoriseTransactionTypeFromDescription(string description)
 	{
+		// TODO: this can maybe be moved to the constructor for an UpTransaction or as the get
+		// for the category enum
 		if (description.StartsWith("Cover to") || description.StartsWith("Cover from"))
 		{
 			return TransactionType.Cover;
@@ -371,27 +313,5 @@ public class TransactionController
 		}
 
 		return TransactionType.Transaction;
-	}
-
-	/// <summary>
-	/// Returns all transactions from the cache by given 
-	/// </summary>
-	/// <param name="documentSession"></param>
-	/// <param name="pageSize"></param>
-	/// <param name="pageNumber">Defaults to 1. Must be greater than 0.</param>
-	/// <param name="queryExpression">
-	/// Either generated from <see cref="BuildTransactionQuery"/> or passed in raw. Defaults to ((UpTransaction)x => true)
-	/// if null.
-	/// </param>
-	/// <returns></returns>
-	private Task<IPagedList<UpTransaction>> LoadTransactionsFromCacheAsync(IDocumentSession documentSession,
-		int pageSize = DefaultPageSize,
-		int pageNumber = 1,
-		Expression<Func<UpTransaction, bool>>? queryExpression = null)
-	{
-		return documentSession.Query<UpTransaction>()
-			.Where(queryExpression ?? (x => true))
-			.OrderByDescending(x => x.CreatedAt)
-			.ToPagedListAsync(pageNumber, pageSize);
 	}
 }
