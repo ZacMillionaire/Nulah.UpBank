@@ -77,7 +77,7 @@
         </MudExpansionPanel>
     </MudExpansionPanels>
 
-    <MudButton OnClick="CacheAllTransactions" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary">Cache all transactions</MudButton>
+    <MudButton OnClick="CacheAllTransactions" Variant="Variant.Filled" DropShadow="false" Color="Color.Primary">Cache all transactions</MudButton>
 
     @* We pass in a new date range instance here to ensure the default behaviour of this month is prevented *@
     <TransactionTable TransactionDateRange="@(new DateRange())" @ref="TransactionTableComponent" Page="Page" PageSize="PageSize" RetrieveTransactions="GetTransactions"/>

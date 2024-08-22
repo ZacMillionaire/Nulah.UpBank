@@ -11,7 +11,12 @@
         <PackageReference Include="Marten" Version="7.7.0" />
         <PackageReference Include="MudBlazor" Version="7.6.0" />
     </ItemGroup>
-
+    
+    <!-- MudBlazor v6 -> v7 analyser -->
+    <PropertyGroup>
+        <MudAllowedAttributePattern>LowerCase</MudAllowedAttributePattern>
+        <MudIllegalParameters>V7CaseSensitive</MudIllegalParameters>
+    </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\UpApi\Nulah.UpApi.Lib\Nulah.UpApi.Lib.csproj" />
