@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Nulah.UpApi.Domain.Models;
 using Nulah.UpApi.Domain.Models.Transactions;
+using Nulah.UpApi.Domain.Models.Transactions.Criteria;
 
 namespace Nulah.UpApi.Domain.Interfaces;
 
@@ -46,6 +47,20 @@ public interface IUpStorage
 		Expression<Func<UpTransaction, bool>>? queryExpression = null);
 
 	/// <summary>
+	/// Returns all transactions from the cache by given 
+	/// </summary>
+	/// <param name="pageSize"></param>
+	/// <param name="pageNumber">Defaults to 1. Must be greater than 0.</param>
+	/// <param name="queryCriteria">
+	/// Defaults to ((UpTransaction)x => true) if null, returning all transactions unfiltered
+	/// </param>
+	/// <returns></returns>
+	Task<IEnumerable<UpTransaction>> LoadTransactionsFromCacheByCriteriaAsync(
+		int pageSize,
+		int pageNumber = 1,
+		TransactionQueryCriteria? queryCriteria = null);
+
+	/// <summary>
 	/// Returns a stat object for stored transactions
 	/// </summary>
 	/// <returns></returns>
@@ -68,4 +83,22 @@ public interface IUpStorage
 	/// </summary>
 	/// <param name="categories"></param>
 	Task SaveCategoriesToCacheAsync(IEnumerable<UpCategory> categories);
+
+	/// <summary>
+	/// Returns all transactions from the cache by given 
+	/// </summary>
+	/// <param name="queryExpression">
+	/// Defaults to ((UpTransaction)x => true) if null, returning all transactions unfiltered
+	/// </param>
+	/// <returns></returns>
+	Task<IEnumerable<UpTransaction>> LoadTransactionsFromCacheAsync(Expression<Func<UpTransaction, bool>>? queryExpression = null);
+
+	/// <summary>
+	/// Returns all transactions from the cache by given 
+	/// </summary>
+	/// <param name="queryExpression">
+	/// Defaults to ((UpTransaction)x => true) if null, returning all transactions unfiltered
+	/// </param>
+	/// <returns></returns>
+	Task<IEnumerable<UpTransaction>> LoadTransactionsFromCacheAsync(TransactionQueryCriteria? queryExpression = null);
 }

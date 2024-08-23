@@ -1,0 +1,110 @@
+﻿@using Nulah.UpApi.Domain.Models
+<MudItem xs="3">
+    <MudCard Outlined="true">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">@Account.DisplayName</MudText>
+                <MudText Typo="Typo.body2">@Account.AccountType</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            @if (_isLoading)
+            {
+                <span>Loading lol</span>
+            }
+            else
+            {
+                <MudChart ChartType="ChartType.Line"
+                          ChartSeries="@_series"
+                          Width="100%"
+                          Height="250px"
+                          ChartOptions="@_options"/>
+            }
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudItem>
+
+@code {
+
+    #region chart stuff
+
+    private ChartOptions _options = new()
+    {
+        ShowLegend = false
+    };
+
+    private List<ChartSeries> _series = [];
+
+    private string[] _xAxisLabels = [];
+
+    #endregion
+
+    private bool _isLoading = true;
+
+    [Inject]
+    private UpApiService _upBankApi { get; set; }
+
+    [Inject]
+    private IDialogService DialogService { get; set; }
+
+    [Parameter]
+    public UpAccount Account { get; set; } = null!;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // This page _always_ loads accounts explicitly, so does not use the events exposed by the service.
+            // You can think of this page as the source of any events that would trigger accounts to be loaded/cache updated
+            await LoadAccountStats();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task LoadAccountStats()
+    {
+        _isLoading = true;
+        try
+        {
+            // TODO: think about if I want to show the past n amount (maybe 50?) transactions instead of a date range
+            // If I do want quantity over range, create an overload for getting account stats to do by range instead
+            var startOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            var endOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month,
+                DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)
+            );
+
+            var stats = await _upBankApi.Accounts.GetAccountStats(Account.Id, startOfMonth, endOfMonth);
+            // transform the stats into whatever mudblazor needs
+            // we hide labels currently but incase we change our mind, lets still process them
+            _xAxisLabels = stats.Select(x => x.Date.ToString("dd/MM")).ToArray();
+            _series =
+            [
+                new ChartSeries()
+                {
+                    // Kind of wish this just took an enumerable instead of specifically an array, but hey,
+                    // unless I want to start messing around with d3js again, this'll do for now
+                    Data = stats.Select(x => x.Total).ToArray()
+                }
+            ];
+        }
+        catch (Exception ex)
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+
+            var parameters = new DialogParameters<ErrorDialog>();
+            parameters.Add(x => x.ContentText, ex.Message);
+
+            await DialogService.ShowAsync<ErrorDialog>("Error when loading accounts", parameters, options);
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+}

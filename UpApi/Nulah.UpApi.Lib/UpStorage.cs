@@ -6,6 +6,8 @@ using Microsoft.Extensions.Logging;
 using Nulah.UpApi.Domain.Interfaces;
 using Nulah.UpApi.Domain.Models;
 using Nulah.UpApi.Domain.Models.Transactions;
+using Nulah.UpApi.Domain.Models.Transactions.Criteria;
+using Nulah.UpApi.Lib.Controllers;
 
 namespace Nulah.UpApi.Lib;
 
@@ -159,11 +161,130 @@ public class UpStorage : IUpStorage
 			// could expose where a transaction was covered and these uncategorisable transactions may not come through, or may have additional
 			// metadata that can allow me to better display them.
 
-			_logger.LogInformation("Retrieving transactions");
+			_logger.LogInformation("Retrieving transaction page {pageNumber}, paged by {pagesize}", pageNumber, pageSize);
 			return await session.Query<UpTransaction>()
 				.Where(queryExpression ?? (x => true))
 				.OrderByDescending(x => x.CreatedAt)
 				.ToPagedListAsync(pageNumber, pageSize);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "Failed to retrieve transactions: {exceptionMessage}", ex.Message);
+			throw;
+		}
+	}
+
+	/// <summary>
+	/// Returns all transactions from the cache by given 
+	/// </summary>
+	/// <param name="pageSize"></param>
+	/// <param name="pageNumber">Defaults to 1. Must be greater than 0.</param>
+	/// <param name="queryExpression">
+	/// Defaults to ((UpTransaction)x => true) if null, returning all transactions unfiltered
+	/// </param>
+	/// <returns></returns>
+	public async Task<IEnumerable<UpTransaction>> LoadTransactionsFromCacheByCriteriaAsync(
+		int pageSize = DefaultPageSize,
+		int pageNumber = 1,
+		TransactionQueryCriteria? queryExpression = null)
+	{
+		try
+		{
+			_logger.LogDebug("Starting lightweight session");
+			await using var session = _documentStore.LightweightSession();
+
+			// Comment copy and pasted from refactoring. I'm leaving it here to confuse me later, but this may be a feature
+			// as it's "planned" https://github.com/up-banking/api/issues/99. Of course they move very slow with this API
+			// because I'm 99% sure they've all but put it on maintenance mode internally but we can hope!
+			// Also this comment is here as I might shift over to EF still, as MartenDb is super convenient for dev but EF
+			// gives me better query support in the future.
+			// TODO: investigate moving to EF for storage of transaction information so we can reduce zero sum transaction pairs
+			// eg: a cover will generate a pair that can be matched by CreatedBy that count as no difference and can potentially be excluded.
+			// For now a criteria will be used to simply exclude uncategorisable transactions, as a future API update (if one ever happens...),
+			// could expose where a transaction was covered and these uncategorisable transactions may not come through, or may have additional
+			// metadata that can allow me to better display them.
+
+			_logger.LogInformation("Retrieving transaction page {pageNumber}, paged by {pagesize}", pageNumber, pageSize);
+			return await session.Query<UpTransaction>()
+				.Where(BuildTransactionQuery(queryExpression))
+				.OrderByDescending(x => x.CreatedAt)
+				.ToPagedListAsync(pageNumber, pageSize);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "Failed to retrieve transactions: {exceptionMessage}", ex.Message);
+			throw;
+		}
+	}
+
+	/// <summary>
+	/// Returns all transactions from the cache by given 
+	/// </summary>
+	/// <param name="queryExpression">
+	/// Defaults to ((UpTransaction)x => true) if null, returning all transactions unfiltered
+	/// </param>
+	/// <returns></returns>
+	public async Task<IEnumerable<UpTransaction>> LoadTransactionsFromCacheAsync(Expression<Func<UpTransaction, bool>>? queryExpression = null)
+	{
+		try
+		{
+			_logger.LogDebug("Starting lightweight session");
+			await using var session = _documentStore.LightweightSession();
+
+			// Comment copy and pasted from refactoring. I'm leaving it here to confuse me later, but this may be a feature
+			// as it's "planned" https://github.com/up-banking/api/issues/99. Of course they move very slow with this API
+			// because I'm 99% sure they've all but put it on maintenance mode internally but we can hope!
+			// Also this comment is here as I might shift over to EF still, as MartenDb is super convenient for dev but EF
+			// gives me better query support in the future.
+			// TODO: investigate moving to EF for storage of transaction information so we can reduce zero sum transaction pairs
+			// eg: a cover will generate a pair that can be matched by CreatedBy that count as no difference and can potentially be excluded.
+			// For now a criteria will be used to simply exclude uncategorisable transactions, as a future API update (if one ever happens...),
+			// could expose where a transaction was covered and these uncategorisable transactions may not come through, or may have additional
+			// metadata that can allow me to better display them.
+
+			_logger.LogInformation("Retrieving transactions unpaged");
+			return await session.Query<UpTransaction>()
+				.Where(queryExpression ?? (x => true))
+				.OrderByDescending(x => x.CreatedAt)
+				.ToListAsync();
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "Failed to retrieve transactions: {exceptionMessage}", ex.Message);
+			throw;
+		}
+	}
+
+	/// <summary>
+	/// Returns all transactions from the cache by given 
+	/// </summary>
+	/// <param name="queryExpression">
+	/// Defaults to ((UpTransaction)x => true) if null, returning all transactions unfiltered
+	/// </param>
+	/// <returns></returns>
+	public async Task<IEnumerable<UpTransaction>> LoadTransactionsFromCacheAsync(TransactionQueryCriteria? queryExpression = null)
+	{
+		try
+		{
+			_logger.LogDebug("Starting lightweight session");
+			await using var session = _documentStore.LightweightSession();
+
+			// Comment copy and pasted from refactoring. I'm leaving it here to confuse me later, but this may be a feature
+			// as it's "planned" https://github.com/up-banking/api/issues/99. Of course they move very slow with this API
+			// because I'm 99% sure they've all but put it on maintenance mode internally but we can hope!
+			// Also this comment is here as I might shift over to EF still, as MartenDb is super convenient for dev but EF
+			// gives me better query support in the future.
+			// TODO: investigate moving to EF for storage of transaction information so we can reduce zero sum transaction pairs
+			// eg: a cover will generate a pair that can be matched by CreatedBy that count as no difference and can potentially be excluded.
+			// For now a criteria will be used to simply exclude uncategorisable transactions, as a future API update (if one ever happens...),
+			// could expose where a transaction was covered and these uncategorisable transactions may not come through, or may have additional
+			// metadata that can allow me to better display them.
+
+			_logger.LogInformation("Retrieving transactions unpaged");
+			return await session.Query<UpTransaction>()
+				.Where(BuildTransactionQuery(queryExpression))
+				.OrderByDescending(x => x.CreatedAt)
+				.ToListAsync();
 		}
 		catch (Exception ex)
 		{
@@ -259,6 +380,76 @@ public class UpStorage : IUpStorage
 			_logger.LogError(ex, "Failed to save transactions: {exceptionMessage}", ex.Message);
 			throw;
 		}
+	}
+
+
+	/// <summary>
+	/// Creates a predicate for linq to sql to filter transactions as appropriate.
+	/// <para>
+	/// Calling this method with no criteria results in a query that will return all results, excluding transactions that cannot be categorised.
+	/// </para>
+	/// </summary>
+	/// <param name="transactionQueryCriteria"></param>
+	/// <returns></returns>
+	private static Expression<Func<UpTransaction, bool>> BuildTransactionQuery(TransactionQueryCriteria? transactionQueryCriteria)
+	{
+		// TODO: move this to its own criteria class maybe?
+		// Set criteria to a new instance if null is given
+		transactionQueryCriteria ??= new TransactionQueryCriteria();
+
+		Expression<Func<UpTransaction, bool>>? baseFunc = null;
+
+		if (!string.IsNullOrWhiteSpace(transactionQueryCriteria.AccountId))
+		{
+			baseFunc = baseFunc.And(x => x.AccountId == transactionQueryCriteria.AccountId);
+		}
+
+		if (transactionQueryCriteria.Since.HasValue)
+		{
+			baseFunc = baseFunc.And(x => transactionQueryCriteria.Since.Value.ToUniversalTime() <= x.CreatedAt);
+		}
+
+		if (transactionQueryCriteria.Until.HasValue)
+		{
+			baseFunc = baseFunc.And(x => x.CreatedAt <= transactionQueryCriteria.Until.Value.ToUniversalTime());
+		}
+
+		// This defaults to false, so default criteria behaviour should return all transactions that are not covers.
+		// A cover transaction is a zero-sum between 2 accounts where the parent is a users spending account.
+		// This should not affect any cache stats as these do not use this method for query building.
+		if (transactionQueryCriteria.ExcludeUncategorisableTransactions)
+		{
+			baseFunc = baseFunc.And(x => x.IsCategorizable);
+		}
+
+		if (transactionQueryCriteria.TransactionTypes.Count > 0)
+		{
+			Expression<Func<UpTransaction, bool>>? transactionTypeQuery = null;
+
+			foreach (var transactionType in transactionQueryCriteria.TransactionTypes)
+			{
+				transactionTypeQuery = transactionTypeQuery.Or(x => x.InferredType == transactionType);
+			}
+
+			transactionTypeQuery ??= x => true;
+
+			if (transactionTypeQuery.CanReduce)
+			{
+				transactionTypeQuery.Reduce();
+			}
+
+			baseFunc = baseFunc.And(transactionTypeQuery);
+		}
+
+		// Return an "empty" expression if we have a criteria object, but no criteria to act on
+		baseFunc ??= x => true;
+
+		if (baseFunc.CanReduce)
+		{
+			baseFunc.Reduce();
+		}
+
+		return baseFunc;
 	}
 
 	#endregion

@@ -1,73 +1,74 @@
 ﻿@page "/"
+@using Nulah.Up.Blazor.Components.Dialogs
+@using Nulah.Up.Blazor.Services
+@using Nulah.UpApi.Domain.Models
+@using Nulah.Up.Blazor.Pages.Accounts.Components
 <style>
-    .parent {
-        display: grid;
-        grid-template-columns: 60% 40%;
-    }
+   
 </style>
 
 <div class="parent">
     <div class="child pa-2">
-        <MudGrid>
-            <MudItem xs="4">
-                <MudCard>
-                    <MudCardContent>
-                        <MudText>Story of the day</MudText>
-                        <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
-            <MudItem xs="4">
-                <MudCard Outlined="true">
-                    <MudCardContent>
-                        <MudText>Story of the day</MudText>
-                        <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
-            <MudItem xs="4">
-                <MudCard>
-                    <MudCardContent>
-                        <MudText>Story of the day</MudText>
-                        <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
-            <MudItem xs="12">
-                <MudCard>
-                    <MudCardContent>
-                        <MudText>Story of the day</MudText>
-                        <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
-        </MudGrid>
-    </div>
-    <div class="child pa-2">
-        <MudGrid>
-            <MudItem xs="12">
-                <MudCard>
-                    <MudCardContent>
-                        <MudText>Story of the day</MudText>
-                        <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
+        <MudGrid Spacing="2">
+            @if (_isLoading)
+            {
+                <span>Loading...</span>
+            }
+            else
+            {
+                @foreach (var account in LoadedAccounts)
+                {
+                    <AccountStatCard Account="account"/>
+                }
+            }
         </MudGrid>
     </div>
 </div>
+
+@code {
+
+    [Inject]
+    private UpApiService _upBankApi { get; set; }
+
+    [Inject]
+    private IDialogService DialogService { get; set; }
+
+    private IReadOnlyList<UpAccount> LoadedAccounts { get; set; } = new List<UpAccount>();
+    private bool _isLoading = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // This page _always_ loads accounts explicitly, so does not use the events exposed by the service.
+            // You can think of this page as the source of any events that would trigger accounts to be loaded/cache updated
+            await LoadAccounts();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task LoadAccounts(bool updateCache = false)
+    {
+        _isLoading = true;
+        try
+        {
+            LoadedAccounts = await _upBankApi.Accounts.GetAccounts(updateCache);
+        }
+        catch (Exception ex)
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+
+            var parameters = new DialogParameters<ErrorDialog>();
+            parameters.Add(x => x.ContentText, ex.Message);
+
+            await DialogService.ShowAsync<ErrorDialog>("Error when loading accounts", parameters, options);
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+}

@@ -46,7 +46,7 @@ public class TransactionController
 		int pageSize = DefaultPageSize,
 		int pageNumber = 1)
 	{
-		var existingAccounts = await _upStorage.LoadTransactionsFromCacheAsync(pageSize, pageNumber, BuildTransactionQuery(criteria));
+		var existingAccounts = await _upStorage.LoadTransactionsFromCacheByCriteriaAsync(pageSize, pageNumber, criteria);
 
 		// TODO: create a wrapper for IPagedList that we control to reduce the dependency on MartenDB while still
 		// having a valuable pagination
@@ -129,7 +129,7 @@ public class TransactionController
 
 			TransactionCacheMessage?.Invoke(this, $"Cache complete! Cached {transactions.Count} transactions");
 
-			var firstPageOfTransactions = await _upStorage.LoadTransactionsFromCacheAsync(pageSize);
+			var firstPageOfTransactions = await _upStorage.LoadTransactionsFromCacheAsync(pageSize: pageSize);
 
 			return firstPageOfTransactions;
 		}
@@ -205,75 +205,6 @@ public class TransactionController
 		}
 
 		return transactions;
-	}
-
-	/// <summary>
-	/// Creates a predicate for linq to sql to filter transactions as appropriate.
-	/// <para>
-	/// Calling this method with no criteria results in a query that will return all results, excluding transactions that cannot be categorised.
-	/// </para>
-	/// </summary>
-	/// <param name="transactionQueryCriteria"></param>
-	/// <returns></returns>
-	private Expression<Func<UpTransaction, bool>> BuildTransactionQuery(TransactionQueryCriteria? transactionQueryCriteria)
-	{
-		// TODO: move this to its own criteria class maybe?
-		// Set criteria to a new instance if null is given
-		transactionQueryCriteria ??= new TransactionQueryCriteria();
-
-		Expression<Func<UpTransaction, bool>>? baseFunc = null;
-
-		if (!string.IsNullOrWhiteSpace(transactionQueryCriteria.AccountId))
-		{
-			baseFunc = baseFunc.And(x => x.AccountId == transactionQueryCriteria.AccountId);
-		}
-
-		if (transactionQueryCriteria.Since.HasValue)
-		{
-			baseFunc = baseFunc.And(x => transactionQueryCriteria.Since.Value.ToUniversalTime() <= x.CreatedAt);
-		}
-
-		if (transactionQueryCriteria.Until.HasValue)
-		{
-			baseFunc = baseFunc.And(x => x.CreatedAt <= transactionQueryCriteria.Until.Value.ToUniversalTime());
-		}
-
-		// This defaults to false, so default criteria behaviour should return all transactions that are not covers.
-		// A cover transaction is a zero-sum between 2 accounts where the parent is a users spending account.
-		// This should not affect any cache stats as these do not use this method for query building.
-		if (transactionQueryCriteria.ExcludeUncategorisableTransactions)
-		{
-			baseFunc = baseFunc.And(x => x.IsCategorizable);
-		}
-
-		if (transactionQueryCriteria.TransactionTypes.Count > 0)
-		{
-			Expression<Func<UpTransaction, bool>>? transactionTypeQuery = null;
-
-			foreach (var transactionType in transactionQueryCriteria.TransactionTypes)
-			{
-				transactionTypeQuery = transactionTypeQuery.Or(x => x.InferredType == transactionType);
-			}
-
-			transactionTypeQuery ??= x => true;
-
-			if (transactionTypeQuery.CanReduce)
-			{
-				transactionTypeQuery.Reduce();
-			}
-
-			baseFunc = baseFunc.And(transactionTypeQuery);
-		}
-
-		// Return an "empty" expression if we have a criteria object, but no criteria to act on
-		baseFunc ??= x => true;
-
-		if (baseFunc.CanReduce)
-		{
-			baseFunc.Reduce();
-		}
-
-		return baseFunc;
 	}
 
 	/// <summary>

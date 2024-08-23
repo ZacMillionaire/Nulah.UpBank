@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Globalization;
+using Microsoft.Extensions.Logging;
 using Nulah.UpApi.Domain.Interfaces;
 using Nulah.UpApi.Domain.Models;
+using Nulah.UpApi.Domain.Models.Transactions;
+using Nulah.UpApi.Domain.Models.Transactions.Criteria;
 
 namespace Nulah.UpApi.Lib.Controllers;
 
@@ -99,11 +102,70 @@ public class AccountController
 	}
 
 	/// <summary>
-	/// Returns the account summary by given <paramref name="accountId"/>
+	/// Returns the account summary by given <paramref name="accountId"/>, or null if not found
 	/// </summary>
 	/// <param name="accountId"></param>
 	/// <returns></returns>
 	public async Task<UpAccount?> GetAccount(string accountId)
+	{
+		return await GetAccountAsync(accountId);
+	}
+
+	/// <summary>
+	/// Returns an aggregate of totals by day, given a start and end date.
+	/// <para>
+	/// If no account is found, an empty list is returned. This method is guaranteed to return a list, but it is not
+	/// guaranteed to contain data if an account has no transactions within the given date range
+	/// </para>
+	/// </summary>
+	/// <param name="accountId"></param>
+	/// <param name="since"></param>
+	/// <param name="until"></param>
+	/// <param name="excludeUncategorisableTransactions">Defaults to true</param>
+	/// <param name="transactionTypes"></param>
+	/// <returns></returns>
+	public async Task<List<TransactionDateAggregate>> GetAccountStats(string accountId,
+		DateTimeOffset since,
+		DateTimeOffset until,
+		bool? excludeUncategorisableTransactions = true,
+		IEnumerable<TransactionType>? transactionTypes = null)
+	{
+		var account = await GetAccountAsync(accountId);
+		if (account != null)
+		{
+			var accountTransactions = await _upStorage.LoadTransactionsFromCacheAsync(new TransactionQueryCriteria()
+			{
+				Since = since,
+				Until = until,
+				AccountId = accountId,
+				ExcludeUncategorisableTransactions = excludeUncategorisableTransactions ?? true,
+				TransactionTypes = transactionTypes?.ToList() ?? []
+			});
+
+			var aggregate = accountTransactions.GroupBy(x =>
+					x.CreatedAt.ToString("yyyy-MM-dd")
+				)
+				.Select(x => new TransactionDateAggregate
+				{
+					Date = DateTime.ParseExact(x.Key, "yyyy-MM-dd", CultureInfo.InvariantCulture),
+					Total = x.Sum(y => y.Amount.ValueInBaseUnits) / 100.0
+				});
+
+			return aggregate.ToList();
+		}
+
+		return new List<TransactionDateAggregate>();
+	}
+
+	/// <summary>
+	/// Returns the details of an account by its Id, if nothing is found in the cache it will attempt to be cached from the Api.
+	/// <para>
+	/// If the account is not found in either the cache or the Api, null is returned.
+	/// </para>
+	/// </summary>
+	/// <param name="accountId"></param>
+	/// <returns></returns>
+	private async Task<UpAccount?> GetAccountAsync(string accountId)
 	{
 		try
 		{
